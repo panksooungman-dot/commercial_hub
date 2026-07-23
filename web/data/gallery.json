@@ -1,0 +1,18 @@
+[
+  {
+    "id": "gal-1",
+    "category": "exterior",
+    "title": "외관 투시도",
+    "imageUrl": "",
+    "caption": "표지 렌더 — 이미지 URL을 관리자에서 등록하세요.",
+    "sortOrder": 1
+  },
+  {
+    "id": "gal-2",
+    "category": "aerial",
+    "title": "단지 조감",
+    "imageUrl": "",
+    "caption": "사업개요 조감도",
+    "sortOrder": 2
+  }
+]
