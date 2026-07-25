@@ -5,7 +5,7 @@ import { AerialPlan, OverviewTable } from "@/components/overview-materials";
 import { store, getPublicUnits } from "@/lib/store";
 
 /** 히어로 사진(문구 없음) + HTML 문구 오버레이 */
-const HERO = { src: "/images/hero-exterior.jpg", w: 1920, h: 834 } as const;
+const HERO = { src: "/images/hero-banner-main.gif", w: 1903, h: 1033 } as const;
 
 export default async function HomePage() {
   const project = await store.getProject();
@@ -35,35 +35,9 @@ export default async function HomePage() {
               }}
             />
 
-            <div className="absolute inset-0 flex flex-col justify-end px-5 pb-10 pt-24 sm:px-10 sm:pb-12 md:px-14 md:pb-14">
+            <div className="absolute inset-0 flex flex-col items-end justify-end px-5 pb-10 pt-24 sm:px-10 sm:pb-12 md:px-14 md:pb-14">
               <div className="max-w-xl">
-                {project.heroEyebrow ? (
-                  <p className="text-[11px] tracking-[0.22em] text-white/75 uppercase sm:text-xs">
-                    {project.heroEyebrow}
-                  </p>
-                ) : null}
-
-                {project.heroBrandLine ? (
-                  <p className="mt-2 font-display text-lg text-white/95 sm:text-xl md:text-2xl">
-                    {project.heroBrandLine}
-                  </p>
-                ) : null}
-
-                <h1 className="mt-4 whitespace-pre-line font-display text-[1.75rem] font-semibold leading-[1.25] tracking-[-0.02em] text-white sm:text-4xl md:text-[2.75rem]">
-                  {project.heroHeadline}
-                </h1>
-
-                {project.heroSubcopy ? (
-                  <p className="mt-4 max-w-md whitespace-pre-line text-sm leading-relaxed text-white/82 sm:text-[15px]">
-                    {project.heroSubcopy}
-                  </p>
-                ) : null}
-
-                {project.heroAccentLine ? (
-                  <p className="mt-3 text-sm text-accent/95">{project.heroAccentLine}</p>
-                ) : null}
-
-                <div className="mt-7 flex flex-wrap gap-3">
+                <div className="flex flex-wrap gap-3">
                   <Link
                     href="/units"
                     className="bg-accent px-5 py-3 text-sm font-semibold text-brand-deep transition hover:brightness-105"
