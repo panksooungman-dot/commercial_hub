@@ -71,6 +71,81 @@ export function BrandStorySection() {
   );
 }
 
+const AREA_FACILITIES = [
+  {
+    src: "/images/mood/academy.jpg",
+    label: "학원가 · 교육",
+    title: "매일 이어지는 학원가 반복수요",
+    desc: "채드윅 국제학교·포스코고·신정초까지, 학생·학부모의 발걸음이 끊이지 않는 송도 학원 클러스터.",
+  },
+  {
+    src: "/images/mood/retail.jpg",
+    label: "앵커 · 리테일",
+    title: "그랜드 스트리트몰과 맞닿은 노출",
+    desc: "약 140m 대형 스트리트몰 동선과 이어지는 1층 앵커 리테일, 가시성 높은 파사드 구성.",
+  },
+  {
+    src: "/images/mood/hospital.jpg",
+    label: "메디컬 · 서비스",
+    title: "고소득 배후세대의 생활밀착 수요",
+    desc: "1공구 랜드마크 아파트 밀집 지역, 구매력 있는 배후 세대를 위한 병원·클리닉 근린 수요.",
+  },
+  {
+    src: "/images/mood/gym.jpg",
+    label: "체류형 · 헬스",
+    title: "머무는 시간이 길어지는 체류형 앵커",
+    desc: "대형 공간을 활용한 헬스장 등 목적방문형 업종으로, 한 번 오면 오래 머무는 고정 수요를 만듭니다.",
+  },
+] as const;
+
+export function AreaFacilitiesSection() {
+  return (
+    <section className="bg-[#f7f9fb]">
+      <div className="mx-auto max-w-[1100px] px-4 py-14 md:py-16">
+        <p className="text-center text-xs tracking-[0.2em] text-muted uppercase">
+          Real Area Value
+        </p>
+        <h2 className="mt-2 text-center font-display text-2xl text-brand-deep md:text-3xl">
+          상권은 숫자가 아니라, 매일의 발걸음으로 증명됩니다
+        </h2>
+        <p className="mx-auto mt-2 max-w-2xl text-center text-sm text-muted md:text-base">
+          송도 최고 수준의 교육 인프라와 고소득 배후수요가 결합된 핵심 상권,
+          아이비스퀘어가 그 중심에 섭니다
+        </p>
+
+        <div className="mt-10 grid gap-5 sm:grid-cols-2">
+          {AREA_FACILITIES.map((item) => (
+            <figure
+              key={item.label}
+              className="overflow-hidden rounded-2xl bg-white shadow-[0_12px_40px_rgba(20,40,60,0.08)]"
+            >
+              <div className="relative aspect-[3/2] w-full">
+                <Image
+                  src={item.src}
+                  alt={item.title}
+                  fill
+                  sizes="(max-width: 640px) 100vw, 550px"
+                  quality={88}
+                  className="object-cover"
+                />
+              </div>
+              <figcaption className="p-5">
+                <p className="text-xs font-semibold tracking-wide text-accent">{item.label}</p>
+                <h3 className="mt-1.5 font-display text-lg text-brand-deep">{item.title}</h3>
+                <p className="mt-1.5 text-sm leading-relaxed text-muted">{item.desc}</p>
+              </figcaption>
+            </figure>
+          ))}
+        </div>
+
+        <p className="mt-4 text-center text-xs text-muted">
+          ※ 상단 이미지는 상권·업종 분위기를 전달하기 위한 연출 이미지이며, 실제 입점 업종·인테리어와 다를 수 있습니다.
+        </p>
+      </div>
+    </section>
+  );
+}
+
 export function PremiumEightSection() {
   return (
     <section className="bg-white">

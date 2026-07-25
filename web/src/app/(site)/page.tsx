@@ -1,6 +1,11 @@
 import Image from "next/image";
 import Link from "next/link";
-import { BrandStorySection, PremiumEightSection } from "@/components/marketing-sections";
+import {
+  AreaFacilitiesSection,
+  BrandStorySection,
+  PremiumEightSection,
+} from "@/components/marketing-sections";
+import { DesignDrawingsSection } from "@/components/design-drawings-section";
 import { AerialPlan, OverviewTable } from "@/components/overview-materials";
 import { store, getPublicUnits } from "@/lib/store";
 
@@ -61,6 +66,7 @@ export default async function HomePage() {
 
       <BrandStorySection />
       <PremiumEightSection />
+      <AreaFacilitiesSection />
 
       <section className="border-y border-line bg-surface">
         <div className="mx-auto grid max-w-6xl gap-6 px-4 py-8 sm:grid-cols-2 lg:grid-cols-4">
@@ -79,6 +85,8 @@ export default async function HomePage() {
       </section>
 
       <AerialPlan project={project} />
+
+      <DesignDrawingsSection />
 
       <section className="mx-auto max-w-6xl px-4 py-16">
         <h2 className="font-display text-3xl text-brand-deep">층별 MD</h2>
