@@ -3,17 +3,21 @@ import { FloorPlanFigure } from "@/components/floor-plan-figure";
 import { UnitsFilter } from "@/components/units-filter";
 import { formatArea, formatPrice, STATUS_LABEL, unitLabel } from "@/lib/format";
 import { getPublicUnits, store } from "@/lib/store";
-import { Floor, Building } from "@/lib/types";
+import { Floor, Building, UnitStatus } from "@/lib/types";
 
-type Search = Promise<{ floor?: string; building?: string; q?: string }>;
+type Search = Promise<{ floor?: string; building?: string; q?: string; status?: string }>;
 
 export default async function UnitsPage({ searchParams }: { searchParams: Search }) {
   const sp = await searchParams;
   const project = await store.getProject();
-  let units = await getPublicUnits();
+  const allPublic = await getPublicUnits();
+  let units = allPublic;
 
   if (sp.floor) units = units.filter((u) => u.floor === sp.floor);
   if (sp.building) units = units.filter((u) => u.building === sp.building);
+  if (sp.status && sp.status !== "all") {
+    units = units.filter((u) => u.status === sp.status);
+  }
   if (sp.q) {
     const q = sp.q.toLowerCase();
     units = units.filter(
@@ -26,6 +30,15 @@ export default async function UnitsPage({ searchParams }: { searchParams: Search
 
   const activeFloor = ((sp.floor as Floor) || "2F") as Floor;
   const floorMd = project.floorSummaries.find((f) => f.floor === activeFloor);
+  const floorPins = allPublic
+    .filter((u) => u.floor === activeFloor)
+    .map((u) => ({
+      id: u.id,
+      building: u.building,
+      unitNo: u.unitNo,
+      status: u.status as Exclude<UnitStatus, "hidden">,
+      href: `/units/${u.id}#floor-plan`,
+    }));
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-12">
@@ -39,6 +52,7 @@ export default async function UnitsPage({ searchParams }: { searchParams: Search
           floor={(sp.floor as Floor) || ""}
           building={(sp.building as Building) || ""}
           q={sp.q || ""}
+          status={sp.status || ""}
         />
       </div>
 
@@ -65,7 +79,7 @@ export default async function UnitsPage({ searchParams }: { searchParams: Search
             </Link>
           ))}
         </div>
-        <FloorPlanFigure floor={activeFloor} />
+        <FloorPlanFigure floor={activeFloor} pins={floorPins} />
       </div>
 
       <p className="mt-8 text-sm text-muted">검색 결과 {units.length}실</p>

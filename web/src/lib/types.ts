@@ -1,6 +1,6 @@
 export type Building = "A" | "B";
 export type Floor = "2F" | "1F" | "B1";
-export type UnitStatus = "available" | "reserved" | "sold" | "hidden";
+export type UnitStatus = "available" | "reserved" | "sold" | "move_in" | "hidden";
 
 export type FloorSummary = {
   floor: Floor;
@@ -71,6 +71,8 @@ export type Unit = {
   exclusiveAreaUnit: "py" | "m2" | "unknown";
   /** 관리자 입력 */
   contractArea: number | null;
+  /** 도면 정면(전면) 길이 — mm. 설계도면 X축 치수 기준 */
+  frontLengthMm: number | null;
   price: number | null;
   status: UnitStatus;
   recommendedBusiness: string;

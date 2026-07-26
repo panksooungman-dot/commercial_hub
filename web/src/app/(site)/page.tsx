@@ -8,6 +8,7 @@ import {
 import { DesignDrawingsSection } from "@/components/design-drawings-section";
 import { AerialPlan, OverviewTable } from "@/components/overview-materials";
 import { store, getPublicUnits } from "@/lib/store";
+import { frontFacadeForUnitId, resolveFrontLength } from "@/lib/front-lengths";
 
 /** 히어로 사진(문구 없음) + HTML 문구 오버레이 */
 const HERO = { src: "/images/hero-banner-main.gif", w: 1903, h: 1033 } as const;
@@ -86,7 +87,25 @@ export default async function HomePage() {
 
       <AerialPlan project={project} />
 
-      <DesignDrawingsSection />
+      <DesignDrawingsSection
+        units={units
+          .filter((u) => u.status !== "hidden")
+          .map((u) => ({
+            id: u.id,
+            building: u.building,
+            floor: u.floor,
+            unitNo: u.unitNo,
+            status: u.status as "available" | "reserved" | "sold" | "move_in",
+            exclusiveArea: u.exclusiveArea,
+            exclusiveAreaUnit: u.exclusiveAreaUnit,
+            contractArea: u.contractArea,
+            frontLengthMm: u.frontLengthMm ?? resolveFrontLength(u.building, u.floor, u.id)?.mm ?? null,
+            frontFacade: frontFacadeForUnitId(u.id) ?? resolveFrontLength(u.building, u.floor, u.id)?.facade ?? null,
+            price: u.price,
+            recommendedBusiness: u.recommendedBusiness,
+            options: u.options,
+          }))}
+      />
 
       <section className="mx-auto max-w-6xl px-4 py-16">
         <h2 className="font-display text-3xl text-brand-deep">층별 MD</h2>

@@ -1,4 +1,5 @@
 import { Building, Floor, Unit } from "./types";
+import { frontLengthForUnitId } from "./front-lengths";
 
 type SeedRow = { building: Building; floor: Floor; unitNo: string; exclusiveArea: number };
 
@@ -84,20 +85,24 @@ const mdByFloor: Record<Floor, string> = {
 
 export function buildSeedUnits(): Unit[] {
   const now = new Date().toISOString();
-  return rows.map((row, index) => ({
-    id: `${row.building}-${row.floor}-${row.unitNo}`,
-    building: row.building,
-    floor: row.floor,
-    unitNo: row.unitNo,
-    exclusiveArea: row.exclusiveArea,
-    exclusiveAreaUnit: "unknown",
-    contractArea: null,
-    price: null,
-    status: "available",
-    recommendedBusiness: mdByFloor[row.floor],
-    options: "",
-    memo: "",
-    sortOrder: index + 1,
-    updatedAt: now,
-  }));
+  return rows.map((row, index) => {
+    const id = `${row.building}-${row.floor}-${row.unitNo}`;
+    return {
+      id,
+      building: row.building,
+      floor: row.floor,
+      unitNo: row.unitNo,
+      exclusiveArea: row.exclusiveArea,
+      exclusiveAreaUnit: "unknown" as const,
+      contractArea: null,
+      frontLengthMm: frontLengthForUnitId(id),
+      price: null,
+      status: "available" as const,
+      recommendedBusiness: mdByFloor[row.floor],
+      options: "",
+      memo: "",
+      sortOrder: index + 1,
+      updatedAt: now,
+    };
+  });
 }

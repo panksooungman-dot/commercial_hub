@@ -8,12 +8,13 @@
     "exclusiveAreaUnit": "unknown",
     "contractArea": null,
     "price": null,
-    "status": "available",
+    "status": "reserved",
     "recommendedBusiness": "교육·서비스",
     "options": "",
     "memo": "",
     "sortOrder": 1,
-    "updatedAt": "2026-07-23T14:13:21.545Z"
+    "updatedAt": "2026-07-26T05:37:42.147Z",
+    "frontLengthMm": 7295
   },
   {
     "id": "A-2F-202",
@@ -29,7 +30,8 @@
     "options": "",
     "memo": "",
     "sortOrder": 2,
-    "updatedAt": "2026-07-23T14:13:21.545Z"
+    "updatedAt": "2026-07-23T14:13:21.545Z",
+    "frontLengthMm": 5080
   },
   {
     "id": "A-2F-203",
@@ -45,7 +47,8 @@
     "options": "",
     "memo": "",
     "sortOrder": 3,
-    "updatedAt": "2026-07-23T14:13:21.545Z"
+    "updatedAt": "2026-07-23T14:13:21.545Z",
+    "frontLengthMm": 4900
   },
   {
     "id": "A-2F-204",
@@ -61,7 +64,8 @@
     "options": "",
     "memo": "",
     "sortOrder": 4,
-    "updatedAt": "2026-07-23T14:13:21.545Z"
+    "updatedAt": "2026-07-23T14:13:21.545Z",
+    "frontLengthMm": 8450
   },
   {
     "id": "A-2F-205",
@@ -72,12 +76,13 @@
     "exclusiveAreaUnit": "unknown",
     "contractArea": null,
     "price": null,
-    "status": "available",
+    "status": "sold",
     "recommendedBusiness": "교육·서비스",
     "options": "",
     "memo": "",
     "sortOrder": 5,
-    "updatedAt": "2026-07-23T14:13:21.545Z"
+    "updatedAt": "2026-07-26T05:37:42.158Z",
+    "frontLengthMm": 7685
   },
   {
     "id": "A-2F-206",
@@ -93,7 +98,8 @@
     "options": "",
     "memo": "",
     "sortOrder": 6,
-    "updatedAt": "2026-07-23T14:13:21.545Z"
+    "updatedAt": "2026-07-23T14:13:21.545Z",
+    "frontLengthMm": 7300
   },
   {
     "id": "A-2F-207",
@@ -109,7 +115,8 @@
     "options": "",
     "memo": "",
     "sortOrder": 7,
-    "updatedAt": "2026-07-23T14:13:21.545Z"
+    "updatedAt": "2026-07-23T14:13:21.545Z",
+    "frontLengthMm": 6800
   },
   {
     "id": "A-2F-208",
@@ -125,7 +132,8 @@
     "options": "",
     "memo": "",
     "sortOrder": 8,
-    "updatedAt": "2026-07-23T14:13:21.545Z"
+    "updatedAt": "2026-07-23T14:13:21.545Z",
+    "frontLengthMm": 7200
   },
   {
     "id": "A-2F-209",
@@ -141,7 +149,8 @@
     "options": "",
     "memo": "",
     "sortOrder": 9,
-    "updatedAt": "2026-07-23T14:13:21.545Z"
+    "updatedAt": "2026-07-23T14:13:21.545Z",
+    "frontLengthMm": 6800
   },
   {
     "id": "A-2F-210",
@@ -157,7 +166,8 @@
     "options": "",
     "memo": "",
     "sortOrder": 10,
-    "updatedAt": "2026-07-23T14:13:21.545Z"
+    "updatedAt": "2026-07-23T14:13:21.545Z",
+    "frontLengthMm": 7560
   },
   {
     "id": "A-2F-211",
@@ -173,7 +183,8 @@
     "options": "",
     "memo": "",
     "sortOrder": 11,
-    "updatedAt": "2026-07-23T14:13:21.545Z"
+    "updatedAt": "2026-07-23T14:13:21.545Z",
+    "frontLengthMm": 8160
   },
   {
     "id": "A-2F-212",
@@ -189,7 +200,8 @@
     "options": "",
     "memo": "",
     "sortOrder": 12,
-    "updatedAt": "2026-07-23T14:13:21.545Z"
+    "updatedAt": "2026-07-23T14:13:21.545Z",
+    "frontLengthMm": 5550
   },
   {
     "id": "A-2F-213",
@@ -205,7 +217,8 @@
     "options": "",
     "memo": "",
     "sortOrder": 13,
-    "updatedAt": "2026-07-23T14:13:21.545Z"
+    "updatedAt": "2026-07-23T14:13:21.545Z",
+    "frontLengthMm": 9000
   },
   {
     "id": "A-2F-215",
@@ -221,7 +234,8 @@
     "options": "",
     "memo": "",
     "sortOrder": 14,
-    "updatedAt": "2026-07-23T14:13:21.545Z"
+    "updatedAt": "2026-07-23T14:13:21.545Z",
+    "frontLengthMm": 7200
   },
   {
     "id": "A-2F-216",
@@ -237,7 +251,8 @@
     "options": "",
     "memo": "",
     "sortOrder": 15,
-    "updatedAt": "2026-07-23T14:13:21.545Z"
+    "updatedAt": "2026-07-23T14:13:21.545Z",
+    "frontLengthMm": 9000
   },
   {
     "id": "A-2F-217",
@@ -253,7 +268,8 @@
     "options": "",
     "memo": "",
     "sortOrder": 16,
-    "updatedAt": "2026-07-23T14:13:21.545Z"
+    "updatedAt": "2026-07-23T14:13:21.545Z",
+    "frontLengthMm": 5550
   },
   {
     "id": "A-2F-218",
@@ -269,7 +285,8 @@
     "options": "",
     "memo": "",
     "sortOrder": 17,
-    "updatedAt": "2026-07-23T14:13:21.545Z"
+    "updatedAt": "2026-07-23T14:13:21.545Z",
+    "frontLengthMm": 8160
   },
   {
     "id": "A-2F-224",
@@ -285,7 +302,8 @@
     "options": "",
     "memo": "",
     "sortOrder": 18,
-    "updatedAt": "2026-07-23T14:13:21.545Z"
+    "updatedAt": "2026-07-23T14:13:21.545Z",
+    "frontLengthMm": 4149
   },
   {
     "id": "A-2F-226",
@@ -301,7 +319,8 @@
     "options": "",
     "memo": "",
     "sortOrder": 19,
-    "updatedAt": "2026-07-23T14:13:21.545Z"
+    "updatedAt": "2026-07-23T14:13:21.545Z",
+    "frontLengthMm": 6218
   },
   {
     "id": "A-2F-227",
@@ -317,7 +336,8 @@
     "options": "",
     "memo": "",
     "sortOrder": 20,
-    "updatedAt": "2026-07-23T14:13:21.545Z"
+    "updatedAt": "2026-07-23T14:13:21.545Z",
+    "frontLengthMm": 6217
   },
   {
     "id": "A-2F-228",
@@ -333,7 +353,8 @@
     "options": "",
     "memo": "",
     "sortOrder": 21,
-    "updatedAt": "2026-07-23T14:13:21.545Z"
+    "updatedAt": "2026-07-23T14:13:21.545Z",
+    "frontLengthMm": 7880
   },
   {
     "id": "A-2F-229",
@@ -349,7 +370,8 @@
     "options": "",
     "memo": "",
     "sortOrder": 22,
-    "updatedAt": "2026-07-23T14:13:21.545Z"
+    "updatedAt": "2026-07-23T14:13:21.545Z",
+    "frontLengthMm": 10230
   },
   {
     "id": "B-2F-201",
@@ -360,12 +382,13 @@
     "exclusiveAreaUnit": "unknown",
     "contractArea": null,
     "price": null,
-    "status": "available",
+    "status": "reserved",
     "recommendedBusiness": "교육·서비스",
     "options": "",
     "memo": "",
     "sortOrder": 23,
-    "updatedAt": "2026-07-23T14:13:21.545Z"
+    "updatedAt": "2026-07-26T05:37:42.158Z",
+    "frontLengthMm": 7295
   },
   {
     "id": "B-2F-202",
@@ -381,7 +404,8 @@
     "options": "",
     "memo": "",
     "sortOrder": 24,
-    "updatedAt": "2026-07-23T14:13:21.545Z"
+    "updatedAt": "2026-07-23T14:13:21.545Z",
+    "frontLengthMm": 5080
   },
   {
     "id": "B-2F-203",
@@ -397,7 +421,8 @@
     "options": "",
     "memo": "",
     "sortOrder": 25,
-    "updatedAt": "2026-07-23T14:13:21.545Z"
+    "updatedAt": "2026-07-23T14:13:21.545Z",
+    "frontLengthMm": 4900
   },
   {
     "id": "B-2F-204",
@@ -413,7 +438,8 @@
     "options": "",
     "memo": "",
     "sortOrder": 26,
-    "updatedAt": "2026-07-23T14:13:21.545Z"
+    "updatedAt": "2026-07-23T14:13:21.545Z",
+    "frontLengthMm": 8450
   },
   {
     "id": "B-2F-205",
@@ -429,7 +455,8 @@
     "options": "",
     "memo": "",
     "sortOrder": 27,
-    "updatedAt": "2026-07-23T14:13:21.545Z"
+    "updatedAt": "2026-07-23T14:13:21.545Z",
+    "frontLengthMm": 7685
   },
   {
     "id": "B-2F-206",
@@ -445,7 +472,8 @@
     "options": "",
     "memo": "",
     "sortOrder": 28,
-    "updatedAt": "2026-07-23T14:13:21.545Z"
+    "updatedAt": "2026-07-23T14:13:21.545Z",
+    "frontLengthMm": 7300
   },
   {
     "id": "B-2F-207",
@@ -461,7 +489,8 @@
     "options": "",
     "memo": "",
     "sortOrder": 29,
-    "updatedAt": "2026-07-23T14:13:21.545Z"
+    "updatedAt": "2026-07-23T14:13:21.545Z",
+    "frontLengthMm": 6800
   },
   {
     "id": "B-2F-208",
@@ -477,7 +506,8 @@
     "options": "",
     "memo": "",
     "sortOrder": 30,
-    "updatedAt": "2026-07-23T14:13:21.545Z"
+    "updatedAt": "2026-07-23T14:13:21.545Z",
+    "frontLengthMm": 7200
   },
   {
     "id": "B-2F-209",
@@ -493,7 +523,8 @@
     "options": "",
     "memo": "",
     "sortOrder": 31,
-    "updatedAt": "2026-07-23T14:13:21.545Z"
+    "updatedAt": "2026-07-23T14:13:21.545Z",
+    "frontLengthMm": 6800
   },
   {
     "id": "B-2F-210",
@@ -509,7 +540,8 @@
     "options": "",
     "memo": "",
     "sortOrder": 32,
-    "updatedAt": "2026-07-23T14:13:21.545Z"
+    "updatedAt": "2026-07-23T14:13:21.545Z",
+    "frontLengthMm": 7560
   },
   {
     "id": "B-2F-211",
@@ -525,7 +557,8 @@
     "options": "",
     "memo": "",
     "sortOrder": 33,
-    "updatedAt": "2026-07-23T14:13:21.545Z"
+    "updatedAt": "2026-07-23T14:13:21.545Z",
+    "frontLengthMm": 8160
   },
   {
     "id": "B-2F-212",
@@ -541,7 +574,8 @@
     "options": "",
     "memo": "",
     "sortOrder": 34,
-    "updatedAt": "2026-07-23T14:13:21.545Z"
+    "updatedAt": "2026-07-23T14:13:21.545Z",
+    "frontLengthMm": 5550
   },
   {
     "id": "B-2F-213",
@@ -557,7 +591,8 @@
     "options": "",
     "memo": "",
     "sortOrder": 35,
-    "updatedAt": "2026-07-23T14:13:21.545Z"
+    "updatedAt": "2026-07-23T14:13:21.545Z",
+    "frontLengthMm": 9000
   },
   {
     "id": "B-2F-214",
@@ -573,7 +608,8 @@
     "options": "",
     "memo": "",
     "sortOrder": 36,
-    "updatedAt": "2026-07-23T14:13:21.545Z"
+    "updatedAt": "2026-07-23T14:13:21.545Z",
+    "frontLengthMm": 6520
   },
   {
     "id": "B-2F-215",
@@ -589,7 +625,8 @@
     "options": "",
     "memo": "",
     "sortOrder": 37,
-    "updatedAt": "2026-07-23T14:13:21.545Z"
+    "updatedAt": "2026-07-23T14:13:21.545Z",
+    "frontLengthMm": 7200
   },
   {
     "id": "B-2F-216",
@@ -605,7 +642,8 @@
     "options": "",
     "memo": "",
     "sortOrder": 38,
-    "updatedAt": "2026-07-23T14:13:21.545Z"
+    "updatedAt": "2026-07-23T14:13:21.545Z",
+    "frontLengthMm": 9000
   },
   {
     "id": "B-2F-218",
@@ -621,7 +659,8 @@
     "options": "",
     "memo": "",
     "sortOrder": 39,
-    "updatedAt": "2026-07-23T14:13:21.545Z"
+    "updatedAt": "2026-07-23T14:13:21.545Z",
+    "frontLengthMm": 8160
   },
   {
     "id": "B-2F-219",
@@ -637,7 +676,8 @@
     "options": "",
     "memo": "",
     "sortOrder": 40,
-    "updatedAt": "2026-07-23T14:13:21.545Z"
+    "updatedAt": "2026-07-23T14:13:21.545Z",
+    "frontLengthMm": 7560
   },
   {
     "id": "B-2F-220",
@@ -653,7 +693,8 @@
     "options": "",
     "memo": "",
     "sortOrder": 41,
-    "updatedAt": "2026-07-23T14:13:21.545Z"
+    "updatedAt": "2026-07-23T14:13:21.545Z",
+    "frontLengthMm": 6800
   },
   {
     "id": "B-2F-221",
@@ -669,7 +710,8 @@
     "options": "",
     "memo": "",
     "sortOrder": 42,
-    "updatedAt": "2026-07-23T14:13:21.545Z"
+    "updatedAt": "2026-07-23T14:13:21.545Z",
+    "frontLengthMm": 6520
   },
   {
     "id": "B-2F-222",
@@ -685,7 +727,8 @@
     "options": "",
     "memo": "",
     "sortOrder": 43,
-    "updatedAt": "2026-07-23T14:13:21.545Z"
+    "updatedAt": "2026-07-23T14:13:21.545Z",
+    "frontLengthMm": 6800
   },
   {
     "id": "B-2F-223",
@@ -701,7 +744,8 @@
     "options": "",
     "memo": "",
     "sortOrder": 44,
-    "updatedAt": "2026-07-23T14:13:21.545Z"
+    "updatedAt": "2026-07-23T14:13:21.545Z",
+    "frontLengthMm": 4051
   },
   {
     "id": "B-2F-224",
@@ -717,7 +761,8 @@
     "options": "",
     "memo": "",
     "sortOrder": 45,
-    "updatedAt": "2026-07-23T14:13:21.545Z"
+    "updatedAt": "2026-07-23T14:13:21.545Z",
+    "frontLengthMm": 4149
   },
   {
     "id": "B-2F-225",
@@ -733,7 +778,8 @@
     "options": "",
     "memo": "",
     "sortOrder": 46,
-    "updatedAt": "2026-07-23T14:13:21.545Z"
+    "updatedAt": "2026-07-23T14:13:21.545Z",
+    "frontLengthMm": 8200
   },
   {
     "id": "B-2F-226",
@@ -749,7 +795,8 @@
     "options": "",
     "memo": "",
     "sortOrder": 47,
-    "updatedAt": "2026-07-23T14:13:21.545Z"
+    "updatedAt": "2026-07-23T14:13:21.545Z",
+    "frontLengthMm": 6218
   },
   {
     "id": "B-2F-227",
@@ -765,7 +812,8 @@
     "options": "",
     "memo": "",
     "sortOrder": 48,
-    "updatedAt": "2026-07-23T14:13:21.545Z"
+    "updatedAt": "2026-07-23T14:13:21.545Z",
+    "frontLengthMm": 6217
   },
   {
     "id": "B-2F-228",
@@ -781,7 +829,8 @@
     "options": "",
     "memo": "",
     "sortOrder": 49,
-    "updatedAt": "2026-07-23T14:13:21.545Z"
+    "updatedAt": "2026-07-23T14:13:21.545Z",
+    "frontLengthMm": 7880
   },
   {
     "id": "B-2F-229",
@@ -797,7 +846,8 @@
     "options": "",
     "memo": "",
     "sortOrder": 50,
-    "updatedAt": "2026-07-23T14:13:21.545Z"
+    "updatedAt": "2026-07-23T14:13:21.545Z",
+    "frontLengthMm": 10230
   },
   {
     "id": "B-2F-230",
@@ -813,7 +863,8 @@
     "options": "",
     "memo": "",
     "sortOrder": 51,
-    "updatedAt": "2026-07-23T14:13:21.545Z"
+    "updatedAt": "2026-07-23T14:13:21.545Z",
+    "frontLengthMm": 7200
   },
   {
     "id": "A-1F-102",
@@ -824,12 +875,13 @@
     "exclusiveAreaUnit": "unknown",
     "contractArea": null,
     "price": null,
-    "status": "available",
+    "status": "reserved",
     "recommendedBusiness": "앵커·리테일",
     "options": "",
     "memo": "",
     "sortOrder": 52,
-    "updatedAt": "2026-07-23T14:13:21.545Z"
+    "updatedAt": "2026-07-26T05:37:42.158Z",
+    "frontLengthMm": 8270
   },
   {
     "id": "A-1F-105",
@@ -840,12 +892,13 @@
     "exclusiveAreaUnit": "unknown",
     "contractArea": null,
     "price": null,
-    "status": "available",
+    "status": "sold",
     "recommendedBusiness": "앵커·리테일",
     "options": "",
     "memo": "",
     "sortOrder": 53,
-    "updatedAt": "2026-07-23T14:13:21.545Z"
+    "updatedAt": "2026-07-26T05:37:42.158Z",
+    "frontLengthMm": 4900
   },
   {
     "id": "A-1F-106",
@@ -856,12 +909,13 @@
     "exclusiveAreaUnit": "unknown",
     "contractArea": null,
     "price": null,
-    "status": "available",
+    "status": "reserved",
     "recommendedBusiness": "앵커·리테일",
     "options": "",
     "memo": "",
     "sortOrder": 54,
-    "updatedAt": "2026-07-23T14:13:21.545Z"
+    "updatedAt": "2026-07-26T05:37:42.158Z",
+    "frontLengthMm": 8450
   },
   {
     "id": "A-1F-107",
@@ -877,7 +931,8 @@
     "options": "",
     "memo": "",
     "sortOrder": 55,
-    "updatedAt": "2026-07-23T14:13:21.545Z"
+    "updatedAt": "2026-07-23T14:13:21.545Z",
+    "frontLengthMm": 4227
   },
   {
     "id": "A-1F-108",
@@ -893,7 +948,8 @@
     "options": "",
     "memo": "",
     "sortOrder": 56,
-    "updatedAt": "2026-07-23T14:13:21.545Z"
+    "updatedAt": "2026-07-23T14:13:21.545Z",
+    "frontLengthMm": 3458
   },
   {
     "id": "A-1F-109",
@@ -909,7 +965,8 @@
     "options": "",
     "memo": "",
     "sortOrder": 57,
-    "updatedAt": "2026-07-23T14:13:21.545Z"
+    "updatedAt": "2026-07-23T14:13:21.545Z",
+    "frontLengthMm": 7300
   },
   {
     "id": "A-1F-110",
@@ -920,12 +977,13 @@
     "exclusiveAreaUnit": "unknown",
     "contractArea": null,
     "price": null,
-    "status": "available",
+    "status": "sold",
     "recommendedBusiness": "앵커·리테일",
     "options": "",
     "memo": "",
     "sortOrder": 58,
-    "updatedAt": "2026-07-23T14:13:21.545Z"
+    "updatedAt": "2026-07-26T05:37:42.158Z",
+    "frontLengthMm": 6800
   },
   {
     "id": "A-1F-111",
@@ -941,7 +999,8 @@
     "options": "",
     "memo": "",
     "sortOrder": 59,
-    "updatedAt": "2026-07-23T14:13:21.545Z"
+    "updatedAt": "2026-07-23T14:13:21.545Z",
+    "frontLengthMm": 6520
   },
   {
     "id": "A-1F-112",
@@ -957,7 +1016,8 @@
     "options": "",
     "memo": "",
     "sortOrder": 60,
-    "updatedAt": "2026-07-23T14:13:21.545Z"
+    "updatedAt": "2026-07-23T14:13:21.545Z",
+    "frontLengthMm": 3324
   },
   {
     "id": "A-1F-113",
@@ -973,7 +1033,8 @@
     "options": "",
     "memo": "",
     "sortOrder": 61,
-    "updatedAt": "2026-07-23T14:13:21.545Z"
+    "updatedAt": "2026-07-23T14:13:21.545Z",
+    "frontLengthMm": 3476
   },
   {
     "id": "A-1F-114",
@@ -989,7 +1050,8 @@
     "options": "",
     "memo": "",
     "sortOrder": 62,
-    "updatedAt": "2026-07-23T14:13:21.545Z"
+    "updatedAt": "2026-07-23T14:13:21.545Z",
+    "frontLengthMm": 7560
   },
   {
     "id": "A-1F-115",
@@ -1005,7 +1067,8 @@
     "options": "",
     "memo": "",
     "sortOrder": 63,
-    "updatedAt": "2026-07-23T14:13:21.545Z"
+    "updatedAt": "2026-07-23T14:13:21.545Z",
+    "frontLengthMm": 8160
   },
   {
     "id": "A-1F-116",
@@ -1021,7 +1084,8 @@
     "options": "",
     "memo": "",
     "sortOrder": 64,
-    "updatedAt": "2026-07-23T14:13:21.545Z"
+    "updatedAt": "2026-07-23T14:13:21.545Z",
+    "frontLengthMm": 5550
   },
   {
     "id": "A-1F-120",
@@ -1037,7 +1101,8 @@
     "options": "",
     "memo": "",
     "sortOrder": 65,
-    "updatedAt": "2026-07-23T14:13:21.545Z"
+    "updatedAt": "2026-07-23T14:13:21.545Z",
+    "frontLengthMm": 9000
   },
   {
     "id": "A-1F-122",
@@ -1053,7 +1118,8 @@
     "options": "",
     "memo": "",
     "sortOrder": 66,
-    "updatedAt": "2026-07-23T14:13:21.545Z"
+    "updatedAt": "2026-07-23T14:13:21.545Z",
+    "frontLengthMm": 5550
   },
   {
     "id": "A-1F-130",
@@ -1069,7 +1135,8 @@
     "options": "",
     "memo": "",
     "sortOrder": 67,
-    "updatedAt": "2026-07-23T14:13:21.545Z"
+    "updatedAt": "2026-07-23T14:13:21.545Z",
+    "frontLengthMm": 7200
   },
   {
     "id": "A-1F-134",
@@ -1085,7 +1152,8 @@
     "options": "",
     "memo": "",
     "sortOrder": 68,
-    "updatedAt": "2026-07-23T14:13:21.545Z"
+    "updatedAt": "2026-07-23T14:13:21.545Z",
+    "frontLengthMm": 4100
   },
   {
     "id": "A-1F-135",
@@ -1101,7 +1169,8 @@
     "options": "",
     "memo": "",
     "sortOrder": 69,
-    "updatedAt": "2026-07-23T14:13:21.545Z"
+    "updatedAt": "2026-07-23T14:13:21.545Z",
+    "frontLengthMm": 4100
   },
   {
     "id": "A-1F-137",
@@ -1117,7 +1186,8 @@
     "options": "",
     "memo": "",
     "sortOrder": 70,
-    "updatedAt": "2026-07-23T14:13:21.545Z"
+    "updatedAt": "2026-07-23T14:13:21.545Z",
+    "frontLengthMm": 2299
   },
   {
     "id": "A-1F-138",
@@ -1133,7 +1203,8 @@
     "options": "",
     "memo": "",
     "sortOrder": 71,
-    "updatedAt": "2026-07-23T14:13:21.545Z"
+    "updatedAt": "2026-07-23T14:13:21.545Z",
+    "frontLengthMm": 3556
   },
   {
     "id": "A-1F-139",
@@ -1149,7 +1220,8 @@
     "options": "",
     "memo": "",
     "sortOrder": 72,
-    "updatedAt": "2026-07-23T14:13:21.545Z"
+    "updatedAt": "2026-07-23T14:13:21.545Z",
+    "frontLengthMm": 2844
   },
   {
     "id": "A-1F-140",
@@ -1165,7 +1237,8 @@
     "options": "",
     "memo": "",
     "sortOrder": 73,
-    "updatedAt": "2026-07-23T14:13:21.545Z"
+    "updatedAt": "2026-07-23T14:13:21.545Z",
+    "frontLengthMm": 5450
   },
   {
     "id": "A-1F-141",
@@ -1181,7 +1254,8 @@
     "options": "",
     "memo": "",
     "sortOrder": 74,
-    "updatedAt": "2026-07-23T14:13:21.545Z"
+    "updatedAt": "2026-07-23T14:13:21.545Z",
+    "frontLengthMm": 6600
   },
   {
     "id": "A-1F-142",
@@ -1197,7 +1271,8 @@
     "options": "",
     "memo": "",
     "sortOrder": 75,
-    "updatedAt": "2026-07-23T14:13:21.545Z"
+    "updatedAt": "2026-07-23T14:13:21.545Z",
+    "frontLengthMm": 7880
   },
   {
     "id": "A-1F-143",
@@ -1213,7 +1288,8 @@
     "options": "",
     "memo": "",
     "sortOrder": 76,
-    "updatedAt": "2026-07-23T14:13:21.545Z"
+    "updatedAt": "2026-07-23T14:13:21.545Z",
+    "frontLengthMm": 10230
   },
   {
     "id": "B-1F-101",
@@ -1229,7 +1305,8 @@
     "options": "",
     "memo": "",
     "sortOrder": 77,
-    "updatedAt": "2026-07-23T14:13:21.545Z"
+    "updatedAt": "2026-07-23T14:13:21.545Z",
+    "frontLengthMm": 6300
   },
   {
     "id": "B-1F-103",
@@ -1245,7 +1322,8 @@
     "options": "",
     "memo": "",
     "sortOrder": 78,
-    "updatedAt": "2026-07-23T14:13:21.545Z"
+    "updatedAt": "2026-07-23T14:13:21.545Z",
+    "frontLengthMm": 7295
   },
   {
     "id": "B-1F-105",
@@ -1261,7 +1339,8 @@
     "options": "",
     "memo": "",
     "sortOrder": 79,
-    "updatedAt": "2026-07-23T14:13:21.545Z"
+    "updatedAt": "2026-07-23T14:13:21.545Z",
+    "frontLengthMm": 4900
   },
   {
     "id": "B-1F-106",
@@ -1277,7 +1356,8 @@
     "options": "",
     "memo": "",
     "sortOrder": 80,
-    "updatedAt": "2026-07-23T14:13:21.545Z"
+    "updatedAt": "2026-07-23T14:13:21.545Z",
+    "frontLengthMm": 8450
   },
   {
     "id": "B-1F-107",
@@ -1293,7 +1373,8 @@
     "options": "",
     "memo": "",
     "sortOrder": 81,
-    "updatedAt": "2026-07-23T14:13:21.545Z"
+    "updatedAt": "2026-07-23T14:13:21.545Z",
+    "frontLengthMm": 4227
   },
   {
     "id": "B-1F-108",
@@ -1309,7 +1390,8 @@
     "options": "",
     "memo": "",
     "sortOrder": 82,
-    "updatedAt": "2026-07-23T14:13:21.545Z"
+    "updatedAt": "2026-07-23T14:13:21.545Z",
+    "frontLengthMm": 3458
   },
   {
     "id": "B-1F-111",
@@ -1325,7 +1407,8 @@
     "options": "",
     "memo": "",
     "sortOrder": 83,
-    "updatedAt": "2026-07-23T14:13:21.545Z"
+    "updatedAt": "2026-07-23T14:13:21.545Z",
+    "frontLengthMm": 6520
   },
   {
     "id": "B-1F-112",
@@ -1341,7 +1424,8 @@
     "options": "",
     "memo": "",
     "sortOrder": 84,
-    "updatedAt": "2026-07-23T14:13:21.545Z"
+    "updatedAt": "2026-07-23T14:13:21.545Z",
+    "frontLengthMm": 3324
   },
   {
     "id": "B-1F-113",
@@ -1357,7 +1441,8 @@
     "options": "",
     "memo": "",
     "sortOrder": 85,
-    "updatedAt": "2026-07-23T14:13:21.545Z"
+    "updatedAt": "2026-07-23T14:13:21.545Z",
+    "frontLengthMm": 3476
   },
   {
     "id": "B-1F-117",
@@ -1373,7 +1458,8 @@
     "options": "",
     "memo": "",
     "sortOrder": 86,
-    "updatedAt": "2026-07-23T14:13:21.545Z"
+    "updatedAt": "2026-07-23T14:13:21.545Z",
+    "frontLengthMm": 4900
   },
   {
     "id": "B-1F-119",
@@ -1389,7 +1475,8 @@
     "options": "",
     "memo": "",
     "sortOrder": 87,
-    "updatedAt": "2026-07-23T14:13:21.545Z"
+    "updatedAt": "2026-07-23T14:13:21.545Z",
+    "frontLengthMm": 7025
   },
   {
     "id": "B-1F-120",
@@ -1405,7 +1492,8 @@
     "options": "",
     "memo": "",
     "sortOrder": 88,
-    "updatedAt": "2026-07-23T14:13:21.545Z"
+    "updatedAt": "2026-07-23T14:13:21.545Z",
+    "frontLengthMm": 9000
   },
   {
     "id": "B-1F-121",
@@ -1421,7 +1509,8 @@
     "options": "",
     "memo": "",
     "sortOrder": 89,
-    "updatedAt": "2026-07-23T14:13:21.545Z"
+    "updatedAt": "2026-07-23T14:13:21.545Z",
+    "frontLengthMm": 6615
   },
   {
     "id": "B-1F-122",
@@ -1437,7 +1526,8 @@
     "options": "",
     "memo": "",
     "sortOrder": 90,
-    "updatedAt": "2026-07-23T14:13:21.545Z"
+    "updatedAt": "2026-07-23T14:13:21.545Z",
+    "frontLengthMm": 5550
   },
   {
     "id": "B-1F-123",
@@ -1453,7 +1543,8 @@
     "options": "",
     "memo": "",
     "sortOrder": 91,
-    "updatedAt": "2026-07-23T14:13:21.545Z"
+    "updatedAt": "2026-07-23T14:13:21.545Z",
+    "frontLengthMm": 8160
   },
   {
     "id": "B-1F-124",
@@ -1469,7 +1560,8 @@
     "options": "",
     "memo": "",
     "sortOrder": 92,
-    "updatedAt": "2026-07-23T14:13:21.545Z"
+    "updatedAt": "2026-07-23T14:13:21.545Z",
+    "frontLengthMm": 7560
   },
   {
     "id": "B-1F-127",
@@ -1485,7 +1577,8 @@
     "options": "",
     "memo": "",
     "sortOrder": 93,
-    "updatedAt": "2026-07-23T14:13:21.545Z"
+    "updatedAt": "2026-07-23T14:13:21.545Z",
+    "frontLengthMm": 3315
   },
   {
     "id": "B-1F-128",
@@ -1501,7 +1594,8 @@
     "options": "",
     "memo": "",
     "sortOrder": 94,
-    "updatedAt": "2026-07-23T14:13:21.545Z"
+    "updatedAt": "2026-07-23T14:13:21.545Z",
+    "frontLengthMm": 3205
   },
   {
     "id": "B-1F-129",
@@ -1517,7 +1611,8 @@
     "options": "",
     "memo": "",
     "sortOrder": 95,
-    "updatedAt": "2026-07-23T14:13:21.545Z"
+    "updatedAt": "2026-07-23T14:13:21.545Z",
+    "frontLengthMm": 6800
   },
   {
     "id": "B-1F-130",
@@ -1533,7 +1628,8 @@
     "options": "",
     "memo": "",
     "sortOrder": 96,
-    "updatedAt": "2026-07-23T14:13:21.545Z"
+    "updatedAt": "2026-07-23T14:13:21.545Z",
+    "frontLengthMm": 7200
   },
   {
     "id": "B-1F-131",
@@ -1549,7 +1645,8 @@
     "options": "",
     "memo": "",
     "sortOrder": 97,
-    "updatedAt": "2026-07-23T14:13:21.545Z"
+    "updatedAt": "2026-07-23T14:13:21.545Z",
+    "frontLengthMm": 6800
   },
   {
     "id": "B-1F-132",
@@ -1565,7 +1662,8 @@
     "options": "",
     "memo": "",
     "sortOrder": 98,
-    "updatedAt": "2026-07-23T14:13:21.545Z"
+    "updatedAt": "2026-07-23T14:13:21.545Z",
+    "frontLengthMm": 4100
   },
   {
     "id": "B-1F-138",
@@ -1581,7 +1679,8 @@
     "options": "",
     "memo": "",
     "sortOrder": 99,
-    "updatedAt": "2026-07-23T14:13:21.545Z"
+    "updatedAt": "2026-07-23T14:13:21.545Z",
+    "frontLengthMm": 3556
   },
   {
     "id": "B-1F-139",
@@ -1597,7 +1696,8 @@
     "options": "",
     "memo": "",
     "sortOrder": 100,
-    "updatedAt": "2026-07-23T14:13:21.545Z"
+    "updatedAt": "2026-07-23T14:13:21.545Z",
+    "frontLengthMm": 2844
   },
   {
     "id": "B-1F-141",
@@ -1613,7 +1713,8 @@
     "options": "",
     "memo": "",
     "sortOrder": 101,
-    "updatedAt": "2026-07-23T14:13:21.545Z"
+    "updatedAt": "2026-07-23T14:13:21.545Z",
+    "frontLengthMm": 6600
   },
   {
     "id": "A-B1-B-101",
@@ -1629,7 +1730,8 @@
     "options": "",
     "memo": "",
     "sortOrder": 102,
-    "updatedAt": "2026-07-23T14:13:21.545Z"
+    "updatedAt": "2026-07-23T14:13:21.545Z",
+    "frontLengthMm": 7900
   },
   {
     "id": "A-B1-B-102",
@@ -1645,7 +1747,8 @@
     "options": "",
     "memo": "",
     "sortOrder": 103,
-    "updatedAt": "2026-07-23T14:13:21.545Z"
+    "updatedAt": "2026-07-23T14:13:21.545Z",
+    "frontLengthMm": 8160
   },
   {
     "id": "A-B1-B-105",
@@ -1661,7 +1764,8 @@
     "options": "",
     "memo": "",
     "sortOrder": 104,
-    "updatedAt": "2026-07-23T14:13:21.545Z"
+    "updatedAt": "2026-07-23T14:13:21.545Z",
+    "frontLengthMm": 6520
   },
   {
     "id": "B-B1-B-105",
@@ -1677,7 +1781,8 @@
     "options": "",
     "memo": "",
     "sortOrder": 105,
-    "updatedAt": "2026-07-23T14:13:21.545Z"
+    "updatedAt": "2026-07-23T14:13:21.545Z",
+    "frontLengthMm": 6520
   },
   {
     "id": "B-B1-B-106",
@@ -1693,7 +1798,8 @@
     "options": "",
     "memo": "",
     "sortOrder": 106,
-    "updatedAt": "2026-07-23T14:13:21.545Z"
+    "updatedAt": "2026-07-23T14:13:21.545Z",
+    "frontLengthMm": 6800
   },
   {
     "id": "B-B1-B-107",
@@ -1709,6 +1815,7 @@
     "options": "",
     "memo": "",
     "sortOrder": 107,
-    "updatedAt": "2026-07-23T14:13:21.545Z"
+    "updatedAt": "2026-07-23T14:13:21.545Z",
+    "frontLengthMm": 7200
   }
 ]

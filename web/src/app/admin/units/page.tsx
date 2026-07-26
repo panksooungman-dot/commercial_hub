@@ -48,7 +48,7 @@ export default function AdminUnitsPage() {
     <div className="mx-auto max-w-6xl px-4 py-10">
       <h1 className="font-display text-3xl text-brand">호실 관리</h1>
       <p className="mt-2 text-sm text-muted">
-        분양가·상태·계약면적·권장업종을 수정하세요. 공개 사이트에 바로 반영됩니다.
+        분양가·상태·계약면적·정면길이·권장업종을 수정하세요. 공개 사이트에 바로 반영됩니다.
       </p>
 
       <div className="mt-4 flex flex-wrap gap-2">
@@ -72,6 +72,7 @@ export default function AdminUnitsPage() {
             <tr>
               <th className="px-2 py-2">호실</th>
               <th className="px-2 py-2">전용</th>
+              <th className="px-2 py-2">정면(mm)</th>
               <th className="px-2 py-2">계약면적</th>
               <th className="px-2 py-2">분양가(원)</th>
               <th className="px-2 py-2">상태</th>
@@ -89,6 +90,18 @@ export default function AdminUnitsPage() {
                   </Link>
                 </td>
                 <td className="px-2 py-2">{u.exclusiveArea}</td>
+                <td className="px-2 py-2">
+                  <input
+                    type="number"
+                    className="w-20 border px-1 py-1"
+                    value={u.frontLengthMm ?? ""}
+                    onChange={(e) =>
+                      patch(u.id, {
+                        frontLengthMm: e.target.value === "" ? null : Number(e.target.value),
+                      })
+                    }
+                  />
+                </td>
                 <td className="px-2 py-2">
                   <input
                     type="number"

@@ -3,9 +3,120 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { PointerEvent as ReactPointerEvent, WheelEvent as ReactWheelEvent } from "react";
 import Image from "next/image";
+import {
+  PUBLIC_STATUS_FILTERS,
+  STATUS_BORDER,
+  STATUS_FILL,
+  STATUS_LABEL,
+  type PublicStatusFilter,
+} from "@/lib/format";
+import type { Building, Floor, UnitStatus } from "@/lib/types";
+import { UnitInfoPopup, type UnitPopupInfo } from "@/components/unit-info-popup";
+import {
+  candidateUnitNos,
+  frontFacadeForUnitId,
+  resolveFrontLength,
+} from "@/lib/front-lengths";
 
 type FloorKey = "b1" | "1f" | "2f";
 type BuildingKey = "a" | "b";
+
+export type DrawingUnitStatus = {
+  id: string;
+  building: Building;
+  floor: Floor;
+  unitNo: string;
+  status: Exclude<UnitStatus, "hidden">;
+  exclusiveArea: number;
+  exclusiveAreaUnit: string;
+  contractArea: number | null;
+  frontLengthMm: number | null;
+  frontFacade?: "north" | "south" | "east" | "west" | null;
+  price: number | null;
+  recommendedBusiness: string;
+  options: string;
+};
+
+const FLOOR_KEY_TO_FLOOR: Record<FloorKey, Floor> = {
+  b1: "B1",
+  "1f": "1F",
+  "2f": "2F",
+};
+
+const BUILDING_KEY_TO_BUILDING: Record<BuildingKey, Building> = {
+  a: "A",
+  b: "B",
+};
+
+function markerUnitNo(label: string, building: Building): string {
+  const prefix = building.toUpperCase();
+  if (label.toUpperCase().startsWith(prefix)) return label.slice(prefix.length);
+  return label.replace(/^[ABab]/, "");
+}
+
+function findUnitForMarker(
+  units: DrawingUnitStatus[],
+  building: BuildingKey,
+  floor: FloorKey,
+  label: string,
+): DrawingUnitStatus | undefined {
+  const b = BUILDING_KEY_TO_BUILDING[building];
+  const f = FLOOR_KEY_TO_FLOOR[floor];
+  const nos = candidateUnitNos(b, f, label);
+  return units.find((u) => u.building === b && u.floor === f && nos.includes(u.unitNo));
+}
+
+function statusForMarker(
+  units: DrawingUnitStatus[],
+  building: BuildingKey,
+  floor: FloorKey,
+  label: string,
+): Exclude<UnitStatus, "hidden"> {
+  return findUnitForMarker(units, building, floor, label)?.status ?? "available";
+}
+
+function popupInfoForMarker(
+  units: DrawingUnitStatus[],
+  building: BuildingKey,
+  floor: FloorKey,
+  label: string,
+): UnitPopupInfo {
+  const hit = findUnitForMarker(units, building, floor, label);
+  const b = BUILDING_KEY_TO_BUILDING[building];
+  const f = FLOOR_KEY_TO_FLOOR[floor];
+  const unitNo = hit?.unitNo ?? markerUnitNo(label, b);
+  const resolved =
+    (hit?.id ? resolveFrontLength(b, f, hit.id) : null) ??
+    resolveFrontLength(b, f, label) ??
+    resolveFrontLength(b, f, unitNo);
+
+  if (hit) {
+    return {
+      id: hit.id,
+      building: hit.building,
+      floor: hit.floor,
+      unitNo: hit.unitNo,
+      status: hit.status,
+      exclusiveArea: hit.exclusiveArea,
+      exclusiveAreaUnit: hit.exclusiveAreaUnit,
+      contractArea: hit.contractArea,
+      frontLengthMm: hit.frontLengthMm ?? resolved?.mm ?? null,
+      frontFacade: hit.frontFacade ?? resolved?.facade ?? frontFacadeForUnitId(hit.id),
+      price: hit.price,
+      recommendedBusiness: hit.recommendedBusiness,
+      options: hit.options,
+    };
+  }
+
+  return {
+    building: b,
+    floor: f,
+    unitNo,
+    status: "available",
+    frontLengthMm: resolved?.mm ?? null,
+    frontFacade: resolved?.facade ?? null,
+  };
+}
 
 const ZOOM_MIN = 1;
 const ZOOM_MAX = 5;
@@ -40,9 +151,9 @@ const DRAWINGS: Record<BuildingKey, Record<FloorKey, { src: string; alt: string 
 type UnitMarker = { id: string; label: string; x: number; y: number; w?: number; h?: number };
 type MarkerStore = Record<BuildingKey, Record<FloorKey, UnitMarker[]>>;
 
-/** 좌표/크기 데이터가 없는 마커(수동 추가분 등)에 적용할 기본 호실 박스 크기 — 이미지 기준 % */
-const DEFAULT_BOX_W = 2.8;
-const DEFAULT_BOX_H = 3.3;
+/** MD Plan 스타일: 호실 전체 빨간 면적 표시용 기본 박스 비율(%) — 수동 추가 마커용 */
+const DEFAULT_BOX_W = 3.6;
+const DEFAULT_BOX_H = 5.2;
 
 /**
  * 도면 위 호실 라벨의 대략 위치·크기(이미지 기준 %). X1~X14 / Y1~Y11 그리드 실측치(mm)를
@@ -282,7 +393,7 @@ function MarkerPin({
       onPointerUp={editable ? onPointerUp : undefined}
       onDoubleClick={editable ? onDoubleClick : undefined}
     >
-      <span className="relative flex h-4 min-w-[16px] items-center justify-center gap-0.5 whitespace-nowrap rounded-[3px] border border-[#8a6a28] bg-accent px-1 text-[8px] font-bold leading-none text-white shadow-[0_1px_3px_rgba(0,0,0,0.5)]">
+      <span className="relative flex h-[18px] min-w-[22px] items-center justify-center gap-0.5 whitespace-nowrap rounded-[3px] border border-[#2f5f9a]/80 bg-[#3d7ab8] px-1.5 text-[9px] font-bold leading-none text-white shadow-[0_1px_3px_rgba(0,0,0,0.45)]">
         {marker.label}
         {editable && (
           <button
@@ -303,40 +414,79 @@ function MarkerPin({
   );
 }
 
-/** 호실 구획을 사각형 테두리로 표시 — 실측 벽체가 아닌 근사 박스이며 확대/이동 시 도면과 함께 스케일된다 */
+/** 분양 상태별 색으로 호실 전체 면적 표시(근사 박스, 실측 벽체 아님) */
 function UnitBox({
   marker,
+  status = "available",
   editable,
+  selected,
   pinScale = 1,
+  onSelect,
   onResizeHandlePointerDown,
   onResizeHandlePointerMove,
   onResizeHandlePointerUp,
 }: {
   marker: UnitMarker;
+  status?: Exclude<UnitStatus, "hidden">;
   editable?: boolean;
+  selected?: boolean;
   pinScale?: number;
+  onSelect?: () => void;
   onResizeHandlePointerDown?: (e: ReactPointerEvent<HTMLDivElement>) => void;
   onResizeHandlePointerMove?: (e: ReactPointerEvent<HTMLDivElement>) => void;
   onResizeHandlePointerUp?: (e: ReactPointerEvent<HTMLDivElement>) => void;
 }) {
   const w = marker.w ?? DEFAULT_BOX_W;
   const h = marker.h ?? DEFAULT_BOX_H;
+  const clickable = Boolean(onSelect) && !editable;
   return (
     <div
-      className={`absolute rounded-[1px] border-[1.5px] ${
-        editable ? "border-red-600/90" : "pointer-events-none border-red-600"
-      } bg-red-500/15`}
+      role={clickable ? "button" : undefined}
+      tabIndex={clickable ? 0 : undefined}
+      className={`absolute rounded-[1px] border ${
+        editable
+          ? "border-black/40"
+          : `${STATUS_BORDER[status]} ${clickable ? "cursor-pointer hover:brightness-95" : "pointer-events-none"}`
+      } ${selected ? "z-10 ring-2 ring-brand-deep ring-offset-1" : ""}`}
       style={{
         left: `${marker.x}%`,
         top: `${marker.y}%`,
         width: `${w}%`,
         height: `${h}%`,
         transform: "translate(-50%, -50%)",
+        backgroundColor: STATUS_FILL[status],
       }}
+      title={`${marker.label} · ${STATUS_LABEL[status]} · 클릭하여 정보 보기`}
+      onPointerDown={
+        clickable
+          ? (e) => {
+              e.stopPropagation();
+            }
+          : undefined
+      }
+      onClick={
+        clickable
+          ? (e) => {
+              e.stopPropagation();
+              onSelect?.();
+            }
+          : undefined
+      }
+      onKeyDown={
+        clickable
+          ? (e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                e.stopPropagation();
+                onSelect?.();
+              }
+            }
+          : undefined
+      }
     >
       {editable && (
         <div
-          className="absolute -bottom-1.5 -right-1.5 h-3 w-3 cursor-nwse-resize rounded-sm border border-white bg-red-600 shadow"
+          className="absolute -bottom-1.5 -right-1.5 h-3 w-3 cursor-nwse-resize rounded-sm border border-white bg-[#d63c3c] shadow"
           style={{ transform: `scale(${pinScale})`, transformOrigin: "center" }}
           onPointerDown={onResizeHandlePointerDown}
           onPointerMove={onResizeHandlePointerMove}
@@ -347,10 +497,11 @@ function UnitBox({
   );
 }
 
-export function DesignDrawingsSection() {
+export function DesignDrawingsSection({ units = [] }: { units?: DrawingUnitStatus[] }) {
   const [building, setBuilding] = useState<BuildingKey>("a");
   const [floor, setFloor] = useState<FloorKey>("1f");
   const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [selectedUnit, setSelectedUnit] = useState<UnitPopupInfo | null>(null);
   const [scale, setScale] = useState(ZOOM_OPEN_DEFAULT);
   const [pan, setPan] = useState({ x: 0, y: 0 });
   const dragState = useRef({ dragging: false, startX: 0, startY: 0, panX: 0, panY: 0 });
@@ -376,6 +527,7 @@ export function DesignDrawingsSection() {
     }
   });
   const [showMarkers, setShowMarkers] = useState(true);
+  const [statusFilter, setStatusFilter] = useState<PublicStatusFilter>("all");
   const [editMode, setEditMode] = useState(false);
   const [exportFlash, setExportFlash] = useState(false);
   const imageBoxRef = useRef<HTMLDivElement>(null);
@@ -400,6 +552,12 @@ export function DesignDrawingsSection() {
     setLightboxOpen(false);
     setEditMode(false);
   };
+
+  const openUnitPopup = (markerLabel: string) => {
+    setSelectedUnit(popupInfoForMarker(units, building, floor, markerLabel));
+  };
+
+  const closeUnitPopup = () => setSelectedUnit(null);
 
   const zoomBy = (delta: number) => setScale((prev) => clampScale(prev + delta));
 
@@ -532,20 +690,44 @@ export function DesignDrawingsSection() {
   };
 
   useEffect(() => {
-    if (!lightboxOpen) return;
+    if (!lightboxOpen && !selectedUnit) return;
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") closeLightbox();
+      if (e.key !== "Escape") return;
+      if (selectedUnit) {
+        closeUnitPopup();
+        return;
+      }
+      if (lightboxOpen) closeLightbox();
     };
     document.addEventListener("keydown", onKey);
     const prevOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
+    if (lightboxOpen || selectedUnit) document.body.style.overflow = "hidden";
     return () => {
       document.removeEventListener("keydown", onKey);
       document.body.style.overflow = prevOverflow;
     };
-  }, [lightboxOpen]);
+  }, [lightboxOpen, selectedUnit]);
 
-  const thumbMarkers = useMemo(() => (showMarkers ? currentMarkers : []), [showMarkers, currentMarkers]);
+  const visibleMarkers = useMemo(() => {
+    return currentMarkers.filter((m) => {
+      const st = statusForMarker(units, building, floor, m.label);
+      return statusFilter === "all" || st === statusFilter;
+    });
+  }, [currentMarkers, units, building, floor, statusFilter]);
+
+  const thumbMarkers = useMemo(
+    () => (showMarkers ? visibleMarkers : []),
+    [showMarkers, visibleMarkers],
+  );
+
+  const statusCounts = useMemo(() => {
+    const counts = { available: 0, reserved: 0, sold: 0, move_in: 0 };
+    for (const m of currentMarkers) {
+      const st = statusForMarker(units, building, floor, m.label);
+      counts[st] += 1;
+    }
+    return counts;
+  }, [currentMarkers, units, building, floor]);
 
   return (
     <section className="bg-[#f7f9fb] py-16">
@@ -553,7 +735,7 @@ export function DesignDrawingsSection() {
         <p className="text-xs tracking-[0.18em] text-muted uppercase">Design Drawing</p>
         <h2 className="mt-1 font-display text-3xl text-brand-deep">공식 설계도면</h2>
         <p className="mt-2 text-muted">
-          건축사사무소 인허가 도면 전체입니다. 동·층을 선택한 뒤 클릭하면 호실 번호를 크게 확인할 수 있습니다.
+          상가 분양 현황을 도면에서 확인하세요. 호실을 클릭하면 정보가 팝업으로 표시됩니다.
         </p>
 
         <div className="mt-6 flex flex-wrap items-center gap-2">
@@ -603,18 +785,60 @@ export function DesignDrawingsSection() {
                   : "border border-line bg-white text-muted hover:border-brand"
               }`}
             >
-              {showMarkers ? "호실 마커 표시 중" : "호실 마커 숨김"}
+              {showMarkers ? "호실 표시 중" : "호실 표시 숨김"}
             </button>
           )}
         </div>
 
+        <div className="mt-4 flex flex-wrap items-center gap-2">
+          <span className="mr-1 text-xs font-medium text-muted">분양 상태</span>
+          {PUBLIC_STATUS_FILTERS.map((f) => {
+            const count =
+              f.key === "all"
+                ? statusCounts.available +
+                  statusCounts.reserved +
+                  statusCounts.sold +
+                  statusCounts.move_in
+                : statusCounts[f.key];
+            return (
+              <button
+                key={f.key}
+                type="button"
+                onClick={() => setStatusFilter(f.key)}
+                className={`rounded-full px-3.5 py-1.5 text-sm transition ${
+                  statusFilter === f.key
+                    ? "bg-brand-deep text-white"
+                    : "border border-line bg-white text-muted hover:border-brand"
+                }`}
+              >
+                {f.label}
+                <span className="ml-1 opacity-70">({count})</span>
+              </button>
+            );
+          })}
+        </div>
+
+        <div className="mt-3 flex flex-wrap gap-4 text-xs text-muted">
+          <span className="inline-flex items-center gap-1.5">
+            <span className="inline-block h-3 w-5 rounded-sm border border-[#d63c3c]/70" style={{ backgroundColor: STATUS_FILL.available }} />
+            분양가능
+          </span>
+          <span className="inline-flex items-center gap-1.5">
+            <span className="inline-block h-3 w-5 rounded-sm border border-[#c48520]/80" style={{ backgroundColor: STATUS_FILL.reserved }} />
+            예약중
+          </span>
+          <span className="inline-flex items-center gap-1.5">
+            <span className="inline-block h-3 w-5 rounded-sm border border-[#6a6a6a]/70" style={{ backgroundColor: STATUS_FILL.sold }} />
+            계약완료
+          </span>
+          <span className="inline-flex items-center gap-1.5">
+            <span className="inline-block h-3 w-5 rounded-sm border border-[#2d6eaa]/75" style={{ backgroundColor: STATUS_FILL.move_in }} />
+            입주
+          </span>
+        </div>
+
         <figure className="mt-6 overflow-hidden rounded-2xl border border-line bg-white">
-          <button
-            type="button"
-            onClick={openLightbox}
-            className="group relative block aspect-[2400/1696] w-full cursor-zoom-in overflow-hidden bg-[#fbfbfb]"
-            aria-label="도면 확대 보기 (호실 번호 확인)"
-          >
+          <div className="relative aspect-[2400/1696] w-full overflow-hidden bg-[#fbfbfb]">
             <Image
               key={drawing.src}
               src={drawing.src}
@@ -625,28 +849,38 @@ export function DesignDrawingsSection() {
               className="object-contain"
             />
             {thumbMarkers.map((m) => (
-              <UnitBox key={`box-${m.id}`} marker={m} />
+              <UnitBox
+                key={`box-${m.id}`}
+                marker={m}
+                status={statusForMarker(units, building, floor, m.label)}
+                selected={selectedUnit?.unitNo === markerUnitNo(m.label, BUILDING_KEY_TO_BUILDING[building])}
+                onSelect={() => openUnitPopup(m.label)}
+              />
             ))}
             {thumbMarkers.map((m) => (
               <MarkerPin key={m.id} marker={m} editable={false} />
             ))}
-            <span className="absolute inset-0 bg-black/0 transition group-hover:bg-black/5" />
-            <span className="absolute bottom-3 right-3 flex items-center gap-1.5 rounded-full bg-brand-deep/85 px-3 py-1.5 text-xs font-medium text-white shadow-sm backdrop-blur-sm transition group-hover:bg-brand-deep">
+            <button
+              type="button"
+              onClick={openLightbox}
+              className="absolute bottom-3 right-3 z-20 flex items-center gap-1.5 rounded-full bg-brand-deep/85 px-3 py-1.5 text-xs font-medium text-white shadow-sm backdrop-blur-sm transition hover:bg-brand-deep"
+              aria-label="도면 확대 보기"
+            >
               <svg aria-hidden viewBox="0 0 20 20" fill="none" className="h-4 w-4">
                 <circle cx="8.5" cy="8.5" r="5.5" stroke="currentColor" strokeWidth="1.6" />
                 <path d="M8.5 6v5M6 8.5h5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
                 <path d="M13 13l4.5 4.5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
               </svg>
-              호실 번호 확대 보기
-            </span>
-          </button>
+              도면 확대
+            </button>
+          </div>
           <figcaption className="border-t border-line px-4 py-2 text-xs text-muted">
-            {drawing.alt} · (주)아센스 종합건축사사무소 제공
+            {drawing.alt} · 호실을 클릭하면 정보가 표시됩니다 · (주)아센스 종합건축사사무소 제공
           </figcaption>
         </figure>
 
         <p className="mt-3 text-xs text-muted">
-          ※ 설계도면은 인허가 기준이며, 시공 과정에서 일부 변경될 수 있습니다.
+          ※ 색칠된 호실을 클릭하면 면적·분양가·상태를 확인할 수 있습니다. 상태는 관리자에서 변경하면 바로 반영됩니다.
         </p>
       </div>
 
@@ -763,19 +997,26 @@ export function DesignDrawingsSection() {
                 priority
               />
               {(showMarkers || editMode) &&
-                currentMarkers.map((m) => (
+                (editMode ? currentMarkers : visibleMarkers).map((m) => (
                   <UnitBox
                     key={`box-${m.id}`}
                     marker={m}
+                    status={statusForMarker(units, building, floor, m.label)}
                     editable={editMode}
+                    selected={
+                      !editMode &&
+                      selectedUnit?.unitNo ===
+                        markerUnitNo(m.label, BUILDING_KEY_TO_BUILDING[building])
+                    }
                     pinScale={1 / scale}
+                    onSelect={editMode ? undefined : () => openUnitPopup(m.label)}
                     onResizeHandlePointerDown={(e) => handleBoxResizePointerDown(e, m.id)}
                     onResizeHandlePointerMove={(e) => handleBoxResizePointerMove(e, m.id)}
                     onResizeHandlePointerUp={handleBoxResizePointerUp}
                   />
                 ))}
               {(showMarkers || editMode) &&
-                currentMarkers.map((m) => (
+                (editMode ? currentMarkers : visibleMarkers).map((m) => (
                   <MarkerPin
                     key={m.id}
                     marker={m}
@@ -794,10 +1035,12 @@ export function DesignDrawingsSection() {
           <p className="px-4 pb-4 text-center text-xs text-white/60 sm:px-6">
             {editMode
               ? "빈 곳 클릭: 마커 추가 · 배지 드래그: 위치 이동 · 빨간 박스 모서리 드래그: 크기 조절 · 더블클릭: 이름 수정 · ✕: 삭제 · 완료 후 '좌표 내보내기'로 저장"
-              : "마우스 휠로 확대/축소 · 드래그로 이동 · 더블클릭으로 리셋 · ESC로 닫기"}
+              : "호실 클릭: 정보 팝업 · 마우스 휠로 확대/축소 · 드래그로 이동 · ESC로 닫기"}
           </p>
         </div>
       )}
+
+      {selectedUnit && <UnitInfoPopup unit={selectedUnit} onClose={closeUnitPopup} />}
     </section>
   );
 }

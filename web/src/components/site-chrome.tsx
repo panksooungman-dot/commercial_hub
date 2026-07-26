@@ -1,10 +1,12 @@
 import Link from "next/link";
+import { InterestNavLink } from "@/components/interest-nav-link";
 
 const NAV = [
   { href: "/about", label: "사업개요" },
   { href: "/area", label: "입지·상권" },
   { href: "/units", label: "호실 보기" },
   { href: "/plan", label: "도면·MD" },
+  { href: "/interest", label: "내 선택", special: true },
   { href: "/guide", label: "분양안내" },
   { href: "/faq", label: "FAQ" },
   { href: "/contact", label: "상담신청" },
@@ -21,11 +23,15 @@ export function SiteHeader({ projectName }: { projectName: string }) {
           <p className="truncate text-xs text-muted">상업시설</p>
         </Link>
         <nav className="hidden items-center gap-4 text-sm text-brand lg:flex">
-          {NAV.map((item) => (
-            <Link key={item.href} href={item.href} className="hover:text-accent">
-              {item.label}
-            </Link>
-          ))}
+          {NAV.map((item) =>
+            item.special ? (
+              <InterestNavLink key={item.href} />
+            ) : (
+              <Link key={item.href} href={item.href} className="hover:text-accent">
+                {item.label}
+              </Link>
+            ),
+          )}
         </nav>
         <Link
           href="/contact"
@@ -35,11 +41,17 @@ export function SiteHeader({ projectName }: { projectName: string }) {
         </Link>
       </div>
       <div className="flex gap-3 overflow-x-auto border-t border-line px-4 py-2 text-xs text-muted lg:hidden">
-        {NAV.map((item) => (
-          <Link key={item.href} href={item.href} className="whitespace-nowrap">
-            {item.label}
-          </Link>
-        ))}
+        {NAV.map((item) =>
+          item.special ? (
+            <span key={item.href} className="whitespace-nowrap text-brand">
+              <InterestNavLink />
+            </span>
+          ) : (
+            <Link key={item.href} href={item.href} className="whitespace-nowrap">
+              {item.label}
+            </Link>
+          ),
+        )}
       </div>
     </header>
   );

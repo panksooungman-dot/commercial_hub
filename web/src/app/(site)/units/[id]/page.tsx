@@ -2,10 +2,12 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { FloorPlanFigure } from "@/components/floor-plan-figure";
 import { InquiryForm } from "@/components/inquiry-form";
+import { InterestToggleButton } from "@/components/interest-toggle-button";
 import { ScrollToFloorPlan } from "@/components/scroll-to-floor-plan";
-import { formatArea, formatPrice, STATUS_LABEL, unitLabel } from "@/lib/format";
+import { formatArea, formatFrontLength, formatPrice, STATUS_LABEL, unitLabel } from "@/lib/format";
+import { FACADE_LABEL, frontFacadeForUnitId } from "@/lib/front-lengths";
 import { store } from "@/lib/store";
-import { Floor } from "@/lib/types";
+import { Floor, UnitStatus } from "@/lib/types";
 
 type Ctx = { params: Promise<{ id: string }> };
 
@@ -20,6 +22,15 @@ export default async function UnitDetailPage({ params }: Ctx) {
   const siblings = units
     .filter((u) => u.floor === unit.floor && u.building === unit.building && u.status !== "hidden")
     .map((u) => u.unitNo);
+  const floorPins = units
+    .filter((u) => u.floor === unit.floor && u.status !== "hidden")
+    .map((u) => ({
+      id: u.id,
+      building: u.building,
+      unitNo: u.unitNo,
+      status: u.status as Exclude<UnitStatus, "hidden">,
+      href: `/units/${u.id}#floor-plan`,
+    }));
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-12">
@@ -37,12 +48,21 @@ export default async function UnitDetailPage({ params }: Ctx) {
             {unit.floor} · {STATUS_LABEL[unit.status]}
           </p>
         </div>
-        <Link
-          href={`/contact?building=${unit.building}&floor=${unit.floor}&unit=${unit.unitNo}`}
-          className="rounded-full bg-brand px-4 py-2 text-sm text-white"
-        >
-          이 호실 상담 신청
-        </Link>
+        <div className="flex flex-wrap gap-2">
+          <InterestToggleButton unitId={unit.id} />
+          <Link
+            href={`/contact?building=${unit.building}&floor=${unit.floor}&unit=${unit.unitNo}`}
+            className="rounded-full bg-brand px-4 py-2 text-sm text-white"
+          >
+            이 호실 상담 신청
+          </Link>
+          <Link
+            href="/interest"
+            className="rounded-full border border-line px-4 py-2 text-sm text-muted hover:border-brand hover:text-brand"
+          >
+            내 선택 목록
+          </Link>
+        </div>
       </div>
 
       {/* 상세 진입 시 도면 + 선택 호실 표시를 먼저 노출 */}
@@ -50,6 +70,7 @@ export default async function UnitDetailPage({ params }: Ctx) {
         <h2 className="mb-4 font-display text-2xl text-brand-deep">도면에서 위치 확인</h2>
         <FloorPlanFigure
           floor={unit.floor as Floor}
+          pins={floorPins}
           highlight={{
             building: unit.building,
             unitNo: unit.unitNo,
@@ -61,6 +82,14 @@ export default async function UnitDetailPage({ params }: Ctx) {
       <div className="mt-10 grid gap-6 md:grid-cols-3">
         {[
           ["전용면적", formatArea(unit.exclusiveArea, unit.exclusiveAreaUnit)],
+          [
+            "정면길이",
+            (() => {
+              const face = frontFacadeForUnitId(unit.id);
+              const len = formatFrontLength(unit.frontLengthMm);
+              return face ? `${len} (${FACADE_LABEL[face]})` : len;
+            })(),
+          ],
           ["계약면적", unit.contractArea != null ? String(unit.contractArea) : "관리자 등록 필요"],
           ["분양가", formatPrice(unit.price)],
           ["권장업종", unit.recommendedBusiness || "—"],

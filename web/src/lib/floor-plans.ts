@@ -6,21 +6,21 @@ export const FLOOR_PLAN_IMAGES: Record<
 > = {
   "2F": {
     src: "/images/plans/md-2f.jpg",
-    width: 1190,
-    height: 1683,
-    alt: "MD Plan 2F — 교육·서비스 층 평면도",
+    width: 1024,
+    height: 795,
+    alt: "MD Plan 2F — 교육·서비스 층 평면도 (A동·B동)",
   },
   "1F": {
     src: "/images/plans/md-1f.jpg",
-    width: 1190,
-    height: 1683,
-    alt: "MD Plan 1F — 앵커·리테일 층 평면도",
+    width: 1024,
+    height: 843,
+    alt: "MD Plan 1F — 앵커·리테일 층 평면도 (A동·B동)",
   },
   B1: {
     src: "/images/plans/md-b1.jpg",
-    width: 1190,
-    height: 1683,
-    alt: "MD Plan B1 — 목적방문·체류형 층 평면도",
+    width: 1024,
+    height: 941,
+    alt: "MD Plan B1 — 목적방문·체류형 층 평면도 (A동·B동)",
   },
 };
 
