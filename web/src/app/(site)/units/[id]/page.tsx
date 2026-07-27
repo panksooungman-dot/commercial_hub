@@ -36,8 +36,8 @@ export default async function UnitDetailPage({ params }: Ctx) {
     <div className="mx-auto max-w-6xl px-4 py-12">
       <ScrollToFloorPlan enabled />
 
-      <Link href="/units" className="text-sm text-muted hover:text-brand">
-        ← 호실 목록
+      <Link href="/plan" className="text-sm text-muted hover:text-brand">
+        ← 호실·도면
       </Link>
       <div className="mt-4 flex flex-wrap items-end justify-between gap-4">
         <div>
@@ -70,6 +70,7 @@ export default async function UnitDetailPage({ params }: Ctx) {
         <h2 className="mb-4 font-display text-2xl text-brand-deep">도면에서 위치 확인</h2>
         <FloorPlanFigure
           floor={unit.floor as Floor}
+          building={unit.building}
           pins={floorPins}
           highlight={{
             building: unit.building,
@@ -111,7 +112,7 @@ export default async function UnitDetailPage({ params }: Ctx) {
             href={`/plan?floor=${unit.floor}&building=${unit.building}&unit=${unit.unitNo}`}
             className="mt-3 inline-block text-sm text-brand underline"
           >
-            도면·MD에서 크게 보기
+            호실·도면에서 크게 보기
           </Link>
         </div>
       ) : null}

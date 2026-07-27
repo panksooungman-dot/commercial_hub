@@ -1,28 +1,52 @@
-import { Floor } from "@/lib/types";
+import { Building, Floor } from "@/lib/types";
+import { PLAN_MEDIA_GALLERY } from "@/lib/plan-media-gallery";
 
-export const FLOOR_PLAN_IMAGES: Record<
-  Floor,
-  { src: string; width: number; height: number; alt: string }
-> = {
-  "2F": {
-    src: "/images/plans/md-2f.jpg",
-    width: 1024,
-    height: 795,
-    alt: "MD Plan 2F — 교육·서비스 층 평면도 (A동·B동)",
-  },
-  "1F": {
-    src: "/images/plans/md-1f.jpg",
-    width: 1024,
-    height: 843,
-    alt: "MD Plan 1F — 앵커·리테일 층 평면도 (A동·B동)",
-  },
-  B1: {
-    src: "/images/plans/md-b1.jpg",
-    width: 1024,
-    height: 941,
-    alt: "MD Plan B1 — 목적방문·체류형 층 평면도 (A동·B동)",
-  },
+export type FloorPlanImage = {
+  src: string;
+  width: number;
+  height: number;
+  alt: string;
+  videoSrc?: string;
 };
+
+function mdForFloor(floor: Floor): FloorPlanImage {
+  const g = PLAN_MEDIA_GALLERY.find((x) => x.floor === floor) ?? PLAN_MEDIA_GALLERY[2];
+  return {
+    src: g.imageSrc,
+    width: g.width,
+    height: g.height,
+    alt: g.alt,
+    videoSrc: g.videoSrc,
+  };
+}
+
+/** 층별 MD Plan (A·B동 동일 이미지 — 한 장에 양동 표기) */
+export const FLOOR_PLAN_BY_BUILDING: Record<
+  Floor,
+  Record<Building, FloorPlanImage>
+> = {
+  B1: { A: mdForFloor("B1"), B: mdForFloor("B1") },
+  "1F": { A: mdForFloor("1F"), B: mdForFloor("1F") },
+  "2F": { A: mdForFloor("2F"), B: mdForFloor("2F") },
+};
+
+export const FLOOR_PLAN_IMAGES: Record<Floor, FloorPlanImage> = {
+  B1: mdForFloor("B1"),
+  "1F": mdForFloor("1F"),
+  "2F": mdForFloor("2F"),
+};
+
+export const MD_PLAN_IMAGE = FLOOR_PLAN_IMAGES["2F"];
+
+/** 층 필터 기준 MD Plan 1장 (A·B 포함) */
+export function plansForFloor(
+  floor: Floor,
+  _building?: Building | "",
+): { building: Building; plan: FloorPlanImage }[] {
+  return [{ building: "A", plan: mdForFloor(floor) }];
+}
+
+export const DESIGN_PDF_HREF = "/docs/songdo-commercial-plans.pdf";
 
 export type MoodImage = {
   src: string;
@@ -30,7 +54,6 @@ export type MoodImage = {
   label: string;
 };
 
-/** 리플렛 MD 플레이스홀더(병원/학원·리테일·헬스장) 대체 이미지 */
 export const FLOOR_MOOD_IMAGES: Record<
   Floor,
   { title: string; subtitle: string; images: MoodImage[] }

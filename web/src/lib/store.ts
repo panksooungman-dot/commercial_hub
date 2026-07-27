@@ -61,7 +61,7 @@ function defaultProject(): Project {
         exclusiveAreaPy: 1116.1,
         contractAreaPy: 2275.6,
         exclusiveRatioPct: 49.05,
-        mdConcept: "지역 수요·선호를 반영한 교육·서비스 업종 중심 구성",
+        mdConcept: "병원·학원이 모이는, 송도의 생활 밀착형 서비스층",
         recommendedBusinesses: "병원, 학원, 서비스",
       },
       {
@@ -70,7 +70,7 @@ function defaultProject(): Project {
         exclusiveAreaPy: 691.1,
         contractAreaPy: 1409.1,
         exclusiveRatioPct: 49.05,
-        mdConcept: "우수한 가시성·노출도 기반 앵커 테넌트 및 리테일 배치",
+        mdConcept: "시선이 머무는 1층, 앵커와 리테일이 만드는 스트리트 상권",
         recommendedBusinesses: "앵커 테넌트, 리테일",
       },
       {
@@ -79,7 +79,7 @@ function defaultProject(): Project {
         exclusiveAreaPy: 232.3,
         contractAreaPy: 473.7,
         exclusiveRatioPct: 49.05,
-        mdConcept: "대형공간 활용이 가능한 목적방문형·체류형 업종 중심",
+        mdConcept: "넓은 면적으로 여는 목적형 상권, 머무름이 매출이 되는 층",
         recommendedBusinesses: "헬스장 등",
       },
     ],
@@ -97,7 +97,7 @@ function defaultProject(): Project {
     heroSubcopy:
       "약 1만 5천여 세대와 7개 학교, 수도권 대표 학원가를 품은 자리. 약 140m 그랜드 스트리트몰의 주목성 위에 한 수 위 공간 설계를 더했습니다.",
     heroAccentLine: "송도학원가 랜드마크 상가 — 아이비스퀘어",
-    heroCtaPrimary: "호실 보기",
+    heroCtaPrimary: "호실·도면",
     heroCtaSecondary: "상담 신청하기",
     updatedAt: now(),
   };
@@ -111,7 +111,7 @@ function defaultFaqs(): Faq[] {
       category: "unit",
       question: "분양 가능 호실은 몇 실이며, 층·동별로 어떻게 나뉘나요?",
       answer:
-        "전체 근린생활시설 161호실 중 107실이 분양 가능합니다.\n\n층별 잔여 호실 수\n· 2층(2F): 51실\n· 1층(1F): 50실\n· 지하1층(B1): 6실\n\n호실은 A동·B동으로 구분되며, 호실 보기에서 층·동·호수로 확인할 수 있습니다.\n(세부 호실 현황은 관리자에서 상태·분양가 업데이트 시 최신 기준으로 반영됩니다.)",
+        "전체 근린생활시설 161호실 중 107실이 분양 가능합니다.\n\n층별 잔여 호실 수\n· 2층(2F): 51실\n· 1층(1F): 50실\n· 지하1층(B1): 6실\n\n호실은 A동·B동으로 구분되며, 호실·도면에서 층·동·호수로 확인할 수 있습니다.\n(세부 호실 현황은 관리자에서 상태·분양가 업데이트 시 최신 기준으로 반영됩니다.)",
       sortOrder: 1,
       published: true,
       updatedAt: nowIso,
@@ -162,7 +162,7 @@ function defaultFaqs(): Faq[] {
       question:
         "전용면적·계약면적·전용률(49.05%) 산정 기준과 공용 부분은 어떻게 구분되나요?",
       answer:
-        "잔여 호실(근생) 집계 기준 전용률은 49.05%입니다.\n\n층별 면적 요약(전용 / 계약, PY)\n· 2F: 1,116.1 / 2,275.6\n· 1F: 691.1 / 1,409.1\n· B1: 232.3 / 473.7\n· 합계: 2,039.6 / 4,158.4\n\n호실별 전용면적은 호실 보기에서 확인할 수 있으며, 계약면적·공용부분 상세 산정은 분양 계약서·관리규약 기준을 따릅니다.\n\n※ 상세 산정 설명이 확정되면 관리자 페이지(FAQ)에서 보완해 주세요.",
+        "잔여 호실(근생) 집계 기준 전용률은 49.05%입니다.\n\n층별 면적 요약(전용 / 계약, PY)\n· 2F: 1,116.1 / 2,275.6\n· 1F: 691.1 / 1,409.1\n· B1: 232.3 / 473.7\n· 합계: 2,039.6 / 4,158.4\n\n호실별 전용면적은 호실·도면에서 확인할 수 있으며, 계약면적·공용부분 상세 산정은 분양 계약서·관리규약 기준을 따릅니다.\n\n※ 상세 산정 설명이 확정되면 관리자 페이지(FAQ)에서 보완해 주세요.",
       sortOrder: 6,
       published: true,
       updatedAt: nowIso,

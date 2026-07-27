@@ -1,4 +1,5 @@
 import { InterestUnitsPanel } from "@/components/interest-units-panel";
+import { resolveFrontLength } from "@/lib/front-lengths";
 import { getPublicUnits } from "@/lib/store";
 
 export default async function InterestPage() {
@@ -13,6 +14,8 @@ export default async function InterestPage() {
     price: u.price,
     status: u.status,
     recommendedBusiness: u.recommendedBusiness,
+    frontLengthMm:
+      u.frontLengthMm ?? resolveFrontLength(u.building, u.floor, u.id)?.mm ?? null,
   }));
 
   return (

@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { FLOOR_MOOD_IMAGES, FLOOR_PLAN_IMAGES } from "@/lib/floor-plans";
+import { FLOOR_MOOD_IMAGES, plansForFloor } from "@/lib/floor-plans";
 import { estimateUnitPin } from "@/lib/unit-pins";
 import { Building, Floor, UnitStatus } from "@/lib/types";
 import { unitLabel } from "@/lib/format";
@@ -60,14 +60,19 @@ function pinKey(building: Building, unitNo: string) {
 
 export function FloorPlanFigure({
   floor,
+  building = "",
   className = "",
   showMood = true,
   highlight,
   highlights,
   pins = [],
   hideDimPins = false,
+  /** 구 MD 좌표 핀 — 3D 도면에는 기본 비표시 */
+  showPins = false,
 }: {
   floor: Floor;
+  /** 동 필터. 비우면 A·B 모두 표시 */
+  building?: Building | "";
   className?: string;
   showMood?: boolean;
   /** @deprecated highlights 사용 권장 */
@@ -78,10 +83,11 @@ export function FloorPlanFigure({
   pins?: PlanPin[];
   /** true면 선택 호실만 표시(나머지 작은 핀 숨김) */
   hideDimPins?: boolean;
+  showPins?: boolean;
 }) {
-  const plan = FLOOR_PLAN_IMAGES[floor];
+  const plans = plansForFloor(floor, building);
   const mood = FLOOR_MOOD_IMAGES[floor];
-  if (!plan) return null;
+  if (plans.length === 0) return null;
 
   const selected: PlanHighlight[] = highlights?.length
     ? highlights.slice(0, 3)
@@ -89,22 +95,7 @@ export function FloorPlanFigure({
       ? [highlight]
       : [];
 
-  const selectedPins = selected.map((h, i) => {
-    const pos = estimateUnitPin(h.building, h.unitNo, h.siblings ?? [], floor);
-    const order = Math.min(3, Math.max(1, h.mark ?? i + 1));
-    return { ...h, ...pos, style: HIGHLIGHT_STYLES[order - 1] ?? HIGHLIGHT_STYLES[0], order };
-  });
-
   const selectedKeys = new Set(selected.map((h) => pinKey(h.building, h.unitNo)));
-
-  const overlayPins = hideDimPins
-    ? []
-    : pins
-        .map((p) => {
-          const pos = estimateUnitPin(p.building, p.unitNo, [], floor);
-          return { ...p, x: pos.x, y: pos.y };
-        })
-        .filter((p) => Number.isFinite(p.x) && Number.isFinite(p.y));
 
   return (
     <div id="floor-plan" className={`scroll-mt-24 space-y-6 ${className}`}>
@@ -113,107 +104,140 @@ export function FloorPlanFigure({
           <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-accent/40 bg-[#fff8e8] px-4 py-3">
             <p className="text-sm text-brand-deep">
               <span className="font-semibold text-brand">선택 {selected.length}호실</span>
-              <span className="text-muted"> 위치가 도면에 표시됩니다.</span>
+              <span className="text-muted"> — 아래 {floor} 3D 평면도에서 동·호수를 확인하세요.</span>
             </p>
             <span className="rounded-full bg-brand px-3 py-1 text-xs font-medium text-white">
               {floor} 평면도
             </span>
           </div>
           <ul className="flex flex-wrap gap-2">
-            {selectedPins.map((h) => (
-              <li
-                key={pinKey(h.building, h.unitNo)}
-                className={`inline-flex items-center gap-2 rounded-full border-2 px-3 py-1.5 text-sm font-semibold text-white ${h.style.bg} ${h.style.ring}`}
-              >
-                <span className="flex h-6 w-6 items-center justify-center rounded-full bg-white/25 text-xs font-black">
-                  {h.order}
-                </span>
-                {unitLabel(h.building, h.unitNo)}
-              </li>
-            ))}
+            {selected.map((h, i) => {
+              const order = Math.min(3, Math.max(1, h.mark ?? i + 1));
+              const style = HIGHLIGHT_STYLES[order - 1] ?? HIGHLIGHT_STYLES[0];
+              return (
+                <li
+                  key={pinKey(h.building, h.unitNo)}
+                  className={`inline-flex items-center gap-2 rounded-full border-2 px-3 py-1.5 text-sm font-semibold text-white ${style.bg} ${style.ring}`}
+                >
+                  <span className="flex h-6 w-6 items-center justify-center rounded-full bg-white/25 text-xs font-black">
+                    {order}
+                  </span>
+                  {unitLabel(h.building, h.unitNo)}
+                </li>
+              );
+            })}
           </ul>
         </div>
       ) : null}
 
-      <figure className="rounded-2xl border border-line bg-white">
-        <div
-          className="relative w-full overflow-visible"
-          style={{ aspectRatio: `${plan.width} / ${plan.height}` }}
-        >
-          <Image
-            src={plan.src}
-            alt={plan.alt}
-            fill
-            quality={88}
-            sizes="(max-width: 1152px) 100vw, 1100px"
-            className="rounded-t-2xl object-contain object-top"
-            priority={selected.length > 0}
-          />
+      <div className={`grid gap-6 ${plans.length > 1 ? "lg:grid-cols-2" : ""}`}>
+        {plans.map(({ building: b, plan }) => {
+          const selectedPins = showPins
+            ? selected
+                .filter((h) => h.building === b)
+                .map((h, i) => {
+                  const pos = estimateUnitPin(h.building, h.unitNo, h.siblings ?? [], floor);
+                  const order = Math.min(3, Math.max(1, h.mark ?? i + 1));
+                  return {
+                    ...h,
+                    ...pos,
+                    style: HIGHLIGHT_STYLES[order - 1] ?? HIGHLIGHT_STYLES[0],
+                    order,
+                  };
+                })
+            : [];
 
-          {overlayPins.map((p) => {
-            const key = pinKey(p.building, p.unitNo);
-            if (selectedKeys.has(key)) return null;
-            const dot = PIN_DOT[p.status ?? "available"];
-            const body = (
-              <span
-                className={`flex h-6 min-w-6 items-center justify-center rounded-full border border-white px-1 text-[9px] font-bold text-white shadow ${dot}`}
-              >
-                {p.unitNo.replace(/^B-/, "")}
-              </span>
-            );
-            return (
+          const overlayPins =
+            showPins && !hideDimPins
+              ? pins
+                  .filter((p) => p.building === b)
+                  .map((p) => {
+                    const pos = estimateUnitPin(p.building, p.unitNo, [], floor);
+                    return { ...p, x: pos.x, y: pos.y };
+                  })
+                  .filter((p) => Number.isFinite(p.x) && Number.isFinite(p.y))
+              : [];
+
+          return (
+            <figure key={b} className="rounded-2xl border border-line bg-white">
               <div
-                key={p.id}
-                className="absolute z-[5] -translate-x-1/2 -translate-y-1/2"
-                style={{ left: `${p.x}%`, top: `${p.y}%` }}
-                title={unitLabel(p.building, p.unitNo)}
+                className="relative w-full overflow-hidden"
+                style={{ aspectRatio: `${plan.width} / ${plan.height}` }}
               >
-                {p.href ? (
-                  <Link href={p.href} className="block hover:scale-110">
-                    {body}
-                  </Link>
-                ) : (
-                  body
-                )}
-              </div>
-            );
-          })}
-
-          {selectedPins.map((h) => (
-            <div
-              key={pinKey(h.building, h.unitNo)}
-              className="pointer-events-none absolute z-10 -translate-x-1/2 -translate-y-1/2"
-              style={{ left: `${h.x}%`, top: `${h.y}%` }}
-              aria-label={`${h.style.label} ${unitLabel(h.building, h.unitNo)}`}
-            >
-              <div className="relative flex flex-col items-center">
-                <span
-                  className={`absolute -inset-2 animate-ping rounded-full ${h.style.ping}`}
+                <Image
+                  src={plan.src}
+                  alt={plan.alt}
+                  fill
+                  quality={88}
+                  sizes="(max-width: 1152px) 100vw, 550px"
+                  className="rounded-t-2xl object-contain object-top"
+                  priority={selected.length > 0}
                 />
-                {/* 큰 번호 배지 — 3호실 구분용 */}
-                <span
-                  className={`relative flex h-11 w-11 items-center justify-center rounded-full border-[3px] border-white text-base font-black text-white shadow-lg ${h.style.bg}`}
-                >
-                  {h.order}
-                </span>
-                <span
-                  className={`relative mt-1 max-w-[7.5rem] truncate rounded-md px-2 py-0.5 text-center text-[11px] font-bold text-white shadow-md ${h.style.bg}`}
-                >
-                  {unitLabel(h.building, h.unitNo)}
-                </span>
+
+                {overlayPins.map((p) => {
+                  const key = pinKey(p.building, p.unitNo);
+                  if (selectedKeys.has(key)) return null;
+                  const dot = PIN_DOT[p.status ?? "available"];
+                  const body = (
+                    <span
+                      className={`flex h-6 min-w-6 items-center justify-center rounded-full border border-white px-1 text-[9px] font-bold text-white shadow ${dot}`}
+                    >
+                      {p.unitNo.replace(/^B-/, "")}
+                    </span>
+                  );
+                  return (
+                    <div
+                      key={p.id}
+                      className="absolute z-[5] -translate-x-1/2 -translate-y-1/2"
+                      style={{ left: `${p.x}%`, top: `${p.y}%` }}
+                      title={unitLabel(p.building, p.unitNo)}
+                    >
+                      {p.href ? (
+                        <Link href={p.href} className="block hover:scale-110">
+                          {body}
+                        </Link>
+                      ) : (
+                        body
+                      )}
+                    </div>
+                  );
+                })}
+
+                {selectedPins.map((h) => (
+                  <div
+                    key={pinKey(h.building, h.unitNo)}
+                    className="pointer-events-none absolute z-10 -translate-x-1/2 -translate-y-1/2"
+                    style={{ left: `${h.x}%`, top: `${h.y}%` }}
+                    aria-label={`${h.style.label} ${unitLabel(h.building, h.unitNo)}`}
+                  >
+                    <div className="relative flex flex-col items-center">
+                      <span
+                        className={`absolute -inset-2 animate-ping rounded-full ${h.style.ping}`}
+                      />
+                      <span
+                        className={`relative flex h-11 w-11 items-center justify-center rounded-full border-[3px] border-white text-base font-black text-white shadow-lg ${h.style.bg}`}
+                      >
+                        {h.order}
+                      </span>
+                      <span
+                        className={`relative mt-1 max-w-[7.5rem] truncate rounded-md px-2 py-0.5 text-center text-[11px] font-bold text-white shadow-md ${h.style.bg}`}
+                      >
+                        {unitLabel(h.building, h.unitNo)}
+                      </span>
+                    </div>
+                  </div>
+                ))}
               </div>
-            </div>
-          ))}
-        </div>
-        <figcaption className="border-t border-line px-4 py-2 text-xs text-muted">
-          {plan.alt}
-          {selected.length > 0
-            ? ` · 선택 ${selected.length}호실 표시`
-            : overlayPins.length > 0
-              ? ` · 분양 호실 ${overlayPins.length}개 표시`
-              : " · 리플렛 제안 도면"}
-        </figcaption>
-      </figure>
+              <figcaption className="border-t border-line px-4 py-2 text-xs text-muted">
+                {plan.alt}
+                {selected.filter((h) => h.building === b).length > 0
+                  ? ` · 선택 호실 포함`
+                  : ""}
+              </figcaption>
+            </figure>
+          );
+        })}
+      </div>
 
       {showMood && mood ? (
         <section className="rounded-2xl border border-line bg-surface p-4 sm:p-5">

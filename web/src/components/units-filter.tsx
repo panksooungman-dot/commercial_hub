@@ -8,11 +8,14 @@ export function UnitsFilter({
   building,
   q,
   status = "",
+  basePath = "/plan",
 }: {
   floor: string;
   building: string;
   q: string;
   status?: string;
+  /** 필터 적용 시 이동 경로 (기본: 호실·도면) */
+  basePath?: string;
 }) {
   const router = useRouter();
 
@@ -22,7 +25,8 @@ export function UnitsFilter({
     Object.entries(merged).forEach(([k, v]) => {
       if (v) params.set(k, v);
     });
-    router.push(`/units?${params.toString()}`);
+    const qs = params.toString();
+    router.push(qs ? `${basePath}?${qs}` : basePath);
   }
 
   return (
@@ -33,7 +37,6 @@ export function UnitsFilter({
           onChange={(e) => apply({ floor: e.target.value })}
           className="border border-line bg-surface px-3 py-2 text-sm"
         >
-          <option value="">전체 층</option>
           <option value="2F">2F</option>
           <option value="1F">1F</option>
           <option value="B1">B1</option>
@@ -49,12 +52,25 @@ export function UnitsFilter({
         </select>
         <input
           defaultValue={q}
+          key={q}
           placeholder="호실번호 검색"
-          className="border border-line bg-surface px-3 py-2 text-sm"
+          className="min-w-[10rem] flex-1 border border-line bg-surface px-3 py-2 text-sm sm:max-w-xs"
           onKeyDown={(e) => {
-            if (e.key === "Enter") apply({ q: (e.target as HTMLInputElement).value });
+            if (e.key === "Enter") apply({ q: (e.target as HTMLInputElement).value.trim() });
           }}
         />
+        <button
+          type="button"
+          className="rounded-sm border border-line bg-surface px-3 py-2 text-sm hover:border-brand"
+          onClick={(e) => {
+            const input = (e.currentTarget.parentElement?.querySelector(
+              "input",
+            ) as HTMLInputElement | null);
+            apply({ q: input?.value.trim() || "" });
+          }}
+        >
+          검색
+        </button>
       </div>
 
       <div className="flex flex-wrap items-center gap-2">

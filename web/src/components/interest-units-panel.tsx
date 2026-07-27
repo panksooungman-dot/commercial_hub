@@ -4,7 +4,8 @@ import Link from "next/link";
 import { useMemo } from "react";
 import { FloorPlanFigure, HIGHLIGHT_STYLES } from "@/components/floor-plan-figure";
 import { useInterestUnits } from "@/hooks/use-interest-units";
-import { formatArea, formatPrice, STATUS_LABEL, unitLabel } from "@/lib/format";
+import { formatArea, formatFrontLength, formatPrice, STATUS_LABEL, unitLabel } from "@/lib/format";
+import { FACADE_LABEL, frontFacadeForUnitId } from "@/lib/front-lengths";
 import { Building, Floor, Unit } from "@/lib/types";
 
 type PublicUnit = Pick<
@@ -18,6 +19,7 @@ type PublicUnit = Pick<
   | "price"
   | "status"
   | "recommendedBusiness"
+  | "frontLengthMm"
 >;
 
 export function InterestUnitsPanel({ units }: { units: PublicUnit[] }) {
@@ -50,7 +52,7 @@ export function InterestUnitsPanel({ units }: { units: PublicUnit[] }) {
       <div className="rounded-2xl border border-dashed border-line bg-surface p-8 text-center">
         <p className="font-display text-xl text-brand-deep">선택한 호실이 없습니다</p>
         <p className="mt-2 text-sm text-muted">
-          도면·MD에서 관심 호실을 최대 {interest.max}개까지 선택해 보세요.
+          호실·도면에서 관심 호실을 최대 {interest.max}개까지 선택해 보세요.
         </p>
         <Link
           href="/plan"
@@ -126,6 +128,16 @@ export function InterestUnitsPanel({ units }: { units: PublicUnit[] }) {
               <div className="flex justify-between gap-2">
                 <dt className="text-muted">전용면적</dt>
                 <dd className="font-medium">{formatArea(u.exclusiveArea, u.exclusiveAreaUnit)}</dd>
+              </div>
+              <div className="flex justify-between gap-2">
+                <dt className="text-muted">정면길이</dt>
+                <dd className="font-medium">
+                  {(() => {
+                    const face = frontFacadeForUnitId(u.id);
+                    const len = formatFrontLength(u.frontLengthMm);
+                    return face ? `${len} (${FACADE_LABEL[face]})` : len;
+                  })()}
+                </dd>
               </div>
               <div className="flex justify-between gap-2">
                 <dt className="text-muted">분양가</dt>

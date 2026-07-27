@@ -26,7 +26,7 @@
       "exclusiveAreaPy": 1116.1,
       "contractAreaPy": 2275.6,
       "exclusiveRatioPct": 49.05,
-      "mdConcept": "지역 수요·선호를 반영한 교육·서비스 업종 중심 구성",
+      "mdConcept": "병원·학원이 모이는, 송도의 생활 밀착형 서비스층",
       "recommendedBusinesses": "병원, 학원, 서비스"
     },
     {
@@ -35,7 +35,7 @@
       "exclusiveAreaPy": 691.1,
       "contractAreaPy": 1409.1,
       "exclusiveRatioPct": 49.05,
-      "mdConcept": "우수한 가시성·노출도 기반 앵커 테넌트 및 리테일 배치",
+      "mdConcept": "시선이 머무는 1층, 앵커와 리테일이 만드는 스트리트 상권",
       "recommendedBusinesses": "앵커 테넌트, 리테일"
     },
     {
@@ -44,7 +44,7 @@
       "exclusiveAreaPy": 232.3,
       "contractAreaPy": 473.7,
       "exclusiveRatioPct": 49.05,
-      "mdConcept": "대형공간 활용이 가능한 목적방문형·체류형 업종 중심",
+      "mdConcept": "넓은 면적으로 여는 목적형 상권, 머무름이 매출이 되는 층",
       "recommendedBusinesses": "헬스장 등"
     }
   ],
@@ -61,7 +61,7 @@
   "heroHeadline": "투자 가치의 스케일이 다르다",
   "heroSubcopy": "약 1만 5천여 세대와 7개 학교, 수도권 대표 학원가를 품은 자리. 약 140m 그랜드 스트리트몰의 주목성 위에 한 수 위 공간 설계를 더했습니다.",
   "heroAccentLine": "송도학원가 랜드마크 상가 — 아이비스퀘어",
-  "heroCtaPrimary": "호실 보기",
+  "heroCtaPrimary": "호실·도면",
   "heroCtaSecondary": "상담 신청하기",
   "updatedAt": "2026-07-23T15:25:00.000Z"
 }

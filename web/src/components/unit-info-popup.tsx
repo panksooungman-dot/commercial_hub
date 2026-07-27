@@ -29,7 +29,9 @@ export function UnitInfoPopup({
   onClose: () => void;
 }) {
   const title = unitLabel(unit.building, unit.unitNo);
-  const detailHref = unit.id ? `/units/${unit.id}#floor-plan` : `/units?building=${unit.building}&floor=${unit.floor}`;
+  const detailHref = unit.id
+    ? `/units/${unit.id}#floor-plan`
+    : `/plan?building=${unit.building}&floor=${unit.floor}`;
   const contactHref = `/contact?building=${unit.building}&floor=${unit.floor}&unit=${unit.unitNo}`;
 
   return (

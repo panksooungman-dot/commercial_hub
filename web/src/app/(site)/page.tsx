@@ -45,10 +45,10 @@ export default async function HomePage() {
               <div className="max-w-xl">
                 <div className="flex flex-wrap gap-3">
                   <Link
-                    href="/units"
+                    href="/plan"
                     className="bg-accent px-5 py-3 text-sm font-semibold text-brand-deep transition hover:brightness-105"
                   >
-                    {project.heroCtaPrimary || "호실 보기"}
+                    {project.heroCtaPrimary || "호실·도면"}
                   </Link>
                   <Link
                     href="/contact"
@@ -114,7 +114,7 @@ export default async function HomePage() {
           {project.floorSummaries.map((f) => (
             <Link
               key={f.floor}
-              href={`/units?floor=${f.floor}`}
+              href={`/plan?floor=${f.floor}`}
               className="border border-line bg-surface p-5 transition hover:border-brand"
             >
               <p className="text-sm text-accent">

@@ -2,14 +2,22 @@
 
 import Link from "next/link";
 import { Fragment, useEffect, useMemo, useState } from "react";
-import { FloorPlanFigure, HIGHLIGHT_STYLES } from "@/components/floor-plan-figure";
+import { PlanMediaGallery } from "@/components/plan-media-gallery";
+import { HIGHLIGHT_STYLES } from "@/components/floor-plan-figure";
 import { useInterestUnits } from "@/hooks/use-interest-units";
-import { formatArea, STATUS_LABEL, unitLabel } from "@/lib/format";
+import { formatArea, formatPrice, STATUS_LABEL, unitLabel } from "@/lib/format";
 import { Building, Floor, Unit, UnitStatus } from "@/lib/types";
 
 type PlanUnit = Pick<
   Unit,
-  "id" | "building" | "floor" | "unitNo" | "exclusiveArea" | "exclusiveAreaUnit" | "status"
+  | "id"
+  | "building"
+  | "floor"
+  | "unitNo"
+  | "exclusiveArea"
+  | "exclusiveAreaUnit"
+  | "price"
+  | "status"
 >;
 
 type PlanPin = {
@@ -24,14 +32,16 @@ export function PlanMultiSelect({
   floor,
   listBuilding,
   units,
-  floorPins,
   initialIds = [],
+  resultCount,
 }: {
   floor: Floor;
-  listBuilding: Building;
+  listBuilding: Building | "";
   units: PlanUnit[];
-  floorPins: PlanPin[];
+  /** @deprecated 도면 갤러리로 대체 */
+  floorPins?: PlanPin[];
   initialIds?: string[];
+  resultCount?: number;
 }) {
   const interest = useInterestUnits();
   const [seeded, setSeeded] = useState(false);
@@ -48,18 +58,11 @@ export function PlanMultiSelect({
 
   const byId = useMemo(() => new Map(units.map((u) => [u.id, u])), [units]);
 
-  /** 현재 층에 해당하는 선택 호실만 도면에 표시 */
   const floorSelected = interest.ids
     .map((id) => byId.get(id))
-    .filter((u): u is PlanUnit => Boolean(u) && u.floor === floor);
+    .filter((u): u is PlanUnit => u != null && u.floor === floor);
 
   const otherFloorCount = interest.ids.length - floorSelected.length;
-
-  const highlights = floorSelected.map((u) => ({
-    building: u.building,
-    unitNo: u.unitNo,
-    mark: interest.ids.indexOf(u.id) + 1,
-  }));
 
   const onToggle = (id: string) => {
     const res = interest.toggle(id);
@@ -77,8 +80,9 @@ export function PlanMultiSelect({
               관심 호실 선택 · 위치 표시
             </h2>
             <p className="mt-1 text-sm text-muted">
-              최대 {interest.max}호실까지 선택하면 도면에{" "}
-              <span className="font-medium text-brand">①②③ 번호 마커</span>로 위치가 표시됩니다.
+              최대 {interest.max}호실까지 선택하면 상단에{" "}
+              <span className="font-medium text-brand">①②③ 번호</span>로 표시됩니다. 아래 A/B동
+              층별 도면·영상에서 배치를 확인하세요.
             </p>
           </div>
           <div className="flex flex-wrap gap-2">
@@ -150,18 +154,18 @@ export function PlanMultiSelect({
         ) : null}
       </div>
 
-      <FloorPlanFigure
-        floor={floor}
-        pins={floorPins}
-        highlights={highlights}
-        hideDimPins={floorSelected.length > 0}
-        showMood={floorSelected.length === 0}
-      />
+      <PlanMediaGallery floor={floor} building={listBuilding} />
 
       <div>
         <h2 className="font-display text-2xl text-brand-deep">{floor} 호실 목록</h2>
         <p className="mt-1 text-sm text-muted">
-          체크하면 관심 호실에 추가되고 도면에 번호 마커로 표시됩니다.
+          체크하면 관심 호실에 추가됩니다. 위 설계도면(층·동)과 영상에서 배치를 확인하세요.
+          {typeof resultCount === "number" ? (
+            <>
+              {" "}
+              · 검색 결과 <span className="font-medium text-brand">{resultCount}</span>실
+            </>
+          ) : null}
         </p>
 
         <div className="mt-4 overflow-x-auto rounded-2xl border border-line bg-surface">
@@ -171,70 +175,80 @@ export function PlanMultiSelect({
                 <th className="w-14 px-3 py-3">선택</th>
                 <th className="px-3 py-3">호실</th>
                 <th className="px-3 py-3">전용면적</th>
+                <th className="px-3 py-3">분양가</th>
                 <th className="px-3 py-3">상태</th>
                 <th className="px-3 py-3"></th>
               </tr>
             </thead>
             <tbody>
-              {(["A", "B"] as Building[]).map((b) => {
-                const rows = units.filter((u) => u.building === b);
-                if (rows.length === 0) return null;
-                const focus = b === listBuilding;
-                return (
-                  <Fragment key={b}>
-                    <tr className="border-t border-line bg-background/80">
-                      <td colSpan={5} className="px-3 py-2 text-xs font-semibold text-brand">
-                        {b}동{focus ? " · 포커스" : ""}
-                      </td>
-                    </tr>
-                    {rows.map((u) => {
-                      const checked = interest.ids.includes(u.id);
-                      const order = checked ? interest.ids.indexOf(u.id) + 1 : 0;
-                      const atLimit = !checked && interest.atLimit;
-                      return (
-                        <tr
-                          key={u.id}
-                          className={`border-t border-line ${checked ? "bg-[#fff8e8]" : ""}`}
-                        >
-                          <td className="px-3 py-3">
-                            <label className="inline-flex cursor-pointer items-center gap-2">
-                              <input
-                                type="checkbox"
-                                className="h-4 w-4 accent-[#0b3a5b]"
-                                checked={checked}
-                                disabled={atLimit}
-                                onChange={() => onToggle(u.id)}
-                                aria-label={`${unitLabel(u.building, u.unitNo)} 관심 선택`}
-                              />
-                              {checked ? (
-                                <span
-                                  className={`flex h-6 w-6 items-center justify-center rounded-full text-xs font-black text-white ${
-                                    HIGHLIGHT_STYLES[order - 1]?.bg ?? HIGHLIGHT_STYLES[0].bg
-                                  }`}
-                                >
-                                  {order}
-                                </span>
-                              ) : null}
-                            </label>
-                          </td>
-                          <td className="px-3 py-3 font-medium">
-                            {unitLabel(u.building, u.unitNo)}
-                          </td>
-                          <td className="px-3 py-3">
-                            {formatArea(u.exclusiveArea, u.exclusiveAreaUnit)}
-                          </td>
-                          <td className="px-3 py-3">{STATUS_LABEL[u.status]}</td>
-                          <td className="px-3 py-3">
-                            <Link href={`/units/${u.id}#floor-plan`} className="text-brand underline">
-                              상세
-                            </Link>
-                          </td>
-                        </tr>
-                      );
-                    })}
-                  </Fragment>
-                );
-              })}
+              {units.length === 0 ? (
+                <tr>
+                  <td colSpan={6} className="px-3 py-8 text-center text-muted">
+                    조건에 맞는 호실이 없습니다. 검색어·필터를 바꿔 보세요.
+                  </td>
+                </tr>
+              ) : (
+                (["A", "B"] as Building[]).map((b) => {
+                  const rows = units.filter((u) => u.building === b);
+                  if (rows.length === 0) return null;
+                  const focus = listBuilding !== "" && b === listBuilding;
+                  return (
+                    <Fragment key={b}>
+                      <tr className="border-t border-line bg-background/80">
+                        <td colSpan={6} className="px-3 py-2 text-xs font-semibold text-brand">
+                          {b}동{focus ? " · 포커스" : ""}
+                        </td>
+                      </tr>
+                      {rows.map((u) => {
+                        const checked = interest.ids.includes(u.id);
+                        const order = checked ? interest.ids.indexOf(u.id) + 1 : 0;
+                        const atLimit = !checked && interest.atLimit;
+                        return (
+                          <tr
+                            key={u.id}
+                            className={`border-t border-line ${checked ? "bg-[#fff8e8]" : ""}`}
+                          >
+                            <td className="px-3 py-3">
+                              <label className="inline-flex cursor-pointer items-center gap-2">
+                                <input
+                                  type="checkbox"
+                                  className="h-4 w-4 accent-[#0b3a5b]"
+                                  checked={checked}
+                                  disabled={atLimit}
+                                  onChange={() => onToggle(u.id)}
+                                  aria-label={`${unitLabel(u.building, u.unitNo)} 관심 선택`}
+                                />
+                                {checked ? (
+                                  <span
+                                    className={`flex h-6 w-6 items-center justify-center rounded-full text-xs font-black text-white ${
+                                      HIGHLIGHT_STYLES[order - 1]?.bg ?? HIGHLIGHT_STYLES[0].bg
+                                    }`}
+                                  >
+                                    {order}
+                                  </span>
+                                ) : null}
+                              </label>
+                            </td>
+                            <td className="px-3 py-3 font-medium">
+                              {unitLabel(u.building, u.unitNo)}
+                            </td>
+                            <td className="px-3 py-3">
+                              {formatArea(u.exclusiveArea, u.exclusiveAreaUnit)}
+                            </td>
+                            <td className="px-3 py-3 whitespace-nowrap">{formatPrice(u.price)}</td>
+                            <td className="px-3 py-3">{STATUS_LABEL[u.status]}</td>
+                            <td className="px-3 py-3">
+                              <Link href={`/units/${u.id}#floor-plan`} className="text-brand underline">
+                                상세
+                              </Link>
+                            </td>
+                          </tr>
+                        );
+                      })}
+                    </Fragment>
+                  );
+                })
+              )}
             </tbody>
           </table>
         </div>

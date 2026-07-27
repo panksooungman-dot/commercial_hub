@@ -48,8 +48,8 @@ export default async function AboutPage() {
         </div>
 
         <div className="mt-8 flex gap-3">
-          <Link href="/units" className="bg-brand px-4 py-2 text-sm text-white">
-            호실 보기
+          <Link href="/plan" className="bg-brand px-4 py-2 text-sm text-white">
+            호실·도면
           </Link>
           <Link href="/contact" className="border border-line px-4 py-2 text-sm">
             상담 신청

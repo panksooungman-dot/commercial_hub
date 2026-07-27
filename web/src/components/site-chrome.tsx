@@ -4,8 +4,7 @@ import { InterestNavLink } from "@/components/interest-nav-link";
 const NAV = [
   { href: "/about", label: "사업개요" },
   { href: "/area", label: "입지·상권" },
-  { href: "/units", label: "호실 보기" },
-  { href: "/plan", label: "도면·MD" },
+  { href: "/plan", label: "호실·도면" },
   { href: "/interest", label: "내 선택", special: true },
   { href: "/guide", label: "분양안내" },
   { href: "/faq", label: "FAQ" },
