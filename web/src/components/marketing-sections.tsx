@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 
 const PREMIUM8 = [
   {
@@ -66,6 +67,122 @@ export function BrandStorySection() {
             className="h-auto w-full"
           />
         </figure>
+      </div>
+    </section>
+  );
+}
+
+/**
+ * 라이프스타일 → 상권 수요로 이어지는 분양 카피 섹션
+ * (학세권·스트리트몰·교통 호재 → 헬시가든·근린생활시설)
+ */
+export function LifestylePremiumSection() {
+  return (
+    <section className="relative overflow-hidden bg-[linear-gradient(165deg,#d9e6f0_0%,#eef3f7_38%,#f7f9fb_100%)]">
+      <div
+        className="pointer-events-none absolute -right-24 top-0 h-72 w-72 rounded-full bg-[#9bb8ce]/25 blur-3xl"
+        aria-hidden
+      />
+      <div
+        className="pointer-events-none absolute -left-16 bottom-10 h-56 w-56 rounded-full bg-[#c4a35a]/15 blur-3xl"
+        aria-hidden
+      />
+
+      <div className="relative mx-auto max-w-[1100px] px-4 py-16 md:py-20">
+        <div className="mx-auto max-w-3xl text-center">
+          <p className="animate-hero-fade-up text-xs font-semibold tracking-[0.22em] text-brand uppercase">
+            Songdo Hanulche Ivyone
+          </p>
+          <h2 className="animate-hero-fade-up mt-3 font-display text-[1.85rem] leading-tight text-brand-deep [animation-delay:80ms] sm:text-4xl md:text-[2.65rem]">
+            삶이 머무는 자리에,
+            <span className="mt-1 block text-brand">상권이 자랍니다</span>
+          </h2>
+          <p className="animate-hero-fade-up mx-auto mt-5 max-w-2xl text-[15px] leading-relaxed text-muted [animation-delay:160ms] sm:text-base">
+            학세권의 반복 수요, 약 140m 그랜드 스트리트몰의 시선, 송도를 여는 대형 교통 호재.
+            아이비원은 단지 안 라이프가 곧 상가의 고정 수요가 되는 구조를 갖췄습니다.
+          </p>
+        </div>
+
+        <div className="mt-14 space-y-14 md:mt-16 md:space-y-20">
+          <article className="grid items-center gap-8 md:grid-cols-2 md:gap-12">
+            <figure className="animate-hero-fade-up order-2 overflow-hidden [animation-delay:200ms] md:order-1">
+              <Image
+                src="/images/marketing/lifestyle-premium.png"
+                alt="송도 하늘채 아이비원 — 학세권·그랜드 스트리트몰·교통 호재"
+                width={1024}
+                height={689}
+                quality={90}
+                sizes="(max-width: 768px) 100vw, 540px"
+                className="h-auto w-full transition duration-700 ease-out hover:scale-[1.015]"
+              />
+            </figure>
+            <div className="animate-hero-fade-up order-1 [animation-delay:260ms] md:order-2">
+              <p className="text-xs font-semibold tracking-[0.18em] text-accent uppercase">
+                Location · Street · Transit
+              </p>
+              <h3 className="mt-3 font-display text-2xl leading-snug text-brand-deep sm:text-[1.75rem]">
+                학세권이 사람을 모으고,
+                <br />
+                스트리트몰이 시선을 붙잡습니다
+              </h3>
+              <p className="mt-4 text-[15px] leading-relaxed text-muted sm:text-base">
+                수도권 대표 학원가와 맞닿은 입지. 학생과 학부모의 발길이 매일 이어지는 동선 위에,
+                약 140m 그랜드 스트리트몰이 단지 앞을 관통합니다. 여기에 송도발 GTX·KTX,
+                제2공항철도 구상까지 더해지며 송도는 전국을 반나절 생활권으로 묶는 거점으로
+                도약합니다.
+              </p>
+              <p className="mt-3 text-[15px] leading-relaxed text-brand-deep/85 sm:text-base">
+                사람이 모이는 자리에는, 자연스럽게 매출의 기회가 열립니다.
+              </p>
+            </div>
+          </article>
+
+          <article className="grid items-center gap-8 md:grid-cols-2 md:gap-12">
+            <div className="animate-hero-fade-up [animation-delay:200ms]">
+              <p className="text-xs font-semibold tracking-[0.18em] text-accent uppercase">
+                Healthy Garden · Daily Retail
+              </p>
+              <h3 className="mt-3 font-display text-2xl leading-snug text-brand-deep sm:text-[1.75rem]">
+                단지 안에서 완성되는
+                <br />
+                원스톱 라이프
+              </h3>
+              <p className="mt-4 text-[15px] leading-relaxed text-muted sm:text-base">
+                헬시가든이 일상의 여유를 채우고, 근린생활시설이 생활 밀착 소비를 받칩니다.
+                입주민이 단지 안에서 머무를수록 상가의 고정 수요는 더 단단해집니다.
+              </p>
+              <p className="mt-3 text-[15px] leading-relaxed text-brand-deep/85 sm:text-base">
+                아이비원 상가는 멀리서 사람을 끌어오는 상권이 아니라,
+                가장 가까운 곳에서 반복 구매가 일어나는 상권입니다.
+              </p>
+              <div className="mt-7 flex flex-wrap gap-3">
+                <Link
+                  href="/plan"
+                  className="bg-brand px-5 py-3 text-sm font-semibold text-white transition duration-300 hover:-translate-y-0.5 hover:bg-brand-deep"
+                >
+                  호실·도면 보기
+                </Link>
+                <Link
+                  href="/contact"
+                  className="border border-brand/30 bg-white/70 px-5 py-3 text-sm font-semibold text-brand transition duration-300 hover:-translate-y-0.5 hover:border-brand hover:bg-white"
+                >
+                  상담 신청
+                </Link>
+              </div>
+            </div>
+            <figure className="animate-hero-fade-up [animation-delay:280ms]">
+              <Image
+                src="/images/marketing/lifestyle-garden.png"
+                alt="헬시가든과 근린생활시설 — 단지 안 원스톱 라이프"
+                width={1024}
+                height={582}
+                quality={90}
+                sizes="(max-width: 768px) 100vw, 540px"
+                className="h-auto w-full transition duration-700 ease-out hover:scale-[1.015]"
+              />
+            </figure>
+          </article>
+        </div>
       </div>
     </section>
   );
