@@ -1,27 +1,34 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 
 export default function AdminLoginPage() {
-  const router = useRouter();
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [submitting, setSubmitting] = useState(false);
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError("");
-    const res = await fetch("/api/admin/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ password }),
-    });
-    if (!res.ok) {
-      setError("비밀번호가 올바르지 않습니다.");
-      return;
+    setSubmitting(true);
+    try {
+      const res = await fetch("/api/admin/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ password }),
+      });
+      if (!res.ok) {
+        setError("비밀번호가 올바르지 않습니다.");
+        return;
+      }
+      // 로그인 전 nav 프리페치로 캐시된 /admin 리다이렉트 응답을 그대로 재사용하는
+      // 것을 피하기 위해 클라이언트 라우터 대신 실제 페이지 이동을 사용한다.
+      window.location.assign("/admin");
+    } catch {
+      setError("네트워크 오류로 로그인 요청을 보내지 못했습니다. 잠시 후 다시 시도해 주세요.");
+    } finally {
+      setSubmitting(false);
     }
-    router.push("/admin");
-    router.refresh();
   }
 
   return (
@@ -39,8 +46,12 @@ export default function AdminLoginPage() {
           />
         </label>
         {error ? <p className="text-sm text-red-700">{error}</p> : null}
-        <button type="submit" className="w-full bg-brand py-2 text-sm text-white">
-          로그인
+        <button
+          type="submit"
+          disabled={submitting}
+          className="w-full bg-brand py-2 text-sm text-white disabled:opacity-60"
+        >
+          {submitting ? "로그인 중…" : "로그인"}
         </button>
       </form>
     </div>
