@@ -76,9 +76,9 @@ export function AerialPlan({ project }: { project: Project }) {
         </div>
         <div className="pb-8 pt-4">
           <p className="text-xs tracking-[0.18em] text-muted uppercase">Site Plan</p>
-          <h2 className="mt-1 font-display text-2xl text-brand-deep md:text-3xl">단지 조감</h2>
+          <h2 className="mt-1 font-display text-2xl text-brand-deep md:text-3xl">단지 배치를 한눈에</h2>
           <p className="mt-1 text-sm text-muted">
-            A·B동 배치와 옥상 녹화·중앙 보행축을 한눈에 볼 수 있습니다.
+            A·B동 위치와 중앙 보행축, 옥상 녹화를 확인하고 상가 동선을 그려 보세요.
           </p>
         </div>
       </div>

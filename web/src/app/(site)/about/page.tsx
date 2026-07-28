@@ -10,7 +10,8 @@ export default async function AboutPage() {
       <div className="mx-auto max-w-6xl px-4 pt-12 pb-2">
         <h1 className="font-display text-4xl text-brand-deep">사업개요</h1>
         <p className="mt-3 max-w-3xl text-muted">
-          {project.usageLabel}로 구성된 주상복합 단지의 상업시설입니다.
+          {project.projectName} — {project.usageLabel}. 규모·면적·주차 등 핵심 수치를
+          한곳에서 확인하세요.
         </p>
       </div>
 

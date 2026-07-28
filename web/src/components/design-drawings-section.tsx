@@ -729,7 +729,7 @@ export function DesignDrawingsSection({ units = [] }: { units?: DrawingUnitStatu
         <p className="text-xs tracking-[0.18em] text-muted uppercase">Design Drawing</p>
         <h2 className="mt-1 font-display text-3xl text-brand-deep">공식 설계도면</h2>
         <p className="mt-2 text-muted">
-          상가 분양 현황을 도면에서 확인하세요. 호실을 클릭하면 정보가 팝업으로 표시됩니다.
+          동·층을 골라 호실 위치를 확인해 보세요. 호실을 누르면 면적·상태가 표시됩니다.
         </p>
 
         <div className="mt-6 flex flex-wrap items-center gap-2">

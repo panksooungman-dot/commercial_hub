@@ -6,10 +6,13 @@ export default async function AreaPage() {
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-12">
-      <p className="text-sm text-accent">1공구 상권 특성</p>
+      <p className="text-sm text-accent">Area Guide</p>
       <h1 className="mt-2 max-w-3xl font-display text-3xl text-brand-deep md:text-4xl">
         {area.positioningHeadline}
       </h1>
+      <p className="mt-4 max-w-2xl text-muted">
+        홈에서 본 입지 이야기를, 1공구 상권 특성과 주변 권역별로 더 자세히 풀어 드립니다.
+      </p>
 
       <div className="mt-10 grid gap-6 md:grid-cols-3">
         {area.points.map((p) => (
