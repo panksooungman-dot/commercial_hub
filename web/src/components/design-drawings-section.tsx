@@ -164,15 +164,10 @@ const DEFAULT_BOX_H = 5.2;
 const RAW_SEED: Record<BuildingKey, Record<FloorKey, [string, number, number, number, number][]>> = {
   a: {
     b1: [
-      ["A101", 18.0, 23.5, 10.0, 9.0],
-      ["A102", 27.0, 23.5, 8.5, 9.0],
-      ["A103", 14.9, 36.0, 7.5, 6.5],
-      ["A104", 14.9, 44.0, 7.5, 6.5],
-      ["A105", 30.5, 41.5, 6.5, 5.0],
-      ["A106", 39.0, 41.5, 6.5, 5.0],
-      ["A107", 21.5, 52.7, 7.0, 5.5],
-      ["A108", 15.5, 59.8, 7.0, 5.5],
-      ["A109", 32.5, 52.7, 7.0, 5.0],
+      // 분양 호실만 (A동 B1: B-101, B-102, B-105) — 라벨은 도면 표기 B-xxx
+      ["A101", 18.0, 78.0, 10.0, 9.0],
+      ["A102", 18.0, 68.0, 10.0, 8.0],
+      ["A105", 35.0, 62.0, 10.0, 8.0],
     ],
     "1f": [
       ["A116", 14.9, 22.0, 3.0, 3.4],
@@ -253,13 +248,10 @@ const RAW_SEED: Record<BuildingKey, Record<FloorKey, [string, number, number, nu
   },
   b: {
     b1: [
-      ["B101", 14.9, 22.1, 9.0, 8.5],
-      ["B102", 23.0, 22.1, 8.0, 8.5],
-      ["B103", 14.5, 41.8, 7.5, 6.5],
-      ["B104", 14.5, 48.1, 7.5, 6.5],
+      // 분양 호실만 (B동 B1: B-105, B-106, B-107)
       ["B105", 34.25, 46.7, 6.5, 5.0],
       ["B106", 40.0, 46.7, 6.5, 5.0],
-      ["B107", 15.5, 62.3, 7.5, 6.0],
+      ["B107", 55.0, 70.0, 12.0, 10.0],
     ],
     "1f": [
       ["B117", 13.5, 22.1, 2.8, 3.4],
@@ -350,7 +342,7 @@ function buildSeedMarkers(raw: typeof RAW_SEED): MarkerStore {
 
 const SEED_MARKERS: MarkerStore = buildSeedMarkers(RAW_SEED);
 
-const MARKERS_STORAGE_KEY = "ivysquare:design-drawing-markers:v2";
+const MARKERS_STORAGE_KEY = "ivysquare:design-drawing-markers:v3";
 const DRAG_CLICK_THRESHOLD = 6;
 
 const clamp = (n: number, min: number, max: number) => Math.min(max, Math.max(min, n));
@@ -515,17 +507,16 @@ export function DesignDrawingsSection({ units = [] }: { units?: DrawingUnitStatu
       const raw = window.localStorage.getItem(MARKERS_STORAGE_KEY);
       if (!raw) return SEED_MARKERS;
       const parsed = JSON.parse(raw);
-      const merged: MarkerStore = {
-        a: { b1: parsed?.a?.b1 ?? [], "1f": parsed?.a?.["1f"] ?? [], "2f": parsed?.a?.["2f"] ?? [] },
-        b: { b1: parsed?.b?.b1 ?? [], "1f": parsed?.b?.["1f"] ?? [], "2f": parsed?.b?.["2f"] ?? [] },
+      const slot = (bk: BuildingKey, fk: FloorKey): UnitMarker[] => {
+        const saved = parsed?.[bk]?.[fk];
+        if (Array.isArray(saved) && saved.length > 0) return saved as UnitMarker[];
+        return SEED_MARKERS[bk][fk];
       };
-      // 저장된 데이터가 전부 비어 있으면(구버전 저장값 등) 기본 좌표를 사용
-      const isAllEmpty = (Object.values(merged) as Record<FloorKey, UnitMarker[]>[]).every((byFloor) =>
-        Object.values(byFloor).every((list) => list.length === 0),
-      );
-      return isAllEmpty ? SEED_MARKERS : merged;
+      return {
+        a: { b1: slot("a", "b1"), "1f": slot("a", "1f"), "2f": slot("a", "2f") },
+        b: { b1: slot("b", "b1"), "1f": slot("b", "1f"), "2f": slot("b", "2f") },
+      };
     } catch {
-      // 저장된 마커 데이터가 없거나 손상된 경우 기본 좌표로 시작
       return SEED_MARKERS;
     }
   });

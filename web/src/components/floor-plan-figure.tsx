@@ -186,6 +186,14 @@ export function FloorPlanFigure({
                 />
 
                 <div className="pointer-events-none absolute inset-0 z-20">
+                  {/* A동(좌) · B동(우) 영역 가이드 */}
+                  <div className="absolute left-[2%] top-[2%] rounded bg-brand/80 px-2 py-0.5 text-[10px] font-bold text-white">
+                    A동
+                  </div>
+                  <div className="absolute right-[2%] top-[2%] rounded bg-[#0b5f8a]/90 px-2 py-0.5 text-[10px] font-bold text-white">
+                    B동
+                  </div>
+
                   {overlayPins.map((p) => {
                     const key = pinKey(p.building, p.unitNo);
                     if (selectedKeys.has(key)) return null;
@@ -194,6 +202,7 @@ export function FloorPlanFigure({
                       <span
                         className={`pointer-events-auto flex h-6 min-w-6 items-center justify-center rounded-full border border-white px-1 text-[9px] font-bold text-white shadow ${dot}`}
                       >
+                        {p.building}
                         {p.unitNo.replace(/^B-/, "")}
                       </span>
                     );
@@ -243,7 +252,10 @@ export function FloorPlanFigure({
               </div>
               <figcaption className="border-t border-line px-4 py-2 text-xs text-muted">
                 {plan.alt}
-                {selectedPins.length > 0 ? ` · 선택 호실 마커 ${selectedPins.length}개` : ""}
+                {overlayPins.length > 0
+                  ? ` · A·B동 핀 ${overlayPins.length + selectedPins.length}개`
+                  : ""}
+                {selectedPins.length > 0 ? ` · 선택 강조 ${selectedPins.length}개` : ""}
               </figcaption>
             </figure>
           );

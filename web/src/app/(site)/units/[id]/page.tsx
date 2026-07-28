@@ -70,9 +70,7 @@ export default async function UnitDetailPage({ params }: Ctx) {
         <h2 className="mb-4 font-display text-2xl text-brand-deep">도면에서 위치 확인</h2>
         <FloorPlanFigure
           floor={unit.floor as Floor}
-          building={unit.building}
           pins={floorPins}
-          hideDimPins
           showPins
           highlight={{
             building: unit.building,
