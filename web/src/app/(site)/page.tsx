@@ -53,8 +53,9 @@ export default async function HomePage() {
 
             <div className="absolute inset-0 flex flex-col justify-center px-5 pt-24 pb-10 sm:px-10 sm:pb-12 md:px-14 md:pb-14">
               <div className="max-w-xl sm:max-w-2xl">
-                <h1 className="animate-hero-fade-up font-display text-[2rem] leading-[1.2] font-bold text-white sm:text-4xl md:text-5xl lg:text-[3.375rem] lg:leading-[1.15]">
-                  투자가치의 중심, 새로운 비즈니스의 시작
+                <h1 className="animate-hero-fade-up font-display text-[2.1rem] leading-[1.22] font-bold text-white [text-shadow:0_2px_20px_rgba(0,0,0,0.35)] sm:text-[2.75rem] sm:leading-[1.18] md:text-5xl lg:text-[3.5rem] lg:leading-[1.14]">
+                  <span className="block">투자가치의 중심,</span>
+                  <span className="block text-accent">새로운 비즈니스의 시작</span>
                 </h1>
                 <p className="animate-hero-fade-up mt-4 max-w-md text-sm leading-relaxed text-white/85 [animation-delay:200ms] sm:mt-5 sm:max-w-lg sm:text-base sm:leading-relaxed md:text-lg">
                   프리미엄 입지와 미래가치를 갖춘 상업시설에서 성공적인 투자와 비즈니스의 새로운 기회를 만나보세요.
