@@ -3,44 +3,52 @@ import Link from "next/link";
 
 const PREMIUM8 = [
   {
-    emoji: "🎓",
+    src: "/images/mood/academy.jpg",
     title: "수도권 대표 학원가",
     desc: "송도 1공구 학원가 거리",
+    alt: "송도 학원가 교육 상권 분위기",
   },
   {
-    emoji: "🏘️",
+    src: "/images/aerial-plan.jpg",
     title: "초밀집 배후수요",
     desc: "단지 인근 약 1만 5천여 세대",
+    alt: "송도 하늘채 아이비원 단지 조감도",
   },
   {
-    emoji: "🏬",
+    src: "/images/marketing/facade-street.png",
     title: "그랜드 스트리트몰",
     desc: "약 140m, 3개 층 대형 상업시설",
+    alt: "그랜드 스트리트몰 상업시설 외관",
   },
   {
-    emoji: "🏗️",
+    src: "/images/section-kolon-pride.jpg",
     title: "코오롱 혁신설계",
     desc: "코오롱글로벌의 앞선 시공력",
+    alt: "코오롱글로벌 건축 브랜드",
   },
   {
-    emoji: "🚄",
+    src: "/images/marketing/lifestyle-premium.png",
     title: "획기적 대형호재",
     desc: "단지 인근 송도 GTX, K바이오 랩허브",
+    alt: "송도 교통·입지 프리미엄",
   },
   {
-    emoji: "🏢",
+    src: "/images/hero-exterior.jpg",
     title: "연이은 기업입주",
     desc: "셀트리온, 삼성바이오로직스 등",
+    alt: "송도 프리미엄 주상복합 스카이라인",
   },
   {
-    emoji: "🛒",
+    src: "/images/marketing/lifestyle-garden.png",
     title: "365일 상권",
     desc: "아파트 입주민의 고정수요",
+    alt: "단지 내 라이프·근린생활시설",
   },
   {
-    emoji: "💹",
+    src: "/images/mood/retail.jpg",
     title: "규제 덜한 수익형 상가",
     desc: "높은 대출 한도, 수익형 선호 상승",
+    alt: "스트리트 리테일 상가 분위기",
   },
 ] as const;
 
@@ -188,6 +196,42 @@ export function LifestylePremiumSection() {
   );
 }
 
+/**
+ * 사업개요 직전 — 스트리트형 상가 외관 비주얼
+ */
+export function FacadeStreetSection() {
+  return (
+    <section className="bg-[#f0f3f6]">
+      <div className="mx-auto max-w-[1400px]">
+        <div className="px-4 pt-10 text-center sm:px-6 sm:pt-12 md:pt-14">
+          <p className="text-xs font-semibold tracking-[0.22em] text-brand uppercase">
+            Street Retail · Hanulche Ivyone
+          </p>
+          <h2 className="mt-3 font-display text-2xl leading-snug text-brand-deep sm:text-3xl md:text-[2.15rem]">
+            시선이 머무는 스트리트,
+            <span className="mt-1 block">매출이 열리는 파사드</span>
+          </h2>
+          <p className="mx-auto mt-3 max-w-2xl text-sm leading-relaxed text-muted sm:text-[15px]">
+            통유리 전면과 정돈된 간판 라인, 대로변을 따라 이어지는 연도형 상가.
+            하늘채의 브랜드 아래, 걸음이 곧 기회가 되는 거리입니다.
+          </p>
+        </div>
+        <figure className="mt-8 overflow-hidden sm:mt-10">
+          <Image
+            src="/images/marketing/facade-street.png"
+            alt="송도 하늘채 아이비원 — 스트리트형 상업시설 외관"
+            width={1024}
+            height={444}
+            quality={92}
+            sizes="(max-width: 1400px) 100vw, 1400px"
+            className="h-auto w-full"
+          />
+        </figure>
+      </div>
+    </section>
+  );
+}
+
 const AREA_FACILITIES = [
   {
     src: "/images/mood/academy.jpg",
@@ -265,34 +309,43 @@ export function AreaFacilitiesSection() {
 
 export function PremiumEightSection() {
   return (
-    <section className="bg-white">
+    <section className="bg-[#f4f6f8]">
       <div className="mx-auto max-w-[1100px] px-4 py-14 md:py-16">
-        <p className="text-center text-sm font-medium text-[#1a2a4a]">
-          송도 유일 압도적 투자 가치
+        <p className="text-center text-xs font-semibold tracking-[0.2em] text-brand uppercase">
+          Premium Value
         </p>
-        <h2 className="mt-2 text-center font-display text-3xl text-[#1a2a4a] md:text-4xl">
-          아이비스퀘어 <span className="text-[#b8954a]">PREMIUM 8</span>
+        <h2 className="mt-2 text-center font-display text-3xl text-brand-deep md:text-4xl">
+          아이비스퀘어 <span className="text-accent">PREMIUM 8</span>
         </h2>
-        <p className="mx-auto mt-2 max-w-xl text-center text-sm text-muted">
+        <p className="mx-auto mt-2 max-w-xl text-center text-sm text-muted md:text-base">
           학원가·배후수요·스트리트몰부터 교통·기업 호재까지, 스케일이 다른 투자가치
         </p>
 
-        <ol className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <ol className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
           {PREMIUM8.map((item, i) => (
             <li
               key={item.title}
-              className="rounded-2xl border border-[#d8c49a]/70 bg-[#fcfbf8] px-4 py-5 text-center"
+              className="group overflow-hidden rounded-2xl bg-white shadow-[0_10px_32px_rgba(20,40,60,0.07)] transition duration-300 hover:-translate-y-1 hover:shadow-[0_16px_40px_rgba(20,40,60,0.12)]"
             >
-              <span className="text-3xl leading-none" aria-hidden>
-                {item.emoji}
-              </span>
-              <p className="mt-3 text-xs font-semibold tracking-wide text-[#b8954a]">
-                0{i + 1}
-              </p>
-              <h3 className="mt-1 font-display text-base text-[#1a2a4a] md:text-[17px]">
-                {item.title}
-              </h3>
-              <p className="mt-2 text-xs leading-relaxed text-muted md:text-sm">({item.desc})</p>
+              <div className="relative aspect-[4/3] w-full overflow-hidden">
+                <Image
+                  src={item.src}
+                  alt={item.alt}
+                  fill
+                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 260px"
+                  quality={88}
+                  className="object-cover transition duration-700 ease-out group-hover:scale-[1.04]"
+                />
+                <span className="absolute left-3 top-3 rounded-md bg-brand-deep/85 px-2 py-1 text-[11px] font-bold tracking-wide text-white backdrop-blur-[1px]">
+                  {String(i + 1).padStart(2, "0")}
+                </span>
+              </div>
+              <div className="px-4 py-4 text-left">
+                <h3 className="font-display text-[17px] leading-snug text-brand-deep">
+                  {item.title}
+                </h3>
+                <p className="mt-1.5 text-sm leading-relaxed text-muted">{item.desc}</p>
+              </div>
             </li>
           ))}
         </ol>

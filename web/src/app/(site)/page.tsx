@@ -3,6 +3,7 @@ import Link from "next/link";
 import {
   AreaFacilitiesSection,
   BrandStorySection,
+  FacadeStreetSection,
   LifestylePremiumSection,
   PremiumEightSection,
 } from "@/components/marketing-sections";
@@ -81,10 +82,11 @@ export default async function HomePage() {
         </div>
       </section>
 
+      <LifestylePremiumSection />
+      <FacadeStreetSection />
       <OverviewTable project={project} />
 
       <BrandStorySection />
-      <LifestylePremiumSection />
       <PremiumEightSection />
       <AreaFacilitiesSection />
 

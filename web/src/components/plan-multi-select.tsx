@@ -32,13 +32,14 @@ export function PlanMultiSelect({
   floor,
   listBuilding,
   units,
+  floorPins = [],
   initialIds = [],
   resultCount,
 }: {
   floor: Floor;
   listBuilding: Building | "";
   units: PlanUnit[];
-  /** @deprecated 도면 갤러리로 대체 */
+  /** 해당 층 A·B 전체 핀 (MD Plan 오버레이) */
   floorPins?: PlanPin[];
   initialIds?: string[];
   resultCount?: number;
@@ -154,7 +155,16 @@ export function PlanMultiSelect({
         ) : null}
       </div>
 
-      <PlanMediaGallery floor={floor} building={listBuilding} />
+      <PlanMediaGallery
+        floor={floor}
+        building={listBuilding}
+        pins={floorPins}
+        highlights={floorSelected.map((u) => ({
+          building: u.building,
+          unitNo: u.unitNo,
+          mark: interest.ids.indexOf(u.id) + 1,
+        }))}
+      />
 
       <div>
         <h2 className="font-display text-2xl text-brand-deep">{floor} 호실 목록</h2>

@@ -73,6 +73,8 @@ export function FloorPlanFigure({
   hideDimPins = false,
   /** MD Plan 합본 도면에 호실 핀 표시 (기본 ON) */
   showPins = true,
+  /** 상단 선택 배너·칩 숨김 (갤러리 등 외부 UI가 이미 표시할 때) */
+  compact = false,
 }: {
   floor: Floor;
   /** 동 필터. 비우면 A·B 모두 표시 */
@@ -88,6 +90,7 @@ export function FloorPlanFigure({
   /** true면 선택 호실만 표시(나머지 작은 핀 숨김) */
   hideDimPins?: boolean;
   showPins?: boolean;
+  compact?: boolean;
 }) {
   const plans = plansForFloor(floor, building);
   const mood = FLOOR_MOOD_IMAGES[floor];
@@ -106,7 +109,7 @@ export function FloorPlanFigure({
 
   return (
     <div id="floor-plan" className={`scroll-mt-24 space-y-6 ${className}`}>
-      {selected.length > 0 ? (
+      {!compact && selected.length > 0 ? (
         <div className="space-y-3">
           <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-accent/40 bg-[#fff8e8] px-4 py-3">
             <p className="text-sm text-brand-deep">

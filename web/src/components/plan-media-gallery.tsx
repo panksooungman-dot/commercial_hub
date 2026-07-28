@@ -3,9 +3,13 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import {
+  FloorPlanFigure,
+  type PlanHighlight,
+} from "@/components/floor-plan-figure";
 import { DESIGN_PDF_HREF } from "@/lib/floor-plans";
 import { PLAN_MEDIA_GALLERY, type PlanGalleryItem } from "@/lib/plan-media-gallery";
-import { Building, Floor } from "@/lib/types";
+import { Building, Floor, UnitStatus } from "@/lib/types";
 
 const FLOOR_LABEL: Record<Floor, string> = {
   B1: "지하1층 · A·B동",
@@ -13,12 +17,26 @@ const FLOOR_LABEL: Record<Floor, string> = {
   "2F": "지상2층 · A·B동",
 };
 
+type PlanPin = {
+  id: string;
+  building: Building;
+  unitNo: string;
+  status?: Exclude<UnitStatus, "hidden">;
+  href?: string;
+};
+
 export function PlanMediaGallery({
   floor,
   building = "",
+  pins = [],
+  highlights = [],
 }: {
   floor: Floor;
   building?: Building | "";
+  /** 해당 층 A·B 전체 핀 */
+  pins?: PlanPin[];
+  /** 선택 호실 강조(최대 3) */
+  highlights?: PlanHighlight[];
 }) {
   const router = useRouter();
   const [activeFloor, setActiveFloor] = useState<Floor>(floor);
@@ -79,26 +97,27 @@ export function PlanMediaGallery({
       </div>
 
       <div className="space-y-4">
-        <figure className="overflow-hidden rounded-2xl border border-line bg-white">
+        <div className="overflow-hidden rounded-2xl border border-line bg-white">
           <div className="border-b border-line px-4 py-4 sm:px-5 sm:py-5">
             <p className="font-display text-2xl tracking-tight text-brand-deep sm:text-3xl">
               {current.headline}
             </p>
-            <p className="mt-2 max-w-3xl text-sm leading-relaxed text-ink sm:text-base">
+            <p className="mt-2 max-w-3xl text-sm leading-relaxed text-muted sm:text-base">
               {current.copy}
             </p>
           </div>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            key={current.imageSrc}
-            src={current.imageSrc}
-            alt={current.alt}
-            className="h-auto w-full object-contain"
-          />
-          <figcaption className="border-t border-line px-4 py-2 text-xs text-muted">
-            {current.alt}
-          </figcaption>
-        </figure>
+          <div className="px-2 pb-2 sm:px-3 sm:pb-3">
+            <FloorPlanFigure
+              floor={current.floor}
+              showMood={false}
+              showPins
+              compact
+              pins={pins}
+              highlights={highlights}
+              className="!scroll-mt-0 space-y-3"
+            />
+          </div>
+        </div>
 
         {current.videoSrc ? (
           <figure className="overflow-hidden rounded-2xl border border-line bg-white">
