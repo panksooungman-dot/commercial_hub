@@ -179,6 +179,7 @@ export function InterestUnitsPanel({ units }: { units: PublicUnit[] }) {
             floor={floor}
             showMood={false}
             hideDimPins
+            showPins
             highlights={items.map((i) => ({
               building: i.u.building as Building,
               unitNo: i.u.unitNo,

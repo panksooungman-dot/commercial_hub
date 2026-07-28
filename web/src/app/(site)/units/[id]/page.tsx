@@ -72,6 +72,8 @@ export default async function UnitDetailPage({ params }: Ctx) {
           floor={unit.floor as Floor}
           building={unit.building}
           pins={floorPins}
+          hideDimPins
+          showPins
           highlight={{
             building: unit.building,
             unitNo: unit.unitNo,

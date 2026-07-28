@@ -197,7 +197,7 @@ export function estimateUnitPin(
   floor: Floor = "1F",
 ): Pin {
   const hit = lookupMdPin(building, floor, unitNo);
-  if (hit) return hit;
+  if (hit) return adaptPinToCroppedMd(hit, floor);
 
   const sorted = [...siblings].map(normalizeUnitNo).sort((a, b) =>
     a.localeCompare(b, undefined, { numeric: true }),
@@ -210,10 +210,30 @@ export function estimateUnitPin(
   const row = Math.floor(idx / cols);
   const col = idx % cols;
   const panel = MD_PANELS[floor]?.[building] ?? MD_PANELS["1F"].A;
-  return {
-    x: Math.round((panel.left + ((col + 0.5) / cols) * panel.width) * 10) / 10,
-    y: Math.round((panel.top + ((row + 0.5) / rows) * panel.height) * 10) / 10,
-  };
+  return adaptPinToCroppedMd(
+    {
+      x: Math.round((panel.left + ((col + 0.5) / cols) * panel.width) * 10) / 10,
+      y: Math.round((panel.top + ((row + 0.5) / rows) * panel.height) * 10) / 10,
+    },
+    floor,
+  );
+}
+
+/**
+ * 핀 좌표는 헤더 포함 구 MD 전단(1F 843 / 2F 795 / B1 941) 기준.
+ * 현재 public 이미지는 상단 타이틀을 자른 크롭본이므로 Y만 보정합니다.
+ */
+const MD_LEGACY_H: Record<Floor, number> = { "1F": 843, "2F": 795, B1: 941 };
+const MD_CURRENT_H: Record<Floor, number> = { "1F": 653, "2F": 622, B1: 638 };
+
+function adaptPinToCroppedMd(pin: Pin, floor: Floor): Pin {
+  const oldH = MD_LEGACY_H[floor];
+  const newH = MD_CURRENT_H[floor];
+  const topCrop = oldH - newH;
+  if (topCrop <= 0) return pin;
+  const yPx = (pin.y / 100) * oldH - topCrop;
+  const y = Math.min(97, Math.max(3, (yPx / newH) * 100));
+  return { x: pin.x, y: Math.round(y * 10) / 10 };
 }
 
 /** 해당 층·동에 MD 핀 좌표가 등록돼 있는지 */
