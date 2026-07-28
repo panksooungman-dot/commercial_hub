@@ -364,6 +364,7 @@ function MarkerPin({
   marker,
   editable,
   pinScale = 1,
+  compact = false,
   onPointerDown,
   onPointerMove,
   onPointerUp,
@@ -374,6 +375,8 @@ function MarkerPin({
   editable: boolean;
   /** 부모(도면)에 확대/축소 transform이 걸려 있을 때 마커 자체 크기는 화면상 일정하게 유지하기 위한 역배율 */
   pinScale?: number;
+  /** 좁은 화면 축소 미리보기(모바일)에서는 호실이 밀집해 라벨이 겹쳐 읽을 수 없으므로 숨김 */
+  compact?: boolean;
   onPointerDown?: (e: ReactPointerEvent<HTMLDivElement>) => void;
   onPointerMove?: (e: ReactPointerEvent<HTMLDivElement>) => void;
   onPointerUp?: (e: ReactPointerEvent<HTMLDivElement>) => void;
@@ -382,7 +385,7 @@ function MarkerPin({
 }) {
   return (
     <div
-      className={`absolute select-none ${editable ? "cursor-grab active:cursor-grabbing" : "pointer-events-none"}`}
+      className={`absolute select-none ${compact ? "hidden sm:block" : ""} ${editable ? "cursor-grab active:cursor-grabbing" : "pointer-events-none"}`}
       style={{
         left: `${marker.x}%`,
         top: `${marker.y}%`,
@@ -837,6 +840,37 @@ export function DesignDrawingsSection({ units = [] }: { units?: DrawingUnitStatu
           </span>
         </div>
 
+        <div className="mt-5">
+          <p className="text-sm font-medium text-brand-deep">
+            {PUBLIC_STATUS_FILTERS.find((f) => f.key === statusFilter)?.label ?? "전체"} 호실 목록
+            <span className="ml-1.5 font-normal text-muted">{visibleMarkers.length}건</span>
+          </p>
+          {visibleMarkers.length > 0 ? (
+            <div className="mt-2.5 flex flex-wrap gap-2">
+              {visibleMarkers.map((m) => {
+                const st = statusForMarker(units, building, floor, m.label);
+                return (
+                  <button
+                    key={m.id}
+                    type="button"
+                    onClick={() => openUnitPopup(m.label)}
+                    className="inline-flex items-center gap-1.5 rounded-full border border-line bg-white px-3 py-1.5 text-sm font-medium text-brand-deep shadow-sm transition hover:border-brand hover:shadow"
+                  >
+                    <span
+                      className="h-2.5 w-2.5 rounded-full"
+                      style={{ backgroundColor: STATUS_FILL[st] }}
+                      aria-hidden
+                    />
+                    {m.label}
+                  </button>
+                );
+              })}
+            </div>
+          ) : (
+            <p className="mt-2.5 text-sm text-muted">해당 상태의 호실이 없습니다.</p>
+          )}
+        </div>
+
         <figure className="mt-6 overflow-hidden rounded-2xl border border-line bg-white">
           <div className="relative aspect-[2400/1696] w-full overflow-hidden bg-[#fbfbfb]">
             <Image
@@ -858,7 +892,7 @@ export function DesignDrawingsSection({ units = [] }: { units?: DrawingUnitStatu
               />
             ))}
             {thumbMarkers.map((m) => (
-              <MarkerPin key={m.id} marker={m} editable={false} />
+              <MarkerPin key={m.id} marker={m} editable={false} compact />
             ))}
             <button
               type="button"
@@ -878,6 +912,17 @@ export function DesignDrawingsSection({ units = [] }: { units?: DrawingUnitStatu
             {drawing.alt} · 호실을 클릭하면 정보가 표시됩니다 · (주)아센스 종합건축사사무소 제공
           </figcaption>
         </figure>
+
+        {thumbMarkers.length > 0 && (
+          <p className="mt-3 flex items-center gap-1.5 text-xs text-accent sm:hidden">
+            <svg aria-hidden viewBox="0 0 20 20" fill="none" className="h-3.5 w-3.5 shrink-0">
+              <circle cx="8.5" cy="8.5" r="5.5" stroke="currentColor" strokeWidth="1.6" />
+              <path d="M8.5 6v5M6 8.5h5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+              <path d="M13 13l4.5 4.5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+            </svg>
+            호실 번호가 겹쳐 보일 수 있어요 — &ldquo;도면 확대&rdquo;를 눌러 크게 보세요.
+          </p>
+        )}
 
         <p className="mt-3 text-xs text-muted">
           ※ 색칠된 호실을 클릭하면 면적·분양가·상태를 확인할 수 있습니다. 상태는 관리자에서 변경하면 바로 반영됩니다.

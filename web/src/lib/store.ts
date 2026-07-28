@@ -97,7 +97,7 @@ function defaultProject(): Project {
     heroSubcopy:
       "약 1만 5천여 세대와 7개 학교, 수도권 대표 학원가를 품은 자리. 약 140m 그랜드 스트리트몰의 주목성 위에 한 수 위 공간 설계를 더했습니다.",
     heroAccentLine: "송도학원가 랜드마크 상가 — 아이비스퀘어",
-    heroCtaPrimary: "호실·도면",
+    heroCtaPrimary: "분양 정보 보기",
     heroCtaSecondary: "상담 신청하기",
     updatedAt: now(),
   };

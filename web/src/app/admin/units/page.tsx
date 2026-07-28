@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { STATUS_LABEL } from "@/lib/format";
 import { Unit, UnitStatus } from "@/lib/types";
 
@@ -9,7 +9,10 @@ export default function AdminUnitsPage() {
   const [units, setUnits] = useState<Unit[]>([]);
   const [floor, setFloor] = useState("");
   const [building, setBuilding] = useState("");
+  const [showHidden, setShowHidden] = useState(false);
   const [msg, setMsg] = useState("");
+  /** 삭제 직전 상태를 기억해 두었다가 복구 시 그대로 되돌린다(새로고침 시엔 분양가능으로 복구) */
+  const statusBeforeDelete = useRef<Record<string, UnitStatus>>({});
 
   useEffect(() => {
     fetch("/api/admin/units")
@@ -20,14 +23,17 @@ export default function AdminUnitsPage() {
       .then(setUnits);
   }, []);
 
+  const hiddenCount = useMemo(() => units.filter((u) => u.status === "hidden").length, [units]);
+
   const filtered = useMemo(
     () =>
       units.filter((u) => {
         if (floor && u.floor !== floor) return false;
         if (building && u.building !== building) return false;
+        if (!showHidden && u.status === "hidden") return false;
         return true;
       }),
-    [units, floor, building],
+    [units, floor, building, showHidden],
   );
 
   async function saveUnit(unit: Unit) {
@@ -42,6 +48,25 @@ export default function AdminUnitsPage() {
 
   function patch(id: string, partial: Partial<Unit>) {
     setUnits((list) => list.map((u) => (u.id === id ? { ...u, ...partial } : u)));
+  }
+
+  /** 삭제(비공개 처리)·복구는 상태를 바로 저장해 공개 사이트에 즉시 반영한다 */
+  async function setStatusAndSave(unit: Unit, status: UnitStatus) {
+    const next = { ...unit, status };
+    patch(unit.id, { status });
+    await saveUnit(next);
+  }
+
+  function deleteUnit(unit: Unit) {
+    if (!window.confirm(`${unit.building}-${unit.floor}-${unit.unitNo} 호실을 삭제(비공개)할까요?\n공개 사이트에서 즉시 사라지며, 목록의 "비공개 호실 표시"에서 언제든 복구할 수 있습니다.`)) {
+      return;
+    }
+    statusBeforeDelete.current[unit.id] = unit.status;
+    setStatusAndSave(unit, "hidden");
+  }
+
+  function restoreUnit(unit: Unit) {
+    setStatusAndSave(unit, statusBeforeDelete.current[unit.id] ?? "available");
   }
 
   return (
@@ -63,11 +88,19 @@ export default function AdminUnitsPage() {
           <option value="A">A</option>
           <option value="B">B</option>
         </select>
+        <label className="flex items-center gap-1.5 text-sm text-muted">
+          <input
+            type="checkbox"
+            checked={showHidden}
+            onChange={(e) => setShowHidden(e.target.checked)}
+          />
+          비공개 호실 표시 ({hiddenCount})
+        </label>
         {msg ? <span className="text-sm text-brand">{msg}</span> : null}
       </div>
 
       <div className="mt-4 overflow-x-auto border border-line bg-surface">
-        <table className="w-full min-w-[980px] text-left text-xs">
+        <table className="w-full min-w-[1040px] text-left text-xs">
           <thead className="bg-background text-muted">
             <tr>
               <th className="px-2 py-2">호실</th>
@@ -79,11 +112,15 @@ export default function AdminUnitsPage() {
               <th className="px-2 py-2">권장업종</th>
               <th className="px-2 py-2">옵션</th>
               <th className="px-2 py-2"></th>
+              <th className="px-2 py-2"></th>
             </tr>
           </thead>
           <tbody>
             {filtered.map((u) => (
-              <tr key={u.id} className="border-t border-line">
+              <tr
+                key={u.id}
+                className={`border-t border-line ${u.status === "hidden" ? "bg-background/70 opacity-60" : ""}`}
+              >
                 <td className="px-2 py-2 font-medium">
                   <Link href={`/units/${u.id}`} className="text-brand underline">
                     {u.building}-{u.floor}-{u.unitNo}
@@ -161,6 +198,25 @@ export default function AdminUnitsPage() {
                   >
                     저장
                   </button>
+                </td>
+                <td className="px-2 py-2">
+                  {u.status === "hidden" ? (
+                    <button
+                      type="button"
+                      className="border border-brand px-2 py-1 text-brand hover:bg-brand hover:text-white"
+                      onClick={() => restoreUnit(u)}
+                    >
+                      복구
+                    </button>
+                  ) : (
+                    <button
+                      type="button"
+                      className="border border-[#c0392b] px-2 py-1 text-[#c0392b] hover:bg-[#c0392b] hover:text-white"
+                      onClick={() => deleteUnit(u)}
+                    >
+                      삭제
+                    </button>
+                  )}
                 </td>
               </tr>
             ))}
