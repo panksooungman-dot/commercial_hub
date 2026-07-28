@@ -840,6 +840,37 @@ export function DesignDrawingsSection({ units = [] }: { units?: DrawingUnitStatu
           </span>
         </div>
 
+        <div className="mt-5">
+          <p className="text-sm font-medium text-brand-deep">
+            {PUBLIC_STATUS_FILTERS.find((f) => f.key === statusFilter)?.label ?? "전체"} 호실 목록
+            <span className="ml-1.5 font-normal text-muted">{visibleMarkers.length}건</span>
+          </p>
+          {visibleMarkers.length > 0 ? (
+            <div className="mt-2.5 flex flex-wrap gap-2">
+              {visibleMarkers.map((m) => {
+                const st = statusForMarker(units, building, floor, m.label);
+                return (
+                  <button
+                    key={m.id}
+                    type="button"
+                    onClick={() => openUnitPopup(m.label)}
+                    className="inline-flex items-center gap-1.5 rounded-full border border-line bg-white px-3 py-1.5 text-sm font-medium text-brand-deep shadow-sm transition hover:border-brand hover:shadow"
+                  >
+                    <span
+                      className="h-2.5 w-2.5 rounded-full"
+                      style={{ backgroundColor: STATUS_FILL[st] }}
+                      aria-hidden
+                    />
+                    {m.label}
+                  </button>
+                );
+              })}
+            </div>
+          ) : (
+            <p className="mt-2.5 text-sm text-muted">해당 상태의 호실이 없습니다.</p>
+          )}
+        </div>
+
         <figure className="mt-6 overflow-hidden rounded-2xl border border-line bg-white">
           <div className="relative aspect-[2400/1696] w-full overflow-hidden bg-[#fbfbfb]">
             <Image
