@@ -10,8 +10,9 @@ import { AerialPlan, OverviewTable } from "@/components/overview-materials";
 import { store, getPublicUnits } from "@/lib/store";
 import { frontFacadeForUnitId, resolveFrontLength } from "@/lib/front-lengths";
 
-/** 히어로 사진(문구 없음) + HTML 문구 오버레이 */
-const HERO = { src: "/images/hero-banner-main.gif", w: 1903, h: 1033 } as const;
+/** 히어로 배경 영상(문구 없음) + HTML 문구 오버레이. poster는 영상 첫 프레임과 동일한 이미지. */
+const HERO_VIDEO_SRC = "/videos/hero-banner.mp4";
+const HERO_POSTER_SRC = "/images/hero-banner-poster.jpg";
 
 export default async function HomePage() {
   const project = await store.getProject();
@@ -22,16 +23,30 @@ export default async function HomePage() {
     <div>
       <section className="relative overflow-hidden bg-[#e8eef3] text-white">
         <div className="relative mx-auto w-full max-w-[1400px]">
-          <div className="relative aspect-[1920/834] min-h-[420px] w-full sm:min-h-[480px]">
+          <div className="relative aspect-[1920/834] min-h-[420px] w-full overflow-hidden sm:min-h-[480px]">
+            {/* LCP 대상: 최적화된 poster 이미지가 먼저 그려지고, 영상은 로드되는 대로 위에 겹쳐 재생된다. */}
             <Image
-              src={HERO.src}
+              src={HERO_POSTER_SRC}
               alt={`${project.projectName} 외관`}
               fill
               priority
-              quality={92}
+              quality={90}
               sizes="(max-width: 1400px) 100vw, 1400px"
-              className="object-cover object-[center_45%]"
+              className="object-cover"
             />
+            <video
+              className="absolute inset-0 h-full w-full object-cover"
+              src={HERO_VIDEO_SRC}
+              poster={HERO_POSTER_SRC}
+              autoPlay
+              muted
+              loop
+              playsInline
+              preload="metadata"
+              aria-hidden="true"
+            >
+              <source src={HERO_VIDEO_SRC} type="video/mp4" />
+            </video>
             {/* 사진은 살리고, 좌측·하단에만 부드러운 톤 */}
             <div
               className="absolute inset-0"
