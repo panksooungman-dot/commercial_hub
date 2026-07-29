@@ -300,14 +300,14 @@ export function PremiumEightSection() {
               key={item.title}
               className="group overflow-hidden rounded-2xl bg-[#f7f9fb] shadow-[0_8px_28px_rgba(20,40,60,0.06)] transition duration-300 hover:-translate-y-1 hover:shadow-[0_14px_36px_rgba(20,40,60,0.1)]"
             >
-              <div className="relative aspect-[4/3] w-full overflow-hidden">
+              <div className="relative aspect-[3/2] w-full overflow-hidden bg-white">
                 <Image
                   src={item.src}
                   alt={item.alt}
                   fill
                   sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 260px"
                   quality={88}
-                  className="object-cover transition duration-700 ease-out group-hover:scale-[1.04]"
+                  className="object-contain transition duration-700 ease-out group-hover:scale-[1.04]"
                 />
                 <span className="absolute left-3 top-3 rounded-md bg-brand-deep/85 px-2 py-1 text-[11px] font-bold tracking-wide text-white">
                   {String(i + 1).padStart(2, "0")}
