@@ -773,7 +773,7 @@ export function DesignDrawingsSection({ units = [] }: { units?: DrawingUnitStatu
             <button
               type="button"
               onClick={() => setShowMarkers((v) => !v)}
-              className={`ml-auto rounded-full px-4 py-2 text-sm transition ${
+              className={`w-full rounded-full px-4 py-2 text-sm transition sm:ml-auto sm:w-auto ${
                 showMarkers
                   ? "bg-accent text-brand-deep"
                   : "border border-line bg-white text-muted hover:border-brand"
