@@ -43,7 +43,7 @@ export function SectionDotNav({ sections }: { sections: Section[] }) {
   return (
     <nav
       aria-label="섹션 바로가기"
-      className="fixed right-5 top-1/2 z-30 hidden -translate-y-1/2 flex-col items-end gap-3 lg:flex"
+      className="fixed right-5 top-1/2 z-30 hidden -translate-y-1/2 flex-col items-end gap-3 md:flex"
     >
       {sections.map((s) => {
         const active = s.id === activeId;
