@@ -86,6 +86,33 @@ export function AerialPlan({ project }: { project: Project }) {
   );
 }
 
+export function LocationMapSection() {
+  return (
+    <div className="relative w-full overflow-hidden bg-[#f7f9fb]">
+      <div className="mx-auto max-w-[1100px] px-4 py-12 md:py-16">
+        <p className="text-xs tracking-[0.18em] text-muted uppercase">Location</p>
+        <h2 className="mt-1 font-display text-2xl text-brand-deep md:text-3xl">
+          송도의 &lsquo;대치동&rsquo;, 1공구 중심 상권
+        </h2>
+        <p className="mt-2 max-w-2xl text-sm text-muted md:text-base">
+          채드윅송도국제학교·인천포스코고등학교 등 학원가와 고소득 배후주거, 센트럴파크가
+          한자리에서 만나는 입지입니다. 도보 생활권 안에 상주 수요와 방문 수요가 함께 겹칩니다.
+        </p>
+        <div className="relative mt-6 aspect-[1035/615] w-full overflow-hidden rounded-2xl border border-line bg-[#dfe6ec]">
+          <Image
+            src="/images/site-location-map.jpg"
+            alt="송도 1공구 입지 및 배후 상권 지도"
+            fill
+            sizes="(max-width: 1100px) 100vw, 1100px"
+            quality={90}
+            className="object-contain object-center"
+          />
+        </div>
+      </div>
+    </div>
+  );
+}
+
 /** About 등에서 조감 + 표를 함께 쓸 때 */
 export function OverviewMaterials({ project }: { project: Project }) {
   return (
