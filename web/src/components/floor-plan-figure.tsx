@@ -201,13 +201,15 @@ export function FloorPlanFigure({
                     const key = pinKey(p.building, p.unitNo);
                     if (selectedKeys.has(key)) return null;
                     const dot = PIN_DOT[p.status ?? "available"];
+                    /**
+                     * 도면 한 장에 최대 50개 이상 호실이 촘촘히 몰려 있어 라벨 텍스트를 넣으면
+                     * 서로 겹쳐 읽을 수 없다. 점만 찍고 탭하면(href) 해당 호실의 상세 페이지에서
+                     * 크게 표시된 단독 마커로 확인하도록 유도한다.
+                     */
                     const body = (
                       <span
-                        className={`pointer-events-auto flex h-6 min-w-6 items-center justify-center rounded-full border border-white px-1 text-[9px] font-bold text-white shadow ${dot}`}
-                      >
-                        {p.building}
-                        {p.unitNo.replace(/^B-/, "")}
-                      </span>
+                        className={`pointer-events-auto block h-2.5 w-2.5 rounded-full border border-white shadow ${dot}`}
+                      />
                     );
                     return (
                       <div
@@ -256,7 +258,7 @@ export function FloorPlanFigure({
               <figcaption className="border-t border-line px-4 py-2 text-xs text-muted">
                 {plan.alt}
                 {overlayPins.length > 0
-                  ? ` · A·B동 핀 ${overlayPins.length + selectedPins.length}개`
+                  ? ` · A·B동 핀 ${overlayPins.length + selectedPins.length}개 · 점을 탭하면 해당 호실 상세로 이동`
                   : ""}
                 {selectedPins.length > 0 ? ` · 선택 강조 ${selectedPins.length}개` : ""}
               </figcaption>
