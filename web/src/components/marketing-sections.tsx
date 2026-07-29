@@ -4,14 +4,14 @@ import Link from "next/link";
 const PREMIUM8 = [
   {
     src: "/images/mood/academy.jpg",
-    title: "수도권 대표 학원가",
-    desc: "송도 1공구 학원가 거리",
+    title: "학세권 프리미엄",
+    desc: "채드윅 국제학교 등 송도 대표 학원가 인접",
     alt: "송도 학원가 교육 상권 분위기",
   },
   {
     src: "/images/aerial-plan.jpg",
-    title: "초밀집 배후수요",
-    desc: "단지 인근 약 1만 5천여 세대",
+    title: "고소득 배후수요",
+    desc: "단지 인근 약 1.6만 세대 랜드마크 배후주거",
     alt: "송도 하늘채 아이비원 단지 조감도",
   },
   {
@@ -21,33 +21,21 @@ const PREMIUM8 = [
     alt: "그랜드 스트리트몰 상업시설 외관",
   },
   {
-    src: "/images/section-kolon-pride.jpg",
-    title: "코오롱 혁신설계",
-    desc: "코오롱글로벌의 앞선 시공력",
-    alt: "코오롱글로벌 건축 브랜드",
-  },
-  {
-    src: "/images/marketing/lifestyle-premium.png",
-    title: "획기적 대형호재",
-    desc: "송도 GTX·KTX, K바이오 랩허브",
-    alt: "송도 교통·입지 프리미엄",
+    src: "/images/site-location-map.jpg",
+    title: "교통 호재",
+    desc: "GTX-B·인천1호선, 제2공항철도(예정)까지",
+    alt: "송도 1공구 입지 및 교통망",
   },
   {
     src: "/images/hero-exterior.jpg",
-    title: "연이은 기업입주",
-    desc: "셀트리온, 삼성바이오로직스 등",
+    title: "앵커기업 배후수요",
+    desc: "셀트리온, 삼성바이오로직스 등 바이오 클러스터",
     alt: "송도 프리미엄 주상복합 스카이라인",
   },
   {
-    src: "/images/marketing/lifestyle-garden.png",
-    title: "365일 상권",
-    desc: "아파트 입주민의 고정수요",
-    alt: "단지 내 라이프·근린생활시설",
-  },
-  {
     src: "/images/mood/retail.jpg",
-    title: "규제 덜한 수익형 상가",
-    desc: "높은 대출 한도, 수익형 선호",
+    title: "안정적 상가 투자",
+    desc: "입주민 고정수요와 상대적으로 낮은 상가 규제",
     alt: "스트리트 리테일 상가 분위기",
   },
 ] as const;
@@ -288,13 +276,13 @@ export function PremiumEightSection() {
           At a Glance
         </p>
         <h2 className="mt-2 text-center font-display text-3xl text-brand-deep md:text-4xl">
-          아이비스퀘어 <span className="text-accent">PREMIUM 8</span>
+          아이비스퀘어 <span className="text-accent">PREMIUM 6</span>
         </h2>
         <p className="mx-auto mt-2 max-w-xl text-center text-sm text-muted md:text-base">
-          위에서 이야기한 가치를 여덟 가지로 압축했습니다.
+          위에서 이야기한 가치를 여섯 가지로 압축했습니다.
         </p>
 
-        <ol className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+        <ol className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {PREMIUM8.map((item, i) => (
             <li
               key={item.title}
