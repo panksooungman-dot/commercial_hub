@@ -295,7 +295,7 @@ export function PremiumEightSection() {
                   fill
                   sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 260px"
                   quality={88}
-                  className="object-contain transition duration-700 ease-out group-hover:scale-[1.04]"
+                  className="object-cover transition duration-700 ease-out group-hover:scale-[1.04]"
                 />
                 <span className="absolute left-3 top-3 rounded-md bg-brand-deep/85 px-2 py-1 text-[11px] font-bold tracking-wide text-white">
                   {String(i + 1).padStart(2, "0")}
