@@ -7,6 +7,7 @@ import {
 } from "@/components/marketing-sections";
 import { DesignDrawingsSection } from "@/components/design-drawings-section";
 import { AerialPlan, LocationMapSection, OverviewTable } from "@/components/overview-materials";
+import { SectionDotNav } from "@/components/section-dot-nav";
 import { store, getPublicUnits } from "@/lib/store";
 import { frontFacadeForUnitId, resolveFrontLength } from "@/lib/front-lengths";
 
@@ -14,13 +15,27 @@ import { frontFacadeForUnitId, resolveFrontLength } from "@/lib/front-lengths";
 const HERO_VIDEO_SRC = "/videos/hero-banner.mp4";
 const HERO_POSTER_SRC = "/images/hero-banner-poster.jpg";
 
+const NAV_SECTIONS = [
+  { id: "hero", label: "인트로" },
+  { id: "why", label: "왜 여기인가" },
+  { id: "overview", label: "사업개요" },
+  { id: "brand", label: "브랜드" },
+  { id: "premium8", label: "프리미엄" },
+  { id: "siteplan", label: "단지조감" },
+  { id: "location", label: "입지" },
+  { id: "drawings", label: "설계도면" },
+  { id: "floormd", label: "층별MD" },
+  { id: "cta", label: "상담" },
+];
+
 export default async function HomePage() {
   const project = await store.getProject();
   const units = await getPublicUnits();
 
   return (
     <div>
-      <section className="relative overflow-hidden bg-[#e8eef3] text-white">
+      <SectionDotNav sections={NAV_SECTIONS} />
+      <section id="hero" className="relative overflow-hidden bg-[#e8eef3] text-white">
         <div className="relative mx-auto w-full max-w-[1400px]">
           <div className="relative aspect-[1920/834] min-h-[440px] w-full overflow-hidden sm:min-h-[500px] md:min-h-[560px] lg:min-h-[620px]">
             <Image
@@ -82,35 +97,49 @@ export default async function HomePage() {
       </section>
 
       {/* 1. 왜 여기인가 → 2. 사업 팩트 → 3. 시공 브랜드 → 4. 가치 요약 */}
-      <LifestylePremiumSection />
-      <OverviewTable project={project} />
-      <BrandStorySection />
-      <PremiumEightSection />
+      <div id="why">
+        <LifestylePremiumSection />
+      </div>
+      <div id="overview">
+        <OverviewTable project={project} />
+      </div>
+      <div id="brand">
+        <BrandStorySection />
+      </div>
+      <div id="premium8">
+        <PremiumEightSection />
+      </div>
 
-      <AerialPlan project={project} />
-      <LocationMapSection />
+      <div id="siteplan">
+        <AerialPlan project={project} />
+      </div>
+      <div id="location">
+        <LocationMapSection />
+      </div>
 
-      <DesignDrawingsSection
-        units={units
-          .filter((u) => u.status !== "hidden")
-          .map((u) => ({
-            id: u.id,
-            building: u.building,
-            floor: u.floor,
-            unitNo: u.unitNo,
-            status: u.status as "available" | "reserved" | "sold" | "move_in",
-            exclusiveArea: u.exclusiveArea,
-            exclusiveAreaUnit: u.exclusiveAreaUnit,
-            contractArea: u.contractArea,
-            frontLengthMm: u.frontLengthMm ?? resolveFrontLength(u.building, u.floor, u.id)?.mm ?? null,
-            frontFacade: frontFacadeForUnitId(u.id) ?? resolveFrontLength(u.building, u.floor, u.id)?.facade ?? null,
-            price: u.price,
-            recommendedBusiness: u.recommendedBusiness,
-            options: u.options,
-          }))}
-      />
+      <div id="drawings">
+        <DesignDrawingsSection
+          units={units
+            .filter((u) => u.status !== "hidden")
+            .map((u) => ({
+              id: u.id,
+              building: u.building,
+              floor: u.floor,
+              unitNo: u.unitNo,
+              status: u.status as "available" | "reserved" | "sold" | "move_in",
+              exclusiveArea: u.exclusiveArea,
+              exclusiveAreaUnit: u.exclusiveAreaUnit,
+              contractArea: u.contractArea,
+              frontLengthMm: u.frontLengthMm ?? resolveFrontLength(u.building, u.floor, u.id)?.mm ?? null,
+              frontFacade: frontFacadeForUnitId(u.id) ?? resolveFrontLength(u.building, u.floor, u.id)?.facade ?? null,
+              price: u.price,
+              recommendedBusiness: u.recommendedBusiness,
+              options: u.options,
+            }))}
+        />
+      </div>
 
-      <section className="mx-auto max-w-6xl px-4 py-16">
+      <section id="floormd" className="mx-auto max-w-6xl px-4 py-16">
         <p className="text-xs font-semibold tracking-[0.18em] text-accent uppercase">Floor MD</p>
         <h2 className="mt-2 font-display text-3xl text-brand-deep">층마다 다른 목적, 다른 기회</h2>
         <p className="mt-2 max-w-2xl text-muted">
@@ -134,7 +163,7 @@ export default async function HomePage() {
         </div>
       </section>
 
-      <section className="bg-brand px-4 py-14 text-white">
+      <section id="cta" className="bg-brand px-4 py-14 text-white">
         <div className="mx-auto flex max-w-6xl flex-col items-start justify-between gap-6 md:flex-row md:items-center">
           <div>
             <h2 className="font-display text-3xl">다음 단계는 호실을 고르는 일</h2>
