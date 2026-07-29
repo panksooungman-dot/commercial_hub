@@ -6,7 +6,7 @@ import {
   PremiumEightSection,
 } from "@/components/marketing-sections";
 import { DesignDrawingsSection } from "@/components/design-drawings-section";
-import { AerialPlan, OverviewTable } from "@/components/overview-materials";
+import { AerialPlan, LocationMapSection, OverviewTable } from "@/components/overview-materials";
 import { store, getPublicUnits } from "@/lib/store";
 import { frontFacadeForUnitId, resolveFrontLength } from "@/lib/front-lengths";
 
@@ -88,6 +88,7 @@ export default async function HomePage() {
       <PremiumEightSection />
 
       <AerialPlan project={project} />
+      <LocationMapSection />
 
       <DesignDrawingsSection
         units={units
