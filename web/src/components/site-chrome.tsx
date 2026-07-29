@@ -8,7 +8,6 @@ const NAV = [
   { href: "/interest", label: "내 선택", special: true },
   { href: "/guide", label: "분양안내" },
   { href: "/faq", label: "FAQ" },
-  { href: "/contact", label: "상담신청" },
 ];
 
 export function SiteHeader({ projectName }: { projectName: string }) {
