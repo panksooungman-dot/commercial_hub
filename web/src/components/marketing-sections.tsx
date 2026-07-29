@@ -27,10 +27,10 @@ const PREMIUM8 = [
     alt: "송도 1공구 입지 및 교통망",
   },
   {
-    src: "/images/hero-exterior.jpg",
+    src: "/images/marketing/street-plaza.jpg",
     title: "앵커기업 배후수요",
     desc: "셀트리온, 삼성바이오로직스 등 바이오 클러스터",
-    alt: "송도 프리미엄 주상복합 스카이라인",
+    alt: "단지 앞 보행 플라자와 스트리트 리테일",
   },
   {
     src: "/images/mood/retail.jpg",
