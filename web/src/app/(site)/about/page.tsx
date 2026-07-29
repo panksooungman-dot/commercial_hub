@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { AerialPlan, OverviewTable } from "@/components/overview-materials";
 import { store } from "@/lib/store";
@@ -7,9 +8,28 @@ export default async function AboutPage() {
 
   return (
     <div>
-      <div className="mx-auto max-w-6xl px-4 pt-12 pb-2">
-        <h1 className="font-display text-4xl text-brand-deep">사업개요</h1>
-        <p className="mt-3 max-w-3xl text-muted">
+      <div className="mx-auto max-w-6xl px-4 pt-8 pb-2 sm:pt-12">
+        <div className="relative aspect-[21/9] w-full overflow-hidden rounded-2xl bg-[#0b1622] text-white">
+          <Image
+            src="/images/about-header.jpg"
+            alt={`${project.projectName} 외관 야경`}
+            fill
+            priority
+            quality={90}
+            sizes="(max-width: 1152px) 100vw, 1152px"
+            className="object-cover object-center"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#04141f]/80 via-[#04141f]/20 to-transparent" />
+          <div className="absolute inset-0 flex flex-col justify-end p-5 sm:p-8">
+            <p className="text-xs font-semibold tracking-[0.22em] text-accent uppercase sm:text-sm">
+              {project.projectName}
+            </p>
+            <h1 className="mt-2 font-display text-2xl text-white sm:text-3xl md:text-4xl">
+              사업개요
+            </h1>
+          </div>
+        </div>
+        <p className="mt-4 max-w-3xl text-muted">
           {project.projectName} — {project.usageLabel}. 규모·면적·주차 등 핵심 수치를
           한곳에서 확인하세요.
         </p>
