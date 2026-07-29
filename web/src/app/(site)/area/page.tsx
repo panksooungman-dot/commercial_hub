@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { store } from "@/lib/store";
 
@@ -6,10 +7,26 @@ export default async function AreaPage() {
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-12">
-      <p className="text-sm text-accent">Area Guide</p>
-      <h1 className="mt-2 max-w-3xl font-display text-3xl text-brand-deep md:text-4xl">
-        {area.positioningHeadline}
-      </h1>
+      <div className="relative aspect-[21/9] w-full overflow-hidden rounded-2xl bg-[#0b1622] text-white">
+        <Image
+          src="/images/area-header.jpg"
+          alt="송도 1공구 및 주변 상권 항공뷰"
+          fill
+          priority
+          quality={90}
+          sizes="(max-width: 1152px) 100vw, 1152px"
+          className="object-cover object-center"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#04141f]/80 via-[#04141f]/20 to-transparent" />
+        <div className="absolute inset-0 flex flex-col justify-end p-5 sm:p-8">
+          <p className="text-xs font-semibold tracking-[0.22em] text-accent uppercase sm:text-sm">
+            Area Guide
+          </p>
+          <h1 className="mt-2 font-display text-xl text-white sm:text-2xl md:text-3xl">
+            {area.positioningHeadline}
+          </h1>
+        </div>
+      </div>
       <p className="mt-4 max-w-2xl text-muted">
         홈에서 본 입지 이야기를, 1공구 상권 특성과 주변 권역별로 더 자세히 풀어 드립니다.
       </p>
