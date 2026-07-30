@@ -11,6 +11,7 @@ export default function AdminUnitsPage() {
   const [building, setBuilding] = useState("");
   const [showHidden, setShowHidden] = useState(false);
   const [msg, setMsg] = useState("");
+  const [savingAll, setSavingAll] = useState(false);
   /** 삭제 직전 상태를 기억해 두었다가 복구 시 그대로 되돌린다(새로고침 시엔 분양가능으로 복구) */
   const statusBeforeDelete = useRef<Record<string, UnitStatus>>({});
 
@@ -49,6 +50,27 @@ export default function AdminUnitsPage() {
     }
     const body = await res.json().catch(() => null);
     setMsg(`저장 실패${body?.error ? ` (${body.error})` : ""}`);
+  }
+
+  async function saveAll() {
+    setMsg("");
+    setSavingAll(true);
+    try {
+      const res = await fetch("/api/admin/units", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(units),
+      });
+      if (res.ok) {
+        const body = await res.json();
+        setMsg(`전체 저장됨 (${body.count}실)`);
+        return;
+      }
+      const body = await res.json().catch(() => null);
+      setMsg(`전체 저장 실패${body?.error ? ` (${body.error})` : ""}`);
+    } finally {
+      setSavingAll(false);
+    }
   }
 
   function patch(id: string, partial: Partial<Unit>) {
@@ -101,6 +123,14 @@ export default function AdminUnitsPage() {
           />
           비공개 호실 표시 ({hiddenCount})
         </label>
+        <button
+          type="button"
+          onClick={saveAll}
+          disabled={savingAll || units.length === 0}
+          className="bg-brand px-3 py-1 text-sm text-white hover:bg-brand-deep disabled:opacity-50"
+        >
+          {savingAll ? "전체 저장 중…" : `전체 저장 (${units.length}실)`}
+        </button>
         {msg ? <span className="text-sm text-brand">{msg}</span> : null}
       </div>
 
