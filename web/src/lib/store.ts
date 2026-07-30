@@ -1,29 +1,71 @@
 import "server-only";
 import { promises as fs } from "fs";
 import path from "path";
+import { get, put } from "@vercel/blob";
 import { AreaContent, Faq, GalleryItem, Inquiry, Project, Unit } from "./types";
 import { buildSeedUnits } from "./units-seed";
 
 const DATA_DIR = path.join(process.cwd(), "data");
 
+/**
+ * Vercel의 서버리스 프로덕션 환경은 배포된 코드 폴더가 읽기 전용이라
+ * 로컬 fs.writeFile은 프로덕션에서 항상 실패한다. BLOB_READ_WRITE_TOKEN이
+ * 설정돼 있으면(Vercel Blob 연결됨) 쓰기는 Blob으로, 없으면(로컬 개발)
+ * 기존처럼 로컬 fs로 처리한다.
+ */
+function blobEnabled() {
+  return Boolean(process.env.BLOB_READ_WRITE_TOKEN);
+}
+
 async function ensureDir() {
   await fs.mkdir(DATA_DIR, { recursive: true });
 }
 
-async function readJson<T>(file: string, fallback: () => T): Promise<T> {
-  await ensureDir();
-  const full = path.join(DATA_DIR, file);
+/** 로컬 파일은 읽기 전용으로만 사용 — Vercel 프로덕션에서도 배포된 번들 읽기는 항상 가능하다 */
+async function readLocalFile<T>(file: string): Promise<T | null> {
   try {
-    const raw = await fs.readFile(full, "utf8");
+    const raw = await fs.readFile(path.join(DATA_DIR, file), "utf8");
     return JSON.parse(raw) as T;
   } catch {
-    const data = fallback();
-    await fs.writeFile(full, JSON.stringify(data, null, 2), "utf8");
-    return data;
+    return null;
   }
 }
 
+async function readJson<T>(file: string, fallback: () => T): Promise<T> {
+  if (blobEnabled()) {
+    try {
+      const result = await get(file, { access: "private" });
+      if (result) {
+        const text = await new Response(result.stream).text();
+        return JSON.parse(text) as T;
+      }
+    } catch {
+      // Blob 조회 실패 — 아래에서 시드 데이터로 폴백
+    }
+    // Blob에 아직 없음(최초 1회) — 저장소에 커밋된 실제 데이터로 시드하고 Blob에 기록
+    const seed = (await readLocalFile<T>(file)) ?? fallback();
+    await writeJson(file, seed);
+    return seed;
+  }
+
+  await ensureDir();
+  const local = await readLocalFile<T>(file);
+  if (local) return local;
+  const data = fallback();
+  await writeJson(file, data);
+  return data;
+}
+
 async function writeJson<T>(file: string, data: T): Promise<void> {
+  if (blobEnabled()) {
+    await put(file, JSON.stringify(data, null, 2), {
+      access: "private",
+      addRandomSuffix: false,
+      allowOverwrite: true,
+      contentType: "application/json",
+    });
+    return;
+  }
   await ensureDir();
   await fs.writeFile(path.join(DATA_DIR, file), JSON.stringify(data, null, 2), "utf8");
 }
