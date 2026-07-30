@@ -120,7 +120,7 @@ export type Inquiry = {
   preferredBusiness: string;
   message: string;
   createdAt: string;
-  status: "new" | "done";
+  status: "new" | "confirmed" | "in_progress" | "done";
 };
 
 export type AreaContent = {

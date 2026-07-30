@@ -3,6 +3,26 @@
 import { useEffect, useState } from "react";
 import { Inquiry } from "@/lib/types";
 
+const INQUIRY_STATUS_LABEL: Record<Inquiry["status"], string> = {
+  new: "신규",
+  confirmed: "확인완료",
+  in_progress: "상담중",
+  done: "상담완료",
+};
+
+const INQUIRY_STATUS_STYLE: Record<Inquiry["status"], string> = {
+  new: "bg-[#fff8e8] text-[#a8781a]",
+  confirmed: "bg-[#eef3fb] text-[#2d6eaa]",
+  in_progress: "bg-[#eef7ee] text-[#2f8a4a]",
+  done: "bg-background text-muted",
+};
+
+const STATUS_ACTIONS: { key: Inquiry["status"]; label: string }[] = [
+  { key: "confirmed", label: "확인완료" },
+  { key: "in_progress", label: "상담중" },
+  { key: "done", label: "상담완료" },
+];
+
 export default function AdminInquiriesPage() {
   const [items, setItems] = useState<Inquiry[]>([]);
 
@@ -19,11 +39,12 @@ export default function AdminInquiriesPage() {
     load();
   }, []);
 
-  async function markDone(id: string) {
+  async function setStatus(id: string, status: Inquiry["status"]) {
+    setItems((list) => list.map((i) => (i.id === id ? { ...i, status } : i)));
     await fetch("/api/admin/inquiries", {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ id, status: "done" }),
+      body: JSON.stringify({ id, status }),
     });
     load();
   }
@@ -48,21 +69,33 @@ export default function AdminInquiriesPage() {
                       .join(" / ") || "관심 호실 미지정"}
                   </p>
                 </div>
-                <span className="text-xs text-muted">
-                  {i.status === "new" ? "신규" : "처리완료"} ·{" "}
+                <span className="flex items-center gap-2 text-xs text-muted">
+                  <span
+                    className={`rounded-full px-2 py-0.5 font-medium ${INQUIRY_STATUS_STYLE[i.status]}`}
+                  >
+                    {INQUIRY_STATUS_LABEL[i.status]}
+                  </span>
                   {new Date(i.createdAt).toLocaleString("ko-KR")}
                 </span>
               </div>
               {i.message ? <p className="mt-2 whitespace-pre-wrap">{i.message}</p> : null}
-              {i.status === "new" ? (
-                <button
-                  type="button"
-                  className="mt-3 text-xs text-brand underline"
-                  onClick={() => markDone(i.id)}
-                >
-                  처리완료로 표시
-                </button>
-              ) : null}
+              <div className="mt-3 flex flex-wrap gap-2">
+                {STATUS_ACTIONS.map((a) => (
+                  <button
+                    key={a.key}
+                    type="button"
+                    disabled={i.status === a.key}
+                    onClick={() => setStatus(i.id, a.key)}
+                    className={`rounded-full border px-3 py-1 text-xs transition ${
+                      i.status === a.key
+                        ? "border-brand bg-brand text-white"
+                        : "border-line bg-white text-muted hover:border-brand hover:text-brand"
+                    }`}
+                  >
+                    {a.label}
+                  </button>
+                ))}
+              </div>
             </article>
           ))
         )}
