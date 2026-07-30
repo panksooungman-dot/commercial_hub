@@ -715,7 +715,7 @@ export function DesignDrawingsSection({ units = [] }: { units?: DrawingUnitStatu
   );
 
   const statusCounts = useMemo(() => {
-    const counts = { available: 0, reserved: 0, sold: 0, move_in: 0 };
+    const counts = { available: 0, for_lease: 0, reserved: 0, sold: 0, move_in: 0 };
     for (const m of currentMarkers) {
       const st = statusForMarker(units, building, floor, m.label);
       counts[st] += 1;
@@ -790,6 +790,7 @@ export function DesignDrawingsSection({ units = [] }: { units?: DrawingUnitStatu
             const count =
               f.key === "all"
                 ? statusCounts.available +
+                  statusCounts.for_lease +
                   statusCounts.reserved +
                   statusCounts.sold +
                   statusCounts.move_in
@@ -816,6 +817,10 @@ export function DesignDrawingsSection({ units = [] }: { units?: DrawingUnitStatu
           <span className="inline-flex items-center gap-1.5">
             <span className="inline-block h-3 w-5 rounded-sm border border-[#d63c3c]/70" style={{ backgroundColor: STATUS_FILL.available }} />
             분양가능
+          </span>
+          <span className="inline-flex items-center gap-1.5">
+            <span className="inline-block h-3 w-5 rounded-sm border border-[#2f9e5c]/75" style={{ backgroundColor: STATUS_FILL.for_lease }} />
+            임대가능
           </span>
           <span className="inline-flex items-center gap-1.5">
             <span className="inline-block h-3 w-5 rounded-sm border border-[#c48520]/80" style={{ backgroundColor: STATUS_FILL.reserved }} />

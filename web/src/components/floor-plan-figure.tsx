@@ -24,6 +24,7 @@ type PlanPin = {
 
 const PIN_DOT: Record<Exclude<UnitStatus, "hidden">, string> = {
   available: "bg-[#d63c3c]",
+  for_lease: "bg-[#2f9e5c]",
   reserved: "bg-[#c48520]",
   sold: "bg-[#6a6a6a]",
   move_in: "bg-[#2d6eaa]",
