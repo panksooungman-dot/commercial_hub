@@ -121,6 +121,8 @@ export type Inquiry = {
   message: string;
   createdAt: string;
   status: "new" | "confirmed" | "in_progress" | "done";
+  /** 담당자 메모 — 통화 내용·후속 조치 등 */
+  note: string;
 };
 
 export type AreaContent = {

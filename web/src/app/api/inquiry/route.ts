@@ -25,6 +25,7 @@ export async function POST(req: Request) {
     message: String(body.message || ""),
     createdAt: new Date().toISOString(),
     status: "new",
+    note: "",
   };
 
   const list = await store.getInquiries();
