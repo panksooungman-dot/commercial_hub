@@ -32,7 +32,11 @@ const STATUS_FILTERS: { key: Inquiry["status"] | "all"; label: string }[] = [
 ];
 
 function defaultSmsMessage(i: Inquiry) {
-  return `[송도 하늘채 아이비원] ${i.name}님, 문의주신 상담 건으로 연락드립니다. 편하신 시간에 다시 연락드리겠습니다. 감사합니다.`;
+  const unitInfo = [i.interestBuilding && `${i.interestBuilding}동`, i.interestFloor, i.interestUnitNo]
+    .filter(Boolean)
+    .join(" ");
+  const subject = unitInfo ? `문의주신 ${unitInfo}호 상담 건` : "문의주신 상담 건";
+  return `[송도 하늘채 아이비원] ${i.name}님, 안녕하세요. ${subject}으로 연락드립니다. 편하신 시간 알려주시면 다시 연락드리겠습니다. 감사합니다.`;
 }
 
 export default function AdminInquiriesPage() {
