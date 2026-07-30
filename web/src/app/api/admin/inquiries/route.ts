@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { requireAdmin } from "@/lib/auth";
 import { store } from "@/lib/store";
+import { Inquiry } from "@/lib/types";
 
 export async function GET() {
   try {
@@ -14,14 +15,22 @@ export async function GET() {
 export async function PATCH(req: Request) {
   try {
     await requireAdmin();
-    const { id, status } = await req.json();
+  } catch {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  try {
+    const { id, ...patch } = (await req.json()) as { id: string } & Partial<
+      Pick<Inquiry, "status" | "note">
+    >;
     const list = await store.getInquiries();
     const idx = list.findIndex((i) => i.id === id);
     if (idx < 0) return NextResponse.json({ error: "Not found" }, { status: 404 });
-    list[idx].status = status;
+    list[idx] = { ...list[idx], ...patch };
     await store.saveInquiries(list);
     return NextResponse.json(list[idx]);
-  } catch {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  } catch (err) {
+    const message = err instanceof Error ? err.message : "Save failed";
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }
