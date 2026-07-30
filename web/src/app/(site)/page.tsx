@@ -126,7 +126,7 @@ export default async function HomePage() {
               building: u.building,
               floor: u.floor,
               unitNo: u.unitNo,
-              status: u.status as "available" | "reserved" | "sold" | "move_in",
+              status: u.status as "available" | "for_lease" | "reserved" | "sold" | "move_in",
               exclusiveArea: u.exclusiveArea,
               exclusiveAreaUnit: u.exclusiveAreaUnit,
               contractArea: u.contractArea,

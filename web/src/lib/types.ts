@@ -1,6 +1,6 @@
 export type Building = "A" | "B";
 export type Floor = "2F" | "1F" | "B1";
-export type UnitStatus = "available" | "reserved" | "sold" | "move_in" | "hidden";
+export type UnitStatus = "available" | "for_lease" | "reserved" | "sold" | "move_in" | "hidden";
 
 export type FloorSummary = {
   floor: Floor;
