@@ -43,7 +43,12 @@ export default function AdminUnitsPage() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(unit),
     });
-    setMsg(res.ok ? `${unit.id} 저장됨` : "저장 실패");
+    if (res.ok) {
+      setMsg(`${unit.id} 저장됨`);
+      return;
+    }
+    const body = await res.json().catch(() => null);
+    setMsg(`저장 실패${body?.error ? ` (${body.error})` : ""}`);
   }
 
   function patch(id: string, partial: Partial<Unit>) {
