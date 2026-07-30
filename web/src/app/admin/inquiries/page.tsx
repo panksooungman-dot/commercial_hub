@@ -31,12 +31,18 @@ const STATUS_FILTERS: { key: Inquiry["status"] | "all"; label: string }[] = [
   { key: "done", label: "상담완료" },
 ];
 
+function defaultSmsMessage(i: Inquiry) {
+  return `[송도 하늘채 아이비원] ${i.name}님, 문의주신 상담 건으로 연락드립니다. 편하신 시간에 다시 연락드리겠습니다. 감사합니다.`;
+}
+
 export default function AdminInquiriesPage() {
   const [items, setItems] = useState<Inquiry[]>([]);
   const [statusFilter, setStatusFilter] = useState<Inquiry["status"] | "all">("all");
   const [q, setQ] = useState("");
   const [savingNoteId, setSavingNoteId] = useState<string | null>(null);
   const [noteMsg, setNoteMsg] = useState<{ id: string; text: string } | null>(null);
+  const [smsDrafts, setSmsDrafts] = useState<Record<string, string>>({});
+  const [smsMsg, setSmsMsg] = useState<{ id: string; text: string } | null>(null);
 
   async function load() {
     const res = await fetch("/api/admin/inquiries");
@@ -90,6 +96,19 @@ export default function AdminInquiriesPage() {
     await patchInquiry(id, { note });
     setSavingNoteId(null);
     setNoteMsg({ id, text: "메모 저장됨" });
+  }
+
+  function updateSmsDraft(id: string, text: string) {
+    setSmsDrafts((prev) => ({ ...prev, [id]: text }));
+  }
+
+  async function copySms(id: string, text: string) {
+    try {
+      await navigator.clipboard.writeText(text);
+      setSmsMsg({ id, text: "문자 내용 복사됨" });
+    } catch {
+      setSmsMsg({ id, text: "복사 실패 — 직접 선택해 복사해 주세요" });
+    }
   }
 
   return (
@@ -189,6 +208,33 @@ export default function AdminInquiriesPage() {
                   </button>
                   {noteMsg?.id === i.id ? (
                     <span className="text-xs text-brand">{noteMsg.text}</span>
+                  ) : null}
+                </div>
+              </div>
+              <div className="mt-3 border-t border-line pt-3">
+                <label className="text-xs font-medium text-muted">문자(SMS) 보내기</label>
+                <textarea
+                  value={smsDrafts[i.id] ?? defaultSmsMessage(i)}
+                  onChange={(e) => updateSmsDraft(i.id, e.target.value)}
+                  rows={2}
+                  className="mt-1 w-full border border-line bg-white px-2 py-1.5 text-sm"
+                />
+                <div className="mt-1.5 flex flex-wrap items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => copySms(i.id, smsDrafts[i.id] ?? defaultSmsMessage(i))}
+                    className="rounded-sm border border-line bg-white px-3 py-1 text-xs text-brand hover:border-brand"
+                  >
+                    문자 내용 복사
+                  </button>
+                  <a
+                    href={`sms:${i.phone}?body=${encodeURIComponent(smsDrafts[i.id] ?? defaultSmsMessage(i))}`}
+                    className="rounded-sm bg-brand px-3 py-1 text-xs text-white hover:bg-brand-deep"
+                  >
+                    문자 앱 열기
+                  </a>
+                  {smsMsg?.id === i.id ? (
+                    <span className="text-xs text-brand">{smsMsg.text}</span>
                   ) : null}
                 </div>
               </div>
