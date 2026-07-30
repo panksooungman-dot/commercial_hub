@@ -31,15 +31,19 @@ export default async function AdminHomePage() {
 
       <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {[
-          ["호실", `${units.length}실`],
-          ["분양가 입력", `${priced}실`],
-          ["FAQ 답변", `${answered}/${faqs.length}`],
-          ["신규 상담", `${newInq}건`],
-        ].map(([k, v]) => (
-          <div key={k} className="border border-line bg-surface p-4">
-            <p className="text-xs text-muted">{k}</p>
-            <p className="mt-1 font-display text-2xl text-brand">{v}</p>
-          </div>
+          { label: "호실", value: `${units.length}실`, href: "/admin/units" },
+          { label: "분양가 입력", value: `${priced}실`, href: "/admin/units" },
+          { label: "FAQ 답변", value: `${answered}/${faqs.length}`, href: "/admin/faqs" },
+          { label: "신규 상담", value: `${newInq}건`, href: "/admin/inquiries" },
+        ].map(({ label, value, href }) => (
+          <Link
+            key={label}
+            href={href}
+            className="border border-line bg-surface p-4 hover:border-brand"
+          >
+            <p className="text-xs text-muted">{label}</p>
+            <p className="mt-1 font-display text-2xl text-brand">{value}</p>
+          </Link>
         ))}
       </div>
 
