@@ -8,6 +8,11 @@ type Ctx = { params: Promise<{ id: string }> };
 export async function PUT(req: Request, ctx: Ctx) {
   try {
     await requireAdmin();
+  } catch {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  try {
     const { id } = await ctx.params;
     const patch = (await req.json()) as Partial<Unit>;
     const units = await store.getUnits();
@@ -21,7 +26,8 @@ export async function PUT(req: Request, ctx: Ctx) {
     };
     await store.saveUnits(units);
     return NextResponse.json(units[idx]);
-  } catch {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  } catch (err) {
+    const message = err instanceof Error ? err.message : "Save failed";
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }
