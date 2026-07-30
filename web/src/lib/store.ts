@@ -34,7 +34,7 @@ async function readLocalFile<T>(file: string): Promise<T | null> {
 async function readJson<T>(file: string, fallback: () => T): Promise<T> {
   if (blobEnabled()) {
     try {
-      const result = await get(file, { access: "private" });
+      const result = await get(file, { access: "private", useCache: false });
       if (result) {
         const text = await new Response(result.stream).text();
         return JSON.parse(text) as T;
