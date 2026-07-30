@@ -15,10 +15,16 @@ export async function GET() {
 export async function PUT(req: Request) {
   try {
     await requireAdmin();
+  } catch {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  try {
     const body = (await req.json()) as Unit[];
     await store.saveUnits(body);
     return NextResponse.json({ ok: true, count: body.length });
-  } catch {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  } catch (err) {
+    const message = err instanceof Error ? err.message : "Save failed";
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }
