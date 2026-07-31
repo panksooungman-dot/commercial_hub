@@ -7,7 +7,6 @@ const LINKS = [
   { href: "/admin/project", title: "프로젝트·배너·연락처", desc: "메인 배너 문구, 분양일정, 조건, 홍보관" },
   { href: "/admin/units", title: "호실 관리", desc: "분양가, 상태, 계약면적, 권장업종" },
   { href: "/admin/faqs", title: "FAQ", desc: "질문·답변 작성" },
-  { href: "/admin/inquiries", title: "상담 신청", desc: "문의 목록 확인" },
   { href: "/admin/area", title: "입지 콘텐츠", desc: "상권 카피 수정" },
 ];
 
