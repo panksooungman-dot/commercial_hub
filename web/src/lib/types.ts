@@ -62,7 +62,6 @@ export type Project = {
   updatedAt: string;
 };
 
-export type CoBrokerage = "possible" | "impossible";
 export type DealType = "lease" | "sale" | "sublease";
 export type PropertyType = "상가" | "점포" | "사무실" | "지식산업센터" | "빌딩" | "기타";
 export type ListingVisibility = "public" | "broker_only" | "private";
@@ -71,13 +70,6 @@ export type ParkingFeeType = "paid" | "free";
 
 /** 중개사무소 매물 등록 정보 — 어드민 호실 관리 상세정보 입력 */
 export type ListingDetail = {
-  agencyName: string;
-  agentName: string;
-  brokerRegNo: string;
-  agentPhone: string;
-  coBrokerage: CoBrokerage | "";
-  coBrokerageFeeRatio: string;
-
   dealType: DealType | "";
   propertyType: PropertyType | "";
   listingAddress: string;
