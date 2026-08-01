@@ -4,7 +4,6 @@ import Link from "next/link";
 import { Fragment, useEffect, useMemo, useRef, useState } from "react";
 import { STATUS_LABEL } from "@/lib/format";
 import {
-  CoBrokerage,
   DealType,
   ListingDetail,
   MoveInType,
@@ -16,12 +15,6 @@ import {
 
 function defaultListingDetail(): ListingDetail {
   return {
-    agencyName: "",
-    agentName: "",
-    brokerRegNo: "",
-    agentPhone: "",
-    coBrokerage: "",
-    coBrokerageFeeRatio: "",
     dealType: "",
     propertyType: "",
     listingAddress: "",
@@ -75,72 +68,7 @@ function ListingDetailForm({
   return (
     <div className="grid gap-6 sm:grid-cols-2">
       <section>
-        <h3 className="font-display text-base text-brand">1. 중개사무소·등록자 정보</h3>
-        <div className="mt-2 space-y-2">
-          <div>
-            <label className={label}>중개사무소명 (필수)</label>
-            <input
-              className={field}
-              value={value.agencyName}
-              onChange={(e) => onChange({ agencyName: e.target.value })}
-              placeholder="중개사무소명을 입력해주세요."
-            />
-          </div>
-          <div>
-            <label className={label}>중개사 성명 (필수)</label>
-            <input
-              className={field}
-              value={value.agentName}
-              onChange={(e) => onChange({ agentName: e.target.value })}
-              placeholder="중개사 성명을 입력해주세요."
-            />
-          </div>
-          <div>
-            <label className={label}>중개등록번호 (필수)</label>
-            <input
-              className={field}
-              value={value.brokerRegNo}
-              onChange={(e) => onChange({ brokerRegNo: e.target.value })}
-              placeholder="사업자등록번호 또는 중개업 등록번호"
-            />
-          </div>
-          <div>
-            <label className={label}>연락 가능한 전화번호 (필수)</label>
-            <input
-              className={field}
-              value={value.agentPhone}
-              onChange={(e) => onChange({ agentPhone: e.target.value })}
-              placeholder="문의 시 노출됩니다."
-            />
-          </div>
-          <div>
-            <label className={label}>공동중개 가능 여부 (필수)</label>
-            <select
-              className={field}
-              value={value.coBrokerage}
-              onChange={(e) => onChange({ coBrokerage: e.target.value as CoBrokerage | "" })}
-            >
-              <option value="">선택</option>
-              <option value="possible">가능</option>
-              <option value="impossible">불가능</option>
-            </select>
-          </div>
-          {value.coBrokerage === "possible" ? (
-            <div>
-              <label className={label}>공동중개 수수료 비율</label>
-              <input
-                className={field}
-                value={value.coBrokerageFeeRatio}
-                onChange={(e) => onChange({ coBrokerageFeeRatio: e.target.value })}
-                placeholder="예: 50:50"
-              />
-            </div>
-          ) : null}
-        </div>
-      </section>
-
-      <section>
-        <h3 className="font-display text-base text-brand">2. 거래 기본 정보</h3>
+        <h3 className="font-display text-base text-brand">1. 거래 기본 정보</h3>
         <div className="mt-2 space-y-2">
           <div>
             <label className={label}>거래 유형 (필수)</label>
@@ -196,7 +124,7 @@ function ListingDetailForm({
       </section>
 
       <section>
-        <h3 className="font-display text-base text-brand">3. 위치·층수 정보</h3>
+        <h3 className="font-display text-base text-brand">2. 위치·층수 정보</h3>
         <div className="mt-2 space-y-2">
           <div>
             <label className={label}>해당 매물의 층수 (필수)</label>
@@ -234,7 +162,7 @@ function ListingDetailForm({
       </section>
 
       <section>
-        <h3 className="font-display text-base text-brand">4. 면적 정보</h3>
+        <h3 className="font-display text-base text-brand">3. 면적 정보</h3>
         <div className="mt-2 space-y-2">
           <div>
             <label className={label}>
@@ -288,7 +216,7 @@ function ListingDetailForm({
       </section>
 
       <section>
-        <h3 className="font-display text-base text-brand">5. 가격 정보</h3>
+        <h3 className="font-display text-base text-brand">4. 가격 정보</h3>
         <div className="mt-2 space-y-2">
           <div>
             <label className={label}>보증금 원 (필수)</label>
@@ -404,7 +332,7 @@ function ListingDetailForm({
       </section>
 
       <section>
-        <h3 className="font-display text-base text-brand">6. 시설·조건 정보</h3>
+        <h3 className="font-display text-base text-brand">5. 시설·조건 정보</h3>
         <div className="mt-2 space-y-2">
           <div>
             <label className={label}>주차 가능 대수 (필수)</label>
