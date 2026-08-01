@@ -62,6 +62,59 @@ export type Project = {
   updatedAt: string;
 };
 
+export type CoBrokerage = "possible" | "impossible";
+export type DealType = "lease" | "sale" | "sublease";
+export type PropertyType = "상가" | "점포" | "사무실" | "지식산업센터" | "빌딩" | "기타";
+export type ListingVisibility = "public" | "broker_only" | "private";
+export type MoveInType = "immediate" | "negotiable" | "date";
+export type ParkingFeeType = "paid" | "free";
+
+/** 중개사무소 매물 등록 정보 — 어드민 호실 관리 상세정보 입력 */
+export type ListingDetail = {
+  agencyName: string;
+  agentName: string;
+  brokerRegNo: string;
+  agentPhone: string;
+  coBrokerage: CoBrokerage | "";
+  coBrokerageFeeRatio: string;
+
+  dealType: DealType | "";
+  propertyType: PropertyType | "";
+  listingAddress: string;
+  visibility: ListingVisibility | "";
+
+  floorInfo: string;
+  hasElevator: boolean | null;
+  buildingFloorsNote: string;
+
+  exclusiveAreaM2: number | null;
+  supplyAreaM2: number | null;
+  siteAreaM2: number | null;
+  totalFloorAreaM2: number | null;
+
+  deposit: number | null;
+  depositNegotiable: boolean;
+  monthlyRent: number | null;
+  monthlyRentNegotiable: boolean;
+  premiumExists: boolean | null;
+  premiumAmount: number | null;
+  premiumBusinessRestriction: string;
+  maintenanceFee: number | null;
+  maintenanceFeeIncluded: string;
+  brokerageFeeNote: string;
+
+  parkingSpaces: number | null;
+  parkingFeeType: ParkingFeeType | "";
+  allowedBusiness: string;
+  restrictedBusiness: string;
+  interiorState: string;
+  moveInType: MoveInType | "";
+  moveInDate: string;
+  minContractPeriod: string;
+  hasCurrentTenant: boolean;
+  expectedVacateDate: string;
+};
+
 export type Unit = {
   id: string;
   building: Building;
@@ -80,6 +133,8 @@ export type Unit = {
   memo: string;
   sortOrder: number;
   updatedAt: string;
+  /** 중개사무소·등록자 정보 등 매물 상세 — 선택 입력 */
+  listing?: ListingDetail;
 };
 
 export type FaqCategory =
