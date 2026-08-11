@@ -66,15 +66,14 @@ export default async function HomePage() {
             <div className="absolute inset-0 flex flex-col justify-center px-5 pt-24 pb-10 sm:px-10 sm:pb-12 md:px-14 md:pb-14">
               <div className="max-w-xl sm:max-w-2xl">
                 <p className="animate-hero-fade-up text-xs font-semibold tracking-[0.22em] text-accent uppercase sm:text-sm">
-                  {project.projectName}
+                  {project.heroEyebrow || "SONGDO HANULCHE · IVYSQUARE"}
                 </p>
-                <h1 className="animate-hero-fade-up mt-3 font-display text-[2.1rem] leading-[1.22] font-bold text-white [animation-delay:80ms] [text-shadow:0_2px_20px_rgba(0,0,0,0.35)] sm:text-[2.75rem] sm:leading-[1.18] md:text-5xl lg:text-[3.5rem] lg:leading-[1.14]">
-                  <span className="block">걸음이 모이는 거리,</span>
-                  <span className="block text-accent">비즈니스가 자랍니다</span>
+                <h1 className="animate-hero-fade-up mt-3 font-display text-[2.1rem] leading-[1.22] font-bold text-white [animation-delay:80ms] [text-shadow:0_2px_20px_rgba(0,0,0,0.35)] sm:text-[2.75rem] sm:leading-[1.18] md:text-5xl lg:text-[3.4rem] lg:leading-[1.14]">
+                  <span className="block">송도가 기다려온</span>
+                  <span className="block text-accent">최상위권 복합상업시설</span>
                 </h1>
-                <p className="animate-hero-fade-up mt-4 max-w-md text-sm leading-relaxed text-white/85 [animation-delay:200ms] sm:mt-5 sm:max-w-lg sm:text-base md:text-lg">
-                  학세권·스트리트몰·단지 고정수요가 한곳에서 만나는 상업시설.
-                  아이비스퀘어에서 다음 투자의 자리를 골라보세요.
+                <p className="animate-hero-fade-up mt-4 max-w-lg text-sm leading-relaxed text-white/85 [animation-delay:200ms] sm:mt-5 sm:text-base md:text-lg">
+                  {project.heroSubcopy}
                 </p>
                 <div className="animate-hero-fade-up mt-7 flex flex-wrap gap-3 [animation-delay:400ms] sm:mt-9">
                   <Link
@@ -140,26 +139,34 @@ export default async function HomePage() {
       </div>
 
       <section id="floormd" className="mx-auto max-w-6xl px-4 py-16">
-        <p className="text-xs font-semibold tracking-[0.18em] text-accent uppercase">Floor MD</p>
-        <h2 className="mt-2 font-display text-3xl text-brand-deep">층마다 다른 목적, 다른 기회</h2>
+        <p className="text-xs font-semibold tracking-[0.18em] text-accent uppercase">Floor MD · Zone</p>
+        <h2 className="mt-2 font-display text-3xl text-brand-deep">층별 권장업종 존</h2>
         <p className="mt-2 max-w-2xl text-muted">
-          2층은 교육·서비스, 1층은 앵커 리테일, B1은 체류형 목적 상권.
-          업종에 맞는 층을 먼저 고르고 호실을 비교해 보세요.
+          336세대 고정수요를 품은 160실 주상복합 상가. 전체 중 107실이 임대 가능합니다.
+          교육·케어 / 앵커·리테일 / 엔터테인먼트 — 층에 맞는 업종을 고르세요.
         </p>
         <div className="mt-8 grid gap-6 md:grid-cols-3">
-          {project.floorSummaries.map((f) => (
-            <Link
-              key={f.floor}
-              href={`/plan?floor=${f.floor}`}
-              className="border border-line bg-surface p-5 transition hover:border-brand"
-            >
-              <p className="text-sm text-accent">
-                {f.floor} · {f.shopCount}실
-              </p>
-              <h3 className="mt-2 font-display text-xl text-brand">{f.recommendedBusinesses}</h3>
-              <p className="mt-2 text-sm leading-relaxed text-muted">{f.mdConcept}</p>
-            </Link>
-          ))}
+          {project.floorSummaries.map((f) => {
+            const zone =
+              f.floor === "2F"
+                ? "교육 · 케어 ZONE"
+                : f.floor === "1F"
+                  ? "앵커 · 리테일 ZONE"
+                  : "엔터테인먼트 ZONE";
+            return (
+              <Link
+                key={f.floor}
+                href={`/plan?floor=${f.floor}`}
+                className="border border-line bg-surface p-5 transition hover:border-brand"
+              >
+                <p className="text-sm text-accent">
+                  {f.floor} · {f.shopCount}실 · {zone}
+                </p>
+                <h3 className="mt-2 font-display text-xl text-brand">{f.recommendedBusinesses}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-muted">{f.mdConcept}</p>
+              </Link>
+            );
+          })}
         </div>
       </section>
 

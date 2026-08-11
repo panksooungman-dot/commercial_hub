@@ -4,33 +4,45 @@ import Link from "next/link";
 const PREMIUM8 = [
   {
     src: "/images/mood/academy.jpg",
-    title: "학세권 프리미엄",
-    desc: "채드윅 국제학교 등 송도 대표 학원가 인접",
+    title: "수도권 대표 학원가",
+    desc: "아이비 학원가 · 약 280여 교육 클래스",
     alt: "송도 학원가 교육 상권 분위기",
   },
   {
     src: "/images/aerial-plan.jpg",
-    title: "고소득 배후수요",
-    desc: "단지 인근 약 1.6만 세대 랜드마크 배후주거",
+    title: "초밀집 배후수요",
+    desc: "인근 약 1만 6천여 세대",
     alt: "송도 하늘채 아이비원 단지 조감도",
   },
   {
     src: "/images/marketing/facade-street.png",
     title: "그랜드 스트리트몰",
-    desc: "약 140m, 3개 층 대형 상업시설",
+    desc: "약 140m, 3개 층 복합상업시설",
     alt: "그랜드 스트리트몰 상업시설 외관",
   },
   {
     src: "/images/site-location-map.jpg",
     title: "교통 호재",
-    desc: "GTX-B·인천1호선, 제2공항철도(예정)까지",
+    desc: "GTX-B·인천1호선, 제2공항철도(예정)",
     alt: "송도 1공구 입지 및 교통망",
+  },
+  {
+    src: "/images/marketing/ivysquare-night.png",
+    title: "뉴욕풍 랜드마크 디자인",
+    desc: "차별화된 외관의 고급 소비공간",
+    alt: "아이비스퀘어 야간 외관 렌더",
   },
   {
     src: "/images/marketing/street-plaza.jpg",
     title: "앵커기업 배후수요",
-    desc: "셀트리온, 삼성바이오로직스 등 바이오 클러스터",
+    desc: "셀트리온, 삼성바이오로직스 등",
     alt: "단지 앞 보행 플라자와 스트리트 리테일",
+  },
+  {
+    src: "/images/marketing/lifestyle-garden.png",
+    title: "365일 상권",
+    desc: "입주민·학원가·방문객 고정수요",
+    alt: "단지 내 라이프·근린생활시설",
   },
   {
     src: "/images/mood/retail.jpg",
@@ -92,13 +104,12 @@ export function LifestylePremiumSection() {
             Why Ivyone
           </p>
           <h2 className="mt-3 font-display text-[1.85rem] leading-tight text-brand-deep sm:text-4xl md:text-[2.55rem]">
-            사람이 머무는 자리에는
-            <span className="mt-1 block text-brand">매출의 이유가 있습니다</span>
+            ‘송도의 대치동’이 품은
+            <span className="mt-1 block text-brand">불패 상권의 중심</span>
           </h2>
           <p className="mx-auto mt-5 max-w-2xl text-[15px] leading-relaxed text-muted sm:text-base">
-            학세권이 매일의 발길을 만들고, 단지 안 라이프가 고정 수요를 키우며,
-            스트리트 파사드가 시선을 붙잡습니다. 아이비원은 그 세 가지가 한 단지에서
-            이어집니다.
+            아이비 학원가의 반복 수요, 약 1만 6천여 배후세대, 약 140m 스트리트 파사드.
+            아이비스퀘어는 교육이 중심이 되는 자리에서 상가의 이유를 만듭니다.
           </p>
         </div>
 
@@ -120,14 +131,14 @@ export function LifestylePremiumSection() {
                 01 · Location
               </p>
               <h3 className="mt-3 font-display text-2xl leading-snug text-brand-deep sm:text-[1.7rem]">
-                학세권이 모은 발길 위에
+                약 280여 교육 클래스와
                 <br />
-                교통 호재가 더해집니다
+                7개 명문학교가 만드는 동선
               </h3>
               <p className="mt-4 text-[15px] leading-relaxed text-muted sm:text-base">
-                수도권 대표 학원가와 맞닿아 학생·학부모의 동선이 끊이지 않습니다.
-                송도발 GTX·KTX, 제2공항철도 구상까지 더해지며 상권의 반경은 단지 밖으로
-                넓어집니다.
+                송도 1공구 아이비 학원가 거리. 포스코고 등 명문학교와 학원 클러스터가
+                학생·학부모의 발길을 매일 이어 줍니다. GTX·K-바이오 랩허브 호재는 그 반경을
+                더 넓힙니다.
               </p>
             </div>
           </article>
@@ -176,11 +187,11 @@ export function LifestylePremiumSection() {
           />
           <figcaption className="border-t border-line/60 bg-white/80 px-4 py-4 text-center sm:px-6">
             <p className="font-display text-lg text-brand-deep sm:text-xl">
-              03 · Street — 통유리 파사드가 만드는 연도형 상가
+              03 · Street — 뉴욕풍 스트리트, 시선이 모이는 140m
             </p>
             <p className="mx-auto mt-1.5 max-w-2xl text-sm leading-relaxed text-muted">
-              약 140m 그랜드 스트리트몰을 따라 이어지는 노출과 개방감.
-              하늘채의 이름 아래, 걸음이 머무는 거리입니다.
+              3개 층 규모의 복합상업시설. 차별화된 외관 특화 디자인으로 주변 상가와 다른
+              고급 소비공간을 만듭니다.
             </p>
           </figcaption>
         </figure>

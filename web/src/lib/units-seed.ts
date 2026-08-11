@@ -78,9 +78,9 @@ const rows: SeedRow[] = [
 ];
 
 const mdByFloor: Record<Floor, string> = {
-  "2F": "교육·서비스",
-  "1F": "앵커·리테일",
-  B1: "목적방문·체류형",
+  "2F": "학원·메디컬·여성뷰티·금융",
+  "1F": "리테일·식음·카페·생활편의",
+  B1: "교습·운동·공방·스튜디오",
 };
 
 export function buildSeedUnits(): Unit[] {

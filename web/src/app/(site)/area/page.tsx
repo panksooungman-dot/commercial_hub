@@ -28,7 +28,7 @@ export default async function AreaPage() {
         </div>
       </div>
       <p className="mt-4 max-w-2xl text-muted">
-        홈에서 본 입지 이야기를, 1공구 상권 특성과 주변 권역별로 더 자세히 풀어 드립니다.
+        홍보 자료 기준 입지 가이드입니다. 학원가·배후세대·주변 권역을 한눈에 보세요.
       </p>
 
       <div className="mt-10 grid gap-6 md:grid-cols-3">

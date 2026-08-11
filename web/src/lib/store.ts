@@ -78,18 +78,18 @@ function defaultProject(): Project {
   return {
     id: "songdo-hanulche-ivyone-retail",
     projectName: "송도 하늘채 아이비원",
-    subtitle: "송도 아이비원 주상복합 단지 내 상가",
-    address: "인천 연수구 송도동 20-4~11 (총 8필지)",
+    subtitle: "송도 아이비원 주상복합 단지 내 상가 · IVYSQUARE",
+    address: "인천광역시 연수구 송도동 20-4일원",
     scaleFloors: "지하3층 / 지상10층",
     housingUnits: 336,
-    commercialUnitsTotal: 161,
+    commercialUnitsTotal: 160,
     commercialUnitsForSale: 107,
-    zoningDistrict: "준주거지역",
-    usageLabel: "공동주택(336세대) 및 근린생활시설(161호실)",
+    zoningDistrict: "준주거지역, 제1종지구단위계획구역(어민생활대책단지), 경제자유구역",
+    usageLabel: "공동주택(336세대) 및 근린생활시설(160실)",
     siteAreaM2: 12293.3,
-    siteAreaPy: 3718.72,
+    siteAreaPy: 3719,
     totalFloorAreaM2: 62395.35,
-    totalFloorAreaPy: 18874.59,
+    totalFloorAreaPy: 18858,
     parkingTotal: 517,
     parkingResidential: 380,
     parkingCommercial: 137,
@@ -103,8 +103,9 @@ function defaultProject(): Project {
         exclusiveAreaPy: 1116.1,
         contractAreaPy: 2275.6,
         exclusiveRatioPct: 49.05,
-        mdConcept: "병원·학원이 모이는, 송도의 생활 밀착형 서비스층",
-        recommendedBusinesses: "병원, 학원, 서비스",
+        mdConcept:
+          "교육·케어 수요가 모이는 층. 학원·메디컬·여성뷰티·금융 서비스로 생활 밀착형 상권을 엽니다.",
+        recommendedBusinesses: "학원, 메디컬, 여성뷰티, 금융 서비스",
       },
       {
         floor: "1F",
@@ -112,8 +113,9 @@ function defaultProject(): Project {
         exclusiveAreaPy: 691.1,
         contractAreaPy: 1409.1,
         exclusiveRatioPct: 49.05,
-        mdConcept: "시선이 머무는 1층, 앵커와 리테일이 만드는 스트리트 상권",
-        recommendedBusinesses: "앵커 테넌트, 리테일",
+        mdConcept:
+          "140m 스트리트몰과 맞닿은 노출층. 앵커 테넌트와 리테일·식음이 시선을 붙잡습니다.",
+        recommendedBusinesses: "리테일·서비스, 식음, 카페·베이커리, 생활편의",
       },
       {
         floor: "B1",
@@ -121,25 +123,27 @@ function defaultProject(): Project {
         exclusiveAreaPy: 232.3,
         contractAreaPy: 473.7,
         exclusiveRatioPct: 49.05,
-        mdConcept: "넓은 면적으로 여는 목적형 상권, 머무름이 매출이 되는 층",
-        recommendedBusinesses: "헬스장 등",
+        mdConcept:
+          "대형 공간으로 여는 엔터테인먼트·체류형 층. 머무는 시간이 곧 매출이 됩니다.",
+        recommendedBusinesses: "교습소, 운동·체육 레저, 공방, 스튜디오",
       },
     ],
     salesSchedule: [],
     salesTerms: "",
-    notices: "",
+    notices:
+      "※ 임대 가능 호실은 2026년 7월 기준이며, 임대 진행 상황에 따라 변경될 수 있습니다.\n※ 본 홍보물의 MD 구성·이미지·도면은 소비자의 이해를 돕기 위한 것으로 실제와 다를 수 있으므로, 계약 전 반드시 확인하시기 바랍니다.\n※ 홍보물 CG·일러스트·지역도 및 개발계획은 관계기관 사정에 따라 변경·취소될 수 있습니다.",
     prCenterName: "송도 하늘채 아이비원 홍보관",
-    prCenterAddress: "",
+    prCenterAddress: "인천광역시 연수구 컨벤시아대로42번길 21, B동 1층 105호",
     prCenterPhone: "",
     prCenterHours: "",
     prCenterMapUrl: "",
-    heroEyebrow: "Ivy Square · Commercial",
+    heroEyebrow: "SONGDO HANULCHE · IVYSQUARE",
     heroBrandLine: "아이비스퀘어 · 송도 하늘채 아이비원",
-    heroHeadline: "투자 가치의 스케일이 다르다",
+    heroHeadline: "송도가 기다려온 최상위권 복합상업시설",
     heroSubcopy:
-      "약 1만 5천여 세대와 7개 학교, 수도권 대표 학원가를 품은 자리. 약 140m 그랜드 스트리트몰의 주목성 위에 한 수 위 공간 설계를 더했습니다.",
-    heroAccentLine: "송도학원가 랜드마크 상가 — 아이비스퀘어",
-    heroCtaPrimary: "분양 정보 보기",
+      "‘송도의 대치동’ 아이비 학원가와 인근 약 1만 6천여 배후세대, 약 140m 스트리트몰이 한곳에서 만납니다.",
+    heroAccentLine: "THE CENTER OF EDUCATION — 아이비스퀘어",
+    heroCtaPrimary: "호실·도면 보기",
     heroCtaSecondary: "상담 신청하기",
     updatedAt: now(),
   };
@@ -153,7 +157,7 @@ function defaultFaqs(): Faq[] {
       category: "unit",
       question: "분양 가능 호실은 몇 실이며, 층·동별로 어떻게 나뉘나요?",
       answer:
-        "전체 근린생활시설 161호실 중 107실이 분양 가능합니다.\n\n층별 잔여 호실 수\n· 2층(2F): 51실\n· 1층(1F): 50실\n· 지하1층(B1): 6실\n\n호실은 A동·B동으로 구분되며, 호실·도면에서 층·동·호수로 확인할 수 있습니다.\n(세부 호실 현황은 관리자에서 상태·분양가 업데이트 시 최신 기준으로 반영됩니다.)",
+        "전체 근린생활시설 160실 중 107실이 분양(임대) 가능합니다. (2026년 7월 기준)\n\n층별 잔여 호실 수\n· 2층(2F): 51실\n· 1층(1F): 50실\n· 지하1층(B1): 6실\n\n호실은 A동(301동)·B동(302동)으로 구분되며, 호실·도면에서 층·동·호수로 확인할 수 있습니다.\n(세부 호실 현황은 관리자에서 상태·분양가 업데이트 시 최신 기준으로 반영됩니다.)",
       sortOrder: 1,
       published: true,
       updatedAt: nowIso,
@@ -214,20 +218,19 @@ function defaultFaqs(): Faq[] {
 
 function defaultArea(): AreaContent {
   return {
-    positioningHeadline:
-      "학원가·고소득 배후주거·센트럴파크가 겹치는 1공구, '송도의 대치동'이라 불리는 이유",
+    positioningHeadline: "‘송도의 대치동’ — 교육이 중심이 되는 상권",
     points: [
       {
-        title: "송도 최고 수준의 학원가",
-        body: "채드윅 국제학교와 우수 공립학교가 가까이 자리해 학생과 학부모의 발걸음이 매일 이어집니다. 교육시설이 밀집한 만큼 소비 수요도 여러 방향으로 넓어지고 있습니다.",
+        title: "아이비 학원가의 반복 동선",
+        body: "송도 1공구 아이비 학원가 거리 — 약 280여 개 학원·교육 클래스와 포스코고 등 7개 명문학교가 만드는 365일 소비 상권.",
       },
       {
-        title: "고소득 배후수요가 만드는 소비력",
-        body: "송도 1세대를 대표하는 랜드마크 아파트가 밀집해 있어 배후 세대의 소득 수준과 소비력이 높습니다. 이 구매력은 단지 안에 머물지 않고 주변 상권 전체로 이어집니다.",
+        title: "약 1만 6천여 배후세대",
+        body: "고소득 대단지 아파트촌이 밀집한 주거 밀착 메인 상권. 입주민·인근 거주자·방문객 수요가 겹칩니다.",
       },
       {
-        title: "센트럴파크가 이어주는 여가 상권",
-        body: "상권 남쪽으로 송도를 대표하는 센트럴파크가 맞닿아 있어 공원을 찾는 발걸음이 자연스럽게 상권으로 이어집니다. 체류 시간이 길어질수록 여가·문화 업종의 다양성도 함께 넓어집니다.",
+        title: "길목에서 열리는 스트리트",
+        body: "학교·학원·공원 길목에 선 뉴욕풍 스트리트형 점포. 약 140m·3개 층 규모로 시선을 집중시킵니다.",
       },
     ],
     districts: [
@@ -237,6 +240,7 @@ function defaultArea(): AreaContent {
           "교육시설을 중심으로 형성된 안정적인 근린 상권입니다.",
           "인근 약 1.6만 세대의 거주 수요와 꾸준한 교육 수요가 상시 유동을 지탱합니다.",
           "학생과 학부모의 반복 방문이 만드는 생활 밀착형 상권입니다.",
+          "GTX-B(공사중) 등 미래 교통 호재가 상권 확장 기대를 더합니다.",
         ],
       },
       {
@@ -276,7 +280,7 @@ function defaultArea(): AreaContent {
         traits: [
           "대규모 주거 배후를 기반으로 소비가 이루어지는 생활 밀착형 상권입니다.",
           "배후 주거지의 고정 수요가 상권을 꾸준히 지탱하는 구조입니다.",
-          "외부 유입보다는 고정 수요를 겨냥한 근린생활시설이 주를 이룹니다.",
+          "학원가·공원 길목과 이어지는 근린생활시설이 주를 이룹니다.",
         ],
       },
     ],
