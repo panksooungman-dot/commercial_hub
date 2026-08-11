@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "leaflet/dist/leaflet.css";
 
 :root {
   --background: #f3f5f7;
@@ -59,4 +60,166 @@ h3,
 .font-display {
   font-family: var(--font-display), "Apple SD Gothic Neo", serif;
   letter-spacing: -0.02em;
+}
+
+.site-map-pin,
+.site-map-pin-nearby,
+.site-map-pin-labeled,
+.site-map-zone-label {
+  background: transparent !important;
+  border: none !important;
+}
+
+.leaflet-container {
+  font-family: var(--font-body), "Apple SD Gothic Neo", sans-serif;
+  z-index: 0;
+  background: #e8f2f8;
+}
+
+/* 사업지: 지도와 독립된 고정 px 점 */
+.site-map-site-dot {
+  width: 22px;
+  height: 22px;
+  border-radius: 999px;
+  background: rgba(196, 163, 90, 0.25);
+  display: grid;
+  place-items: center;
+}
+
+.site-map-site-core {
+  width: 12px;
+  height: 12px;
+  border-radius: 999px;
+  background: #c4a35a;
+  border: 2px solid #08263c;
+  box-shadow: 0 0 0 3px rgba(196, 163, 90, 0.35);
+}
+
+/* 줌 인 시 단지 라벨 — 좌표 옆 작은 칩 */
+.site-map-label-chip {
+  transform: translate(10px, -50%);
+  background: #fff;
+  border: 1px solid color-mix(in srgb, var(--chip, #6b7c8c) 55%, #fff);
+  border-left: 3px solid var(--chip, #6b7c8c);
+  border-radius: 6px;
+  padding: 3px 7px;
+  box-shadow: 0 2px 8px rgba(20, 40, 60, 0.1);
+  white-space: nowrap;
+  pointer-events: none;
+  max-width: 160px;
+}
+
+.site-map-label-name {
+  display: block;
+  font-size: 10px;
+  font-weight: 700;
+  color: #08263c;
+  line-height: 1.25;
+}
+
+.site-map-label-detail {
+  display: block;
+  font-size: 9px;
+  color: #6b7c8c;
+  margin-top: 1px;
+  line-height: 1.2;
+}
+
+.site-map-zone-label {
+  transform: translate(-50%, -120%);
+}
+
+.site-map-zone-chip {
+  background: rgba(255, 255, 255, 0.92);
+  border: 1.5px dashed #e85d5d;
+  border-radius: 999px;
+  padding: 5px 12px;
+  text-align: center;
+  white-space: nowrap;
+  box-shadow: 0 2px 8px rgba(192, 57, 43, 0.08);
+}
+
+.site-map-zone-chip strong {
+  display: block;
+  font-size: 11px;
+  font-weight: 800;
+  color: #c0392b;
+}
+
+.site-map-zone-chip span {
+  display: block;
+  font-size: 9px;
+  color: #d35454;
+  margin-top: 1px;
+}
+
+.site-map-tooltip-shell {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  padding: 0;
+}
+
+.site-map-tooltip-shell .leaflet-tooltip-tip {
+  display: none;
+}
+
+.site-map-tip {
+  background: #fff;
+  border: 1px solid #d5dde6;
+  border-radius: 8px;
+  padding: 5px 8px;
+  box-shadow: 0 4px 14px rgba(8, 38, 60, 0.12);
+  text-align: center;
+}
+
+.site-map-tip strong {
+  display: block;
+  font-size: 11px;
+  font-weight: 700;
+  color: #08263c;
+  line-height: 1.3;
+}
+
+.site-map-tip span {
+  display: block;
+  margin-top: 2px;
+  font-size: 10px;
+  color: #5c6b7a;
+}
+
+.site-map-tip--site {
+  border-color: #c4a35a;
+  background: #08263c;
+}
+
+.site-map-tip--site strong,
+.site-map-tip--site span {
+  color: #fff;
+}
+
+.site-map-tip--site span {
+  color: #c4a35a;
+}
+
+.site-map-popup-shell .leaflet-popup-content-wrapper {
+  border-radius: 10px;
+  box-shadow: 0 8px 24px rgba(8, 38, 60, 0.15);
+}
+
+.site-map-popup {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.site-map-popup strong {
+  color: #08263c;
+  font-size: 13px;
+}
+
+.site-map-popup span {
+  color: #5c6b7a;
 }

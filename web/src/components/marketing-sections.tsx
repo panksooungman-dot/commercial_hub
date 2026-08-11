@@ -1,54 +1,42 @@
 import Image from "next/image";
 import Link from "next/link";
 
-const PREMIUM8 = [
+const PREMIUM6 = [
   {
     src: "/images/mood/academy.jpg",
-    title: "수도권 대표 학원가",
-    desc: "아이비 학원가 · 약 280여 교육 클래스",
-    alt: "송도 학원가 교육 상권 분위기",
-  },
-  {
-    src: "/images/aerial-plan.jpg",
-    title: "초밀집 배후수요",
-    desc: "인근 약 1만 6천여 세대",
-    alt: "송도 하늘채 아이비원 단지 조감도",
-  },
-  {
-    src: "/images/marketing/facade-street.png",
-    title: "그랜드 스트리트몰",
-    desc: "약 140m, 3개 층 복합상업시설",
-    alt: "그랜드 스트리트몰 상업시설 외관",
-  },
-  {
-    src: "/images/site-location-map.jpg",
-    title: "교통 호재",
-    desc: "GTX-B·인천1호선, 제2공항철도(예정)",
-    alt: "송도 1공구 입지 및 교통망",
+    title: "송도를 대표하는 학원가",
+    desc: "송도 1공구 아이비 학원가 거리의 중심",
+    alt: "송도 아이비 학원가 교육 상권 분위기",
   },
   {
     src: "/images/marketing/ivysquare-night.png",
     title: "뉴욕풍 랜드마크 디자인",
-    desc: "차별화된 외관의 고급 소비공간",
-    alt: "아이비스퀘어 야간 외관 렌더",
-  },
-  {
-    src: "/images/marketing/street-plaza.jpg",
-    title: "앵커기업 배후수요",
-    desc: "셀트리온, 삼성바이오로직스 등",
-    alt: "단지 앞 보행 플라자와 스트리트 리테일",
+    desc: "차별화된 외관으로 품격 높은 소비 공간",
+    alt: "아이비스퀘어 야간 랜드마크 외관",
   },
   {
     src: "/images/marketing/lifestyle-garden.png",
-    title: "365일 상권",
-    desc: "입주민·학원가·방문객 고정수요",
-    alt: "단지 내 라이프·근린생활시설",
+    title: "고소득 배후수요 초밀집",
+    desc: "인근 약 1만 6천여 세대의 풍부한 수요",
+    alt: "단지 내 라이프와 배후 주거 수요",
   },
   {
-    src: "/images/mood/retail.jpg",
-    title: "안정적 상가 투자",
-    desc: "입주민 고정수요와 상대적으로 낮은 상가 규제",
-    alt: "스트리트 리테일 상가 분위기",
+    src: "/images/mood/train.jpg",
+    title: "갈수록 빛나는 미래가치",
+    desc: "송도 GTX, K-바이오 랩허브 등 개발호재",
+    alt: "송도 GTX 고속열차 터널 주행 이미지",
+  },
+  {
+    src: "/images/marketing/facade-street.png",
+    title: "시선이 가는 스트리트몰",
+    desc: "약 140m, 3개 층 규모의 복합상업시설",
+    alt: "약 140m 그랜드 스트리트몰 외관",
+  },
+  {
+    src: "/images/marketing/ivysquare-twilight.jpg",
+    title: "365일 활발한 핵심상권",
+    desc: "아파트 입주민, 인근 거주자, 방문객 수요",
+    alt: "아이비스퀘어 황혼 외관과 핵심 상권",
   },
 ] as const;
 
@@ -278,42 +266,44 @@ export function AreaFacilitiesSection() {
   );
 }
 
-/** 가치 요약 카드 — 스토리에서 이미 말한 내용을 ‘한눈에’만 */
+/** 가치 요약 카드 — PPT PREMIUM 6 카피 반영 */
 export function PremiumEightSection() {
   return (
     <section className="bg-white">
       <div className="mx-auto max-w-[1100px] px-4 py-14 md:py-16">
-        <p className="text-center text-xs font-semibold tracking-[0.2em] text-brand uppercase">
-          At a Glance
+        <p className="text-center text-sm font-medium text-brand md:text-base">
+          송도 하늘채 아이비원{" "}
+          <span className="font-semibold text-brand-deep">단지 내 상가</span>
         </p>
-        <h2 className="mt-2 text-center font-display text-3xl text-brand-deep md:text-4xl">
-          아이비스퀘어 <span className="text-accent">PREMIUM 6</span>
+        <h2 className="mt-2 text-center font-display text-3xl tracking-wide text-brand-deep md:text-5xl">
+          PREMIUM <span className="text-accent">6</span>
         </h2>
-        <p className="mx-auto mt-2 max-w-xl text-center text-sm text-muted md:text-base">
-          위에서 이야기한 가치를 여섯 가지로 압축했습니다.
+        <p className="mx-auto mt-3 max-w-xl text-center text-sm text-muted md:text-base">
+          학원가·배후수요·스트리트몰·미래가치까지, 상가의 이유를 여섯 가지로 압축했습니다.
         </p>
 
-        <ol className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {PREMIUM8.map((item, i) => (
+        <ol className="mt-10 grid gap-5 sm:grid-cols-2">
+          {PREMIUM6.map((item, i) => (
             <li
               key={item.title}
-              className="group overflow-hidden rounded-2xl bg-[#f7f9fb] shadow-[0_8px_28px_rgba(20,40,60,0.06)] transition duration-300 hover:-translate-y-1 hover:shadow-[0_14px_36px_rgba(20,40,60,0.1)]"
+              className="group overflow-hidden rounded-2xl border border-line/70 bg-white shadow-[0_8px_28px_rgba(20,40,60,0.06)] transition duration-300 hover:-translate-y-1 hover:shadow-[0_14px_36px_rgba(20,40,60,0.1)]"
             >
-              <div className="relative aspect-[3/2] w-full overflow-hidden bg-white">
+              <div className="relative overflow-hidden bg-[#eef2f6]">
                 <Image
                   src={item.src}
                   alt={item.alt}
-                  fill
-                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 260px"
+                  width={800}
+                  height={500}
+                  sizes="(max-width: 640px) 100vw, 50vw"
                   quality={88}
-                  className="object-cover transition duration-700 ease-out group-hover:scale-[1.04]"
+                  className="aspect-[16/10] h-auto w-full object-cover transition duration-700 ease-out group-hover:scale-[1.03]"
                 />
                 <span className="absolute left-3 top-3 rounded-md bg-brand-deep/85 px-2 py-1 text-[11px] font-bold tracking-wide text-white">
                   {String(i + 1).padStart(2, "0")}
                 </span>
               </div>
-              <div className="px-4 py-4 text-left">
-                <h3 className="font-display text-[17px] leading-snug text-brand-deep">
+              <div className="px-5 py-4 text-left">
+                <h3 className="font-display text-lg leading-snug text-brand-deep md:text-xl">
                   {item.title}
                 </h3>
                 <p className="mt-1.5 text-sm leading-relaxed text-muted">{item.desc}</p>

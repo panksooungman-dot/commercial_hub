@@ -1,4 +1,6 @@
 import Image from "next/image";
+import { SiteLocationMap } from "@/components/site-location-map";
+import { LOCATION_HIGHLIGHTS } from "@/lib/site-location";
 import { Project } from "@/lib/types";
 
 function overviewRows(project: Project): [string, string][] {
@@ -86,6 +88,7 @@ export function AerialPlan({ project }: { project: Project }) {
   );
 }
 
+/** 입지 — Leaflet 실지도 */
 export function LocationMapSection() {
   return (
     <div className="relative w-full overflow-hidden bg-[#f7f9fb]">
@@ -94,19 +97,24 @@ export function LocationMapSection() {
         <h2 className="mt-1 font-display text-2xl text-brand-deep md:text-3xl">
           송도의 &lsquo;대치동&rsquo;, 1공구 중심 상권
         </h2>
-        <p className="mt-2 max-w-2xl text-sm text-muted md:text-base">
-          채드윅송도국제학교·인천포스코고등학교 등 학원가와 고소득 배후주거, 센트럴파크가
-          한자리에서 만나는 입지입니다. 도보 생활권 안에 상주 수요와 방문 수요가 함께 겹칩니다.
+        <p className="mt-1 text-sm font-medium text-brand md:text-base">
+          송도 아이비 학원가 랜드마크 상업시설 · THE CENTER OF EDUCATION
         </p>
-        <div className="relative mt-6 aspect-[1035/615] w-full overflow-hidden rounded-2xl border border-line bg-[#dfe6ec]">
-          <Image
-            src="/images/site-location-map.jpg"
-            alt="송도 1공구 입지 및 배후 상권 지도"
-            fill
-            sizes="(max-width: 1100px) 100vw, 1100px"
-            quality={90}
-            className="object-contain object-center"
-          />
+        <p className="mt-2 max-w-2xl text-sm text-muted md:text-base">
+          고소득층 초밀집 수요와 메인 학원가로 이어지는 중심자리. 독보적인 외관 특화
+          디자인으로 차별화된 랜드마크 상업시설입니다.
+        </p>
+        <div className="relative mt-6 overflow-hidden rounded-2xl border border-line bg-white shadow-[0_8px_32px_rgba(8,38,60,0.08)]">
+          <SiteLocationMap />
+        </div>
+        <div className="mt-8 grid gap-6 md:grid-cols-3">
+          {LOCATION_HIGHLIGHTS.map((item, index) => (
+            <div key={item.title} className="border-t-2 border-brand pt-4">
+              <p className="text-xs tracking-[0.16em] text-muted uppercase">0{index + 1}</p>
+              <h3 className="mt-2 font-display text-lg text-brand-deep md:text-xl">{item.title}</h3>
+              <p className="mt-2 text-sm leading-relaxed text-muted">{item.body}</p>
+            </div>
+          ))}
         </div>
       </div>
     </div>
