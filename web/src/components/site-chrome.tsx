@@ -13,9 +13,9 @@ const NAV = [
 export function SiteHeader({ projectName, phone }: { projectName: string; phone?: string }) {
   return (
     <header className="sticky top-0 z-40 border-b border-line/80 bg-surface/90 backdrop-blur">
-      <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3">
-        <Link href="/" className="min-w-0">
-          <p className="font-display text-lg font-semibold text-brand-deep md:text-xl">
+      <div className="mx-auto flex max-w-6xl items-center justify-between gap-2 px-4 py-3 sm:gap-4">
+        <Link href="/" className="min-w-0 shrink">
+          <p className="truncate font-display text-base font-semibold text-brand-deep sm:text-lg md:text-xl">
             {projectName}
           </p>
           <p className="truncate text-xs text-muted">상업시설</p>
@@ -31,11 +31,11 @@ export function SiteHeader({ projectName, phone }: { projectName: string; phone?
             ),
           )}
         </nav>
-        <div className="flex items-center gap-2">
+        <div className="flex shrink-0 items-center gap-1.5 sm:gap-2">
           {phone ? (
             <a
               href={`tel:${phone.replace(/[^0-9+]/g, "")}`}
-              className="flex items-center gap-1.5 rounded-sm border border-brand/60 px-3 py-2 text-sm font-medium text-brand hover:border-brand hover:bg-brand/5"
+              className="flex items-center gap-1 whitespace-nowrap rounded-sm border border-brand/60 px-2 py-2 text-xs font-medium text-brand hover:border-brand hover:bg-brand/5 sm:gap-1.5 sm:px-3 sm:text-sm"
             >
               <svg
                 className="h-4 w-4 shrink-0"
@@ -49,12 +49,12 @@ export function SiteHeader({ projectName, phone }: { projectName: string; phone?
               >
                 <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z" />
               </svg>
-              <span className="hidden sm:inline">통화하기</span>
+              <span>통화하기</span>
             </a>
           ) : null}
           <Link
             href="/contact"
-            className="rounded-sm bg-brand px-3 py-2 text-sm font-medium text-white hover:bg-brand-deep"
+            className="whitespace-nowrap rounded-sm bg-brand px-2 py-2 text-xs font-medium text-white hover:bg-brand-deep sm:px-3 sm:text-sm"
           >
             상담 신청
           </Link>
