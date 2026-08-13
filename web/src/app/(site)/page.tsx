@@ -69,10 +69,18 @@ export default async function HomePage() {
                   {project.heroEyebrow || "SONGDO HANULCHE · IVYSQUARE"}
                 </p>
                 <h1 className="animate-hero-fade-up mt-3 font-display text-[2.1rem] leading-[1.22] font-bold text-white [animation-delay:80ms] [text-shadow:0_2px_20px_rgba(0,0,0,0.35)] sm:text-[2.75rem] sm:leading-[1.18] md:text-5xl lg:text-[3.4rem] lg:leading-[1.14]">
-                  <span className="block">송도가 기다려온</span>
-                  <span className="block text-accent">최상위권 복합상업시설</span>
+                  {(project.heroHeadline || "송도가 기다려온\n최상위권 복합상업시설")
+                    .split("\n")
+                    .map((line, i, lines) => (
+                      <span
+                        key={i}
+                        className={`block ${i === lines.length - 1 ? "text-accent" : ""}`}
+                      >
+                        {line}
+                      </span>
+                    ))}
                 </h1>
-                <p className="animate-hero-fade-up mt-4 max-w-lg text-sm leading-relaxed text-white/85 [animation-delay:200ms] sm:mt-5 sm:text-base md:text-lg">
+                <p className="animate-hero-fade-up mt-4 max-w-lg text-sm leading-relaxed whitespace-pre-line text-white/85 [animation-delay:200ms] sm:mt-5 sm:text-base md:text-lg">
                   {project.heroSubcopy}
                 </p>
                 <div className="animate-hero-fade-up mt-7 flex flex-wrap gap-3 [animation-delay:400ms] sm:mt-9">
