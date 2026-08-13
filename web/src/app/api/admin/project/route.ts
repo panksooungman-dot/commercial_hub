@@ -1,3 +1,4 @@
+import { revalidatePath } from "next/cache";
 import { NextResponse } from "next/server";
 import { requireAdmin } from "@/lib/auth";
 import { store } from "@/lib/store";
@@ -17,6 +18,7 @@ export async function PUT(req: Request) {
     await requireAdmin();
     const body = (await req.json()) as Project;
     await store.saveProject(body);
+    revalidatePath("/", "layout");
     return NextResponse.json(body);
   } catch {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
