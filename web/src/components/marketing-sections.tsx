@@ -266,6 +266,133 @@ export function AreaFacilitiesSection() {
   );
 }
 
+const COMMUNITY_PLANS = [
+  {
+    src: "/images/community/community-plan-a-1f.png",
+    alt: "A Block 1F 어린이집 평면도",
+    width: 435,
+    height: 248,
+    desc: "영유아 자녀를 안심하고 맡길 수 있는 단지 내 보육시설",
+  },
+  {
+    src: "/images/community/community-plan-a-b1.png",
+    alt: "A Block B1 작은도서관·실내놀이터 평면도",
+    width: 493,
+    height: 245,
+    desc: "엄마와 아기가 함께 즐겁고 여유로운 시간을 보낼 수 있는 공간",
+  },
+  {
+    src: "/images/community/community-plan-b-b1.png",
+    alt: "B Block B1 주민카페·경로당 평면도",
+    width: 430,
+    height: 265,
+    desc: "친목을 도모하고 문화생활을 즐길 수 있는 어르신들과 주민들의 쉼터",
+  },
+] as const;
+
+/** 단지 내 커뮤니티 시설 — 스트리트 조감·유아놀이터·헬시가든·근생 평면도 */
+export function CommunitySection() {
+  return (
+    <section className="bg-[#f7f9fb]">
+      <div className="mx-auto max-w-[1100px] px-4 py-14 md:py-16">
+        <p className="text-center text-xs font-semibold tracking-[0.22em] text-brand uppercase">
+          Signature Community
+        </p>
+        <h2 className="mt-3 text-center font-display text-2xl leading-snug text-brand-deep md:text-3xl">
+          생활의 가치를 높이는
+          <span className="mt-1 block text-brand">커뮤니티를 누리다!</span>
+        </h2>
+
+        <figure className="mt-10 overflow-hidden rounded-2xl shadow-[0_12px_40px_rgba(20,40,60,0.08)]">
+          <Image
+            src="/images/community/community-street.jpg"
+            alt="단지 내 그랜드 스트리트몰 커뮤니티 조감"
+            width={719}
+            height={455}
+            quality={90}
+            sizes="(max-width: 1100px) 100vw, 1100px"
+            className="h-auto w-full"
+          />
+        </figure>
+
+        <div className="mt-5 grid gap-5 sm:grid-cols-2">
+          <figure className="overflow-hidden rounded-2xl shadow-[0_8px_28px_rgba(20,40,60,0.06)]">
+            <Image
+              src="/images/community/community-playground.jpg"
+              alt="유아놀이터"
+              width={349}
+              height={300}
+              quality={88}
+              sizes="(max-width: 640px) 100vw, 540px"
+              className="h-auto w-full"
+            />
+          </figure>
+          <figure className="overflow-hidden rounded-2xl shadow-[0_8px_28px_rgba(20,40,60,0.06)]">
+            <Image
+              src="/images/community/community-garden.jpg"
+              alt="헬시가든 (A블록/B블록)"
+              width={349}
+              height={300}
+              quality={88}
+              sizes="(max-width: 640px) 100vw, 540px"
+              className="h-auto w-full"
+            />
+          </figure>
+        </div>
+        <p className="mt-3 text-center text-sm leading-relaxed text-muted">
+          헬시가든은 입주민들의 건강한 생활을 유지해 주는 쾌적한 공간입니다.
+        </p>
+
+        <div className="mt-16 text-center md:mt-20">
+          <h3 className="font-display text-2xl leading-snug text-brand-deep sm:text-[1.7rem]">
+            다양한 여가를 가득히!
+            <br />
+            일상에 특별함은 넉넉히!
+          </h3>
+        </div>
+
+        <div className="mt-8 grid gap-5 md:grid-cols-3">
+          {COMMUNITY_PLANS.map((plan) => (
+            <figure
+              key={plan.src}
+              className="overflow-hidden rounded-2xl border border-line/70 bg-white shadow-[0_8px_28px_rgba(20,40,60,0.06)]"
+            >
+              <Image
+                src={plan.src}
+                alt={plan.alt}
+                width={plan.width}
+                height={plan.height}
+                quality={90}
+                sizes="(max-width: 768px) 100vw, 33vw"
+                className="h-auto w-full"
+              />
+              <figcaption className="px-5 py-4">
+                <p className="text-sm leading-relaxed text-muted">{plan.desc}</p>
+              </figcaption>
+            </figure>
+          ))}
+        </div>
+
+        <figure className="mt-10 overflow-hidden rounded-2xl border border-line/70 bg-white shadow-[0_8px_28px_rgba(20,40,60,0.06)]">
+          <Image
+            src="/images/community/community-floor-diagram.png"
+            alt="2F·1F·B1 커뮤니티 시설 배치도"
+            width={413}
+            height={385}
+            quality={90}
+            sizes="(max-width: 768px) 100vw, 700px"
+            className="mx-auto h-auto w-full max-w-xl"
+          />
+          <figcaption className="border-t border-line/60 px-5 py-4 text-sm leading-relaxed text-muted">
+            근린생활시설은 단지 안에서 생활에 필요한 모든 것을 누리는 원스톱 라이프를
+            제공합니다.
+          </figcaption>
+        </figure>
+      </div>
+    </section>
+  );
+}
+
 /** 가치 요약 카드 — PPT PREMIUM 6 카피 반영 */
 export function PremiumEightSection() {
   return (

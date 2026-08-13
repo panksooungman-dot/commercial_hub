@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import {
   BrandStorySection,
+  CommunitySection,
   LifestylePremiumSection,
   PremiumEightSection,
 } from "@/components/marketing-sections";
@@ -21,6 +22,7 @@ const NAV_SECTIONS = [
   { id: "overview", label: "사업개요" },
   { id: "brand", label: "브랜드" },
   { id: "premium8", label: "프리미엄" },
+  { id: "community", label: "커뮤니티" },
   { id: "siteplan", label: "단지조감" },
   { id: "location", label: "입지" },
   { id: "drawings", label: "설계도면" },
@@ -128,6 +130,9 @@ export default async function HomePage() {
       </div>
       <div id="premium8">
         <PremiumEightSection />
+      </div>
+      <div id="community">
+        <CommunitySection />
       </div>
 
       <div id="siteplan">
