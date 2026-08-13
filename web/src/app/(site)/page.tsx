@@ -80,6 +80,14 @@ export default async function HomePage() {
                       </span>
                     ))}
                 </h1>
+                {project.heroBrandLine ? (
+                  <p className="animate-hero-fade-up mt-3 flex flex-wrap items-center gap-2 text-sm font-medium text-white/90 [animation-delay:140ms] sm:text-base">
+                    <span>{project.heroBrandLine}</span>
+                    <span className="rounded-sm bg-white/15 px-2 py-0.5 text-xs font-semibold text-white ring-1 ring-white/30">
+                      단지 내 상가
+                    </span>
+                  </p>
+                ) : null}
                 <p className="animate-hero-fade-up mt-4 max-w-lg text-sm leading-relaxed whitespace-pre-line text-white/85 [animation-delay:200ms] sm:mt-5 sm:text-base md:text-lg">
                   {project.heroSubcopy}
                 </p>
