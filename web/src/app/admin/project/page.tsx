@@ -45,8 +45,16 @@ export default function AdminProjectPage() {
 
   return (
     <div className="mx-auto max-w-4xl px-4 py-10">
-      <h1 className="font-display text-3xl text-brand">프로젝트 · 배너 · 연락처</h1>
-      <p className="mt-2 text-sm text-muted">
+      <div className="sticky top-0 z-10 -mx-4 flex items-center justify-between gap-3 border-b border-line bg-[#eef1f4]/95 px-4 py-3 backdrop-blur">
+        <div>
+          <h1 className="font-display text-lg text-brand">프로젝트 · 배너 · 연락처</h1>
+          {msg ? <p className="text-xs text-brand">{msg}</p> : null}
+        </div>
+        <button type="button" onClick={save} className="shrink-0 bg-brand px-5 py-2.5 text-sm text-white">
+          저장
+        </button>
+      </div>
+      <p className="mt-4 text-sm text-muted">
         메인 배너 문구·분양안내·홍보관 정보를 수정할 수 있습니다. 코드 수정 없이 저장만 하면 됩니다.
       </p>
 
