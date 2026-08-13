@@ -86,11 +86,11 @@ export default async function HomePage() {
                     <span className="rounded-sm bg-white/15 px-2 py-0.5 text-xs font-semibold text-white ring-1 ring-white/30">
                       단지 내 상가
                     </span>
-                    {project.heroAccentLine ? (
-                      <span className="text-xs font-normal text-white/60">
-                        {project.heroAccentLine}
-                      </span>
-                    ) : null}
+                  </p>
+                ) : null}
+                {project.heroAccentLine ? (
+                  <p className="animate-hero-fade-up mt-1.5 text-xs font-medium tracking-wide text-accent/90 [animation-delay:170ms] sm:text-sm">
+                    {project.heroAccentLine}
                   </p>
                 ) : null}
                 <p className="animate-hero-fade-up mt-4 max-w-lg text-sm leading-relaxed whitespace-pre-line text-white/85 [animation-delay:200ms] sm:mt-5 sm:text-base md:text-lg">
