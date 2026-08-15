@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { FLOOR_MOOD_IMAGES, plansForFloor } from "@/lib/floor-plans";
-import { estimateUnitPin } from "@/lib/unit-pins";
+import { estimateUnitPin, pinLabel } from "@/lib/unit-pins";
 import { Building, Floor, UnitStatus } from "@/lib/types";
 import { unitLabel } from "@/lib/format";
 
@@ -174,23 +174,19 @@ export function FloorPlanFigure({
 
           return (
             <figure key={`${b}-${floor}`} className="rounded-2xl border border-line bg-white">
-              <div
-                className="relative w-full overflow-hidden bg-white"
-                style={{ aspectRatio: `${plan.width} / ${plan.height}` }}
-              >
-                {/* next/image fill 대신 img — 마커 좌표(overlay)와 1:1 정렬 */}
+              <div className="relative w-full overflow-hidden bg-white">
+                {/* 이미지 실측 박스와 오버레이를 1:1로 맞춤 */}
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={imageSrc}
                   alt={plan.alt}
                   width={plan.width}
                   height={plan.height}
-                  className="block h-full w-full rounded-t-2xl object-contain object-top"
+                  className="block h-auto w-full rounded-t-2xl"
                   decoding="async"
                 />
 
                 <div className="pointer-events-none absolute inset-0 z-20">
-                  {/* A동(좌) · B동(우) 영역 가이드 */}
                   <div className="absolute left-[2%] top-[2%] rounded bg-brand/80 px-2 py-0.5 text-[10px] font-bold text-white">
                     A동
                   </div>
@@ -202,20 +198,18 @@ export function FloorPlanFigure({
                     const key = pinKey(p.building, p.unitNo);
                     if (selectedKeys.has(key)) return null;
                     const dot = PIN_DOT[p.status ?? "available"];
-                    /**
-                     * 도면 한 장에 최대 50개 이상 호실이 촘촘히 몰려 있어 라벨 텍스트를 넣으면
-                     * 서로 겹쳐 읽을 수 없다. 점만 찍고 탭하면(href) 해당 호실의 상세 페이지에서
-                     * 크게 표시된 단독 마커로 확인하도록 유도한다.
-                     */
+                    const label = pinLabel(p.building, p.unitNo);
                     const body = (
                       <span
-                        className={`pointer-events-auto block h-2.5 w-2.5 rounded-full border border-white shadow ${dot}`}
-                      />
+                        className={`box-border flex h-[22px] w-[42px] min-h-[22px] min-w-[42px] max-h-[22px] max-w-[42px] shrink-0 items-center justify-center overflow-hidden rounded-[3px] border border-white text-[9px] font-black leading-none tabular-nums tracking-tight text-white shadow-[0_1px_3px_rgba(0,0,0,0.4)] ${dot}`}
+                      >
+                        {label}
+                      </span>
                     );
                     return (
                       <div
                         key={p.id}
-                        className="absolute -translate-x-1/2 -translate-y-1/2"
+                        className="pointer-events-auto absolute z-10 -translate-x-1/2 -translate-y-1/2 hover:z-30"
                         style={{ left: `${p.x}%`, top: `${p.y}%` }}
                         title={unitLabel(p.building, p.unitNo)}
                       >
@@ -233,7 +227,7 @@ export function FloorPlanFigure({
                   {selectedPins.map((h) => (
                     <div
                       key={pinKey(h.building, h.unitNo)}
-                      className="absolute -translate-x-1/2 -translate-y-1/2"
+                      className="absolute z-40 -translate-x-1/2 -translate-y-1/2"
                       style={{ left: `${h.x}%`, top: `${h.y}%` }}
                       aria-label={`${h.style.label} ${unitLabel(h.building, h.unitNo)}`}
                     >
@@ -242,14 +236,14 @@ export function FloorPlanFigure({
                           className={`absolute -inset-2 animate-ping rounded-full ${h.style.ping}`}
                         />
                         <span
-                          className={`relative flex h-12 w-12 items-center justify-center rounded-full border-[3px] border-white text-lg font-black text-white shadow-[0_4px_14px_rgba(0,0,0,0.35)] ${h.style.bg}`}
+                          className={`relative flex h-12 min-w-12 items-center justify-center rounded-full border-[3px] border-white px-1.5 text-sm font-black text-white shadow-[0_4px_14px_rgba(0,0,0,0.35)] ${h.style.bg}`}
                         >
-                          {h.order}
+                          {pinLabel(h.building, h.unitNo)}
                         </span>
                         <span
                           className={`relative mt-1 max-w-[8rem] truncate rounded-md px-2.5 py-1 text-center text-xs font-bold text-white shadow-md ${h.style.bg}`}
                         >
-                          {unitLabel(h.building, h.unitNo)}
+                          {h.order} · {unitLabel(h.building, h.unitNo)}
                         </span>
                       </div>
                     </div>
@@ -259,7 +253,7 @@ export function FloorPlanFigure({
               <figcaption className="border-t border-line px-4 py-2 text-xs text-muted">
                 {plan.alt}
                 {overlayPins.length > 0
-                  ? ` · A·B동 핀 ${overlayPins.length + selectedPins.length}개 · 점을 탭하면 해당 호실 상세로 이동`
+                  ? ` · 호실 마커 ${overlayPins.length + selectedPins.length}개 · 번호를 탭하면 상세로 이동`
                   : ""}
                 {selectedPins.length > 0 ? ` · 선택 강조 ${selectedPins.length}개` : ""}
               </figcaption>
