@@ -5,8 +5,11 @@ import { Fragment, useEffect, useMemo, useState } from "react";
 import { PlanMediaGallery } from "@/components/plan-media-gallery";
 import { HIGHLIGHT_STYLES } from "@/components/floor-plan-figure";
 import { useInterestUnits } from "@/hooks/use-interest-units";
-import { formatArea, formatPrice, STATUS_LABEL, unitLabel } from "@/lib/format";
+import { formatArea, formatLeaseLine, formatManwon, STATUS_LABEL, unitLabel } from "@/lib/format";
+import type { OperatingPin } from "@/lib/operating-pins";
 import { Building, Floor, Unit, UnitStatus } from "@/lib/types";
+import type { UnitPopupInfo } from "@/lib/unit-popup";
+import type { UnitPinRecord } from "@/lib/unit-pins";
 
 type PlanUnit = Pick<
   Unit,
@@ -18,6 +21,7 @@ type PlanUnit = Pick<
   | "exclusiveAreaUnit"
   | "price"
   | "status"
+  | "listing"
 >;
 
 type PlanPin = {
@@ -33,6 +37,9 @@ export function PlanMultiSelect({
   listBuilding,
   units,
   floorPins = [],
+  operatingPins = [],
+  popupUnits = [],
+  pinRecords = [],
   initialIds = [],
   resultCount,
 }: {
@@ -41,6 +48,9 @@ export function PlanMultiSelect({
   units: PlanUnit[];
   /** 해당 층 A·B 전체 핀 (MD Plan 오버레이) */
   floorPins?: PlanPin[];
+  operatingPins?: OperatingPin[];
+  popupUnits?: UnitPopupInfo[];
+  pinRecords?: UnitPinRecord[];
   initialIds?: string[];
   resultCount?: number;
 }) {
@@ -159,6 +169,9 @@ export function PlanMultiSelect({
         floor={floor}
         building={listBuilding}
         pins={floorPins}
+        operatingPins={operatingPins}
+        popupUnits={popupUnits}
+        pinRecords={pinRecords}
         highlights={floorSelected.map((u) => ({
           building: u.building,
           unitNo: u.unitNo,
@@ -186,6 +199,7 @@ export function PlanMultiSelect({
                 <th className="px-3 py-3">호실</th>
                 <th className="px-3 py-3">전용면적</th>
                 <th className="px-3 py-3">분양가</th>
+                <th className="px-3 py-3">임대조건</th>
                 <th className="px-3 py-3">상태</th>
                 <th className="px-3 py-3"></th>
               </tr>
@@ -193,7 +207,7 @@ export function PlanMultiSelect({
             <tbody>
               {units.length === 0 ? (
                 <tr>
-                  <td colSpan={6} className="px-3 py-8 text-center text-muted">
+                  <td colSpan={7} className="px-3 py-8 text-center text-muted">
                     조건에 맞는 호실이 없습니다. 검색어·필터를 바꿔 보세요.
                   </td>
                 </tr>
@@ -205,7 +219,7 @@ export function PlanMultiSelect({
                   return (
                     <Fragment key={b}>
                       <tr className="border-t border-line bg-background/80">
-                        <td colSpan={6} className="px-3 py-2 text-xs font-semibold text-brand">
+                        <td colSpan={7} className="px-3 py-2 text-xs font-semibold text-brand">
                           {b}동{focus ? " · 포커스" : ""}
                         </td>
                       </tr>
@@ -245,7 +259,10 @@ export function PlanMultiSelect({
                             <td className="px-3 py-3">
                               {formatArea(u.exclusiveArea, u.exclusiveAreaUnit)}
                             </td>
-                            <td className="px-3 py-3 whitespace-nowrap">{formatPrice(u.price)}</td>
+                            <td className="px-3 py-3 whitespace-nowrap">{formatManwon(u.price)}</td>
+                            <td className="px-3 py-3 whitespace-nowrap">
+                              {formatLeaseLine(u.listing?.deposit, u.listing?.monthlyRent)}
+                            </td>
                             <td className="px-3 py-3">{STATUS_LABEL[u.status]}</td>
                             <td className="px-3 py-3">
                               <Link href={`/units/${u.id}#floor-plan`} className="text-brand underline">

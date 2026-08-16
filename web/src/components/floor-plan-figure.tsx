@@ -1,9 +1,14 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
+import { useState } from "react";
+import { UnitInfoPopup } from "@/components/unit-info-popup";
 import { FLOOR_MOOD_IMAGES, plansForFloor } from "@/lib/floor-plans";
-import { estimateUnitPin, pinLabel } from "@/lib/unit-pins";
+import { buildPinOverlay, estimateUnitPin, pinLabel, type UnitPinRecord } from "@/lib/unit-pins";
 import { Building, Floor, UnitStatus } from "@/lib/types";
 import { unitLabel } from "@/lib/format";
+import type { UnitPopupInfo } from "@/lib/unit-popup";
 
 export type PlanHighlight = {
   building: Building;
@@ -20,6 +25,15 @@ type PlanPin = {
   unitNo: string;
   status?: Exclude<UnitStatus, "hidden">;
   href?: string;
+  /** 직접 지정 좌표(%). 없으면 호실번호로 추정 */
+  x?: number;
+  y?: number;
+  label?: string;
+  tone?: "status" | "operating";
+  /** 영업 점포가 연결된 호실 */
+  unitId?: string;
+  /** 연결된 호실 표시 (A142) */
+  roomLabel?: string;
 };
 
 const PIN_DOT: Record<Exclude<UnitStatus, "hidden">, string> = {
@@ -59,6 +73,15 @@ function pinKey(building: Building, unitNo: string) {
   return `${building}-${unitNo}`;
 }
 
+function OperatingShopChip({ label, roomLabel }: { label: string; roomLabel?: string }) {
+  return (
+    <span className="box-border inline-flex h-[22px] shrink-0 items-center justify-center gap-1 whitespace-nowrap rounded-[3px] border border-white bg-[#ffc000] px-1.5 text-[8px] font-black leading-none text-[#3a2a00] shadow-[0_1px_3px_rgba(0,0,0,0.4)]">
+      {roomLabel ? <span className="text-[8px] font-black text-[#7a5200]">{roomLabel}</span> : null}
+      <span>{label}</span>
+    </span>
+  );
+}
+
 function stripCacheQuery(src: string) {
   return src.split("?")[0] ?? src;
 }
@@ -76,6 +99,8 @@ export function FloorPlanFigure({
   showPins = true,
   /** 상단 선택 배너·칩 숨김 (갤러리 등 외부 UI가 이미 표시할 때) */
   compact = false,
+  popupUnits = [],
+  pinRecords = [],
 }: {
   floor: Floor;
   /** 동 필터. 비우면 A·B 모두 표시 */
@@ -92,7 +117,13 @@ export function FloorPlanFigure({
   hideDimPins?: boolean;
   showPins?: boolean;
   compact?: boolean;
+  /** 노란 영업 점포 클릭 시 호실·임대 팝업에 쓸 데이터 */
+  popupUnits?: UnitPopupInfo[];
+  /** 관리자가 저장한 빨간 호실 마커 좌표 */
+  pinRecords?: UnitPinRecord[];
 }) {
+  const [popup, setPopup] = useState<UnitPopupInfo | null>(null);
+  const overlay = buildPinOverlay(pinRecords);
   const plans = plansForFloor(floor, building);
   const mood = FLOOR_MOOD_IMAGES[floor];
   if (plans.length === 0) return null;
@@ -107,6 +138,21 @@ export function FloorPlanFigure({
       : [];
 
   const selectedKeys = new Set(selected.map((h) => pinKey(h.building, h.unitNo)));
+
+  function openShop(label: string, unitId?: string, pinBuilding: Building = "A", roomLabel?: string) {
+    const hit = unitId ? popupUnits.find((u) => u.id === unitId) : undefined;
+    setPopup(
+      hit
+        ? { ...hit, shopLabel: label }
+        : {
+            building: pinBuilding,
+            floor,
+            unitNo: "",
+            status: "available",
+            shopLabel: roomLabel ? `${roomLabel} ${label}` : label,
+          },
+    );
+  }
 
   return (
     <div id="floor-plan" className={`scroll-mt-24 space-y-6 ${className}`}>
@@ -147,7 +193,7 @@ export function FloorPlanFigure({
             ? selected
                 .filter((h) => combinedSheet || h.building === b)
                 .map((h, i) => {
-                  const pos = estimateUnitPin(h.building, h.unitNo, h.siblings ?? [], floor);
+                  const pos = estimateUnitPin(h.building, h.unitNo, h.siblings ?? [], floor, overlay);
                   const order = Math.min(3, Math.max(1, h.mark ?? i + 1));
                   return {
                     ...h,
@@ -164,7 +210,10 @@ export function FloorPlanFigure({
               ? pins
                   .filter((p) => combinedSheet || p.building === b)
                   .map((p) => {
-                    const pos = estimateUnitPin(p.building, p.unitNo, [], floor);
+                    const pos =
+                      p.x != null && p.y != null
+                        ? { x: p.x, y: p.y }
+                        : estimateUnitPin(p.building, p.unitNo, [], floor, overlay);
                     return { ...p, x: pos.x, y: pos.y };
                   })
                   .filter((p) => Number.isFinite(p.x) && Number.isFinite(p.y))
@@ -195,13 +244,13 @@ export function FloorPlanFigure({
                   </div>
 
                   {overlayPins.map((p) => {
+                    if (p.tone === "operating") return null;
                     const key = pinKey(p.building, p.unitNo);
                     if (selectedKeys.has(key)) return null;
-                    const dot = PIN_DOT[p.status ?? "available"];
                     const label = pinLabel(p.building, p.unitNo);
                     const body = (
                       <span
-                        className={`box-border flex h-[22px] w-[42px] min-h-[22px] min-w-[42px] max-h-[22px] max-w-[42px] shrink-0 items-center justify-center overflow-hidden rounded-[3px] border border-white text-[9px] font-black leading-none tabular-nums tracking-tight text-white shadow-[0_1px_3px_rgba(0,0,0,0.4)] ${dot}`}
+                        className={`box-border flex h-[22px] w-[42px] min-w-[42px] max-h-[22px] max-w-[42px] shrink-0 items-center justify-center overflow-hidden rounded-[3px] border border-white text-[9px] font-black tabular-nums leading-tight tracking-tight text-white shadow-[0_1px_3px_rgba(0,0,0,0.4)] ${PIN_DOT[p.status ?? "available"]}`}
                       >
                         {label}
                       </span>
@@ -223,6 +272,24 @@ export function FloorPlanFigure({
                       </div>
                     );
                   })}
+                  {overlayPins
+                    .filter((p) => p.tone === "operating")
+                    .map((p) => (
+                      <div
+                        key={p.id}
+                        className="pointer-events-auto absolute z-20 -translate-x-1/2 -translate-y-1/2 hover:z-30"
+                        style={{ left: `${p.x}%`, top: `${p.y}%` }}
+                        title={p.roomLabel ? `${p.roomLabel} · ${p.label ?? p.unitNo}` : (p.label ?? p.unitNo)}
+                      >
+                        <button
+                          type="button"
+                          className="block cursor-pointer hover:scale-110"
+                          onClick={() => openShop(p.label ?? p.unitNo, p.unitId, p.building, p.roomLabel)}
+                        >
+                          <OperatingShopChip label={p.label ?? p.unitNo} roomLabel={p.roomLabel} />
+                        </button>
+                      </div>
+                    ))}
 
                   {selectedPins.map((h) => (
                     <div
@@ -253,7 +320,10 @@ export function FloorPlanFigure({
               <figcaption className="border-t border-line px-4 py-2 text-xs text-muted">
                 {plan.alt}
                 {overlayPins.length > 0
-                  ? ` · 호실 마커 ${overlayPins.length + selectedPins.length}개 · 번호를 탭하면 상세로 이동`
+                  ? ` · 호실 마커 ${overlayPins.filter((p) => p.tone !== "operating").length}개 · 번호를 탭하면 상세로 이동`
+                  : ""}
+                {overlayPins.some((p) => p.tone === "operating")
+                  ? " · 노란 표시를 누르면 호실·임대 정보"
                   : ""}
                 {selectedPins.length > 0 ? ` · 선택 강조 ${selectedPins.length}개` : ""}
               </figcaption>
@@ -294,6 +364,7 @@ export function FloorPlanFigure({
           </div>
         </section>
       ) : null}
+      {popup ? <UnitInfoPopup unit={popup} onClose={() => setPopup(null)} /> : null}
     </div>
   );
 }

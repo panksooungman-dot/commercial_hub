@@ -4,6 +4,9 @@ import path from "path";
 import { get, put } from "@vercel/blob";
 import { AreaContent, Faq, GalleryItem, Inquiry, Project, Unit } from "./types";
 import { buildSeedUnits } from "./units-seed";
+import { mergePptPricing } from "./unit-pricing";
+import { DEFAULT_OPERATING_PINS, type OperatingPin } from "./operating-pins";
+import { mergeUnitPins, type UnitPinRecord } from "./unit-pins";
 
 const DATA_DIR = path.join(process.cwd(), "data");
 
@@ -311,7 +314,10 @@ export const store = {
   saveProject: (data: Project) =>
     writeJson("project.json", { ...data, updatedAt: now() }),
 
-  getUnits: () => readJson("units.json", buildSeedUnits),
+  getUnits: async () => {
+    const units = await readJson("units.json", buildSeedUnits);
+    return units.map(mergePptPricing);
+  },
   saveUnits: (data: Unit[]) => writeJson("units.json", data),
 
   getFaqs: () => readJson("faqs.json", defaultFaqs),
@@ -343,6 +349,12 @@ export const store = {
 
   getInquiries: () => readJson<Inquiry[]>("inquiries.json", () => []),
   saveInquiries: (data: Inquiry[]) => writeJson("inquiries.json", data),
+
+  getOperatingPins: () => readJson<OperatingPin[]>("operating-pins.json", () => DEFAULT_OPERATING_PINS),
+  saveOperatingPins: (data: OperatingPin[]) => writeJson("operating-pins.json", data),
+
+  getUnitPins: async () => mergeUnitPins(await readJson<UnitPinRecord[]>("unit-pins.json", () => [])),
+  saveUnitPins: (data: UnitPinRecord[]) => writeJson("unit-pins.json", data),
 };
 
 export async function getPublicUnits() {

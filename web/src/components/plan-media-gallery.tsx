@@ -8,8 +8,11 @@ import {
   type PlanHighlight,
 } from "@/components/floor-plan-figure";
 import { DESIGN_PDF_HREF } from "@/lib/floor-plans";
+import { operatingOverlayPins, type OperatingPin } from "@/lib/operating-pins";
 import { PLAN_MEDIA_GALLERY, type PlanGalleryItem } from "@/lib/plan-media-gallery";
 import { Building, Floor, UnitStatus } from "@/lib/types";
+import type { UnitPopupInfo } from "@/lib/unit-popup";
+import { buildPinOverlay, type UnitPinRecord } from "@/lib/unit-pins";
 
 const FLOOR_LABEL: Record<Floor, string> = {
   B1: "지하1층 · A·B동",
@@ -29,12 +32,19 @@ export function PlanMediaGallery({
   floor,
   building = "",
   pins = [],
+  operatingPins = [],
+  popupUnits = [],
+  pinRecords = [],
   highlights = [],
 }: {
   floor: Floor;
   building?: Building | "";
   /** 해당 층 A·B 전체 핀 */
   pins?: PlanPin[];
+  /** 관리자가 저장한 영업 점포(전 층). 도면 탭에 맞춰 노란 표시로 그립니다. */
+  operatingPins?: OperatingPin[];
+  popupUnits?: UnitPopupInfo[];
+  pinRecords?: UnitPinRecord[];
   /** 선택 호실 강조(최대 3) */
   highlights?: PlanHighlight[];
 }) {
@@ -47,6 +57,18 @@ export function PlanMediaGallery({
 
   const current =
     PLAN_MEDIA_GALLERY.find((g) => g.floor === activeFloor) ?? PLAN_MEDIA_GALLERY[2];
+  const pinOverlay = buildPinOverlay(pinRecords);
+  const unitPins = current.floor === floor ? pins : [];
+  const overlayPins = [
+    ...unitPins,
+    ...operatingOverlayPins(
+      operatingPins,
+      current.floor,
+      building === "A" || building === "B" ? building : "",
+      popupUnits,
+      pinOverlay,
+    ),
+  ];
 
   function select(item: PlanGalleryItem) {
     setActiveFloor(item.floor);
@@ -112,8 +134,10 @@ export function PlanMediaGallery({
               showMood={false}
               showPins
               compact
-              pins={pins}
+              pins={overlayPins}
               highlights={highlights}
+              popupUnits={popupUnits}
+              pinRecords={pinRecords}
               className="!scroll-mt-0 space-y-3"
             />
           </div>

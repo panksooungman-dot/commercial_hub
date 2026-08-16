@@ -3,6 +3,8 @@ import { PlanMultiSelect } from "@/components/plan-multi-select";
 import { UnitsFilter } from "@/components/units-filter";
 import { getPublicUnits, store } from "@/lib/store";
 import { Building, Floor, UnitStatus } from "@/lib/types";
+import { toUnitPopupInfo } from "@/lib/unit-popup";
+import { buildPinOverlay, estimateUnitPin } from "@/lib/unit-pins";
 
 type Search = Promise<{
   floor?: string;
@@ -18,8 +20,12 @@ export default async function PlanPage({ searchParams }: { searchParams: Search 
   const building = (sp.building as Building) || "";
   const statusFilter = (sp.status as Exclude<UnitStatus, "hidden"> | undefined) || "";
   const q = (sp.q || "").trim().toLowerCase();
-  const project = await store.getProject();
-  const all = await getPublicUnits();
+  const [project, all, operatingPins, pinRecords] = await Promise.all([
+    store.getProject(),
+    getPublicUnits(),
+    store.getOperatingPins(),
+    store.getUnitPins(),
+  ]);
 
   let floorUnits = all.filter((u) => u.floor === floor);
   if (building === "A" || building === "B") {
@@ -57,15 +63,21 @@ export default async function PlanPage({ searchParams }: { searchParams: Search 
         )
     : undefined;
 
+  const pinOverlay = buildPinOverlay(pinRecords);
   const floorPins = all
     .filter((u) => u.floor === floor)
-    .map((u) => ({
-      id: u.id,
-      building: u.building,
-      unitNo: u.unitNo,
-      status: u.status as Exclude<UnitStatus, "hidden">,
-      href: `/units/${u.id}#floor-plan`,
-    }));
+    .map((u) => {
+      const pos = estimateUnitPin(u.building, u.unitNo, [], u.floor, pinOverlay);
+      return {
+        id: u.id,
+        building: u.building,
+        unitNo: u.unitNo,
+        status: u.status as Exclude<UnitStatus, "hidden">,
+        href: `/units/${u.id}#floor-plan`,
+        x: pos.x,
+        y: pos.y,
+      };
+    });
 
   const pickerUnits = floorUnits.map((u) => ({
     id: u.id,
@@ -75,6 +87,7 @@ export default async function PlanPage({ searchParams }: { searchParams: Search 
     exclusiveArea: u.exclusiveArea,
     exclusiveAreaUnit: u.exclusiveAreaUnit,
     price: u.price,
+    listing: u.listing,
     status: u.status,
   }));
 
@@ -107,6 +120,9 @@ export default async function PlanPage({ searchParams }: { searchParams: Search 
           listBuilding={listBuilding}
           units={pickerUnits}
           floorPins={floorPins}
+          operatingPins={operatingPins}
+          popupUnits={all.map((u) => toUnitPopupInfo(u))}
+          pinRecords={pinRecords}
           initialIds={initialUnit ? [initialUnit.id] : []}
           resultCount={floorUnits.length}
         />

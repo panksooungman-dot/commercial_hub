@@ -2,6 +2,52 @@ import { Building, Floor } from "@/lib/types";
 
 type Pin = { x: number; y: number };
 
+export type UnitPinRecord = {
+  floor: Floor;
+  building: Building;
+  unitNo: string;
+  x: number;
+  y: number;
+};
+
+export function pinKeyOf(floor: Floor, building: Building, unitNo: string) {
+  return `${floor}|${building}|${normalizeUnitNo(unitNo)}`;
+}
+
+export function buildPinOverlay(records: UnitPinRecord[] = []) {
+  const map = new Map<string, Pin>();
+  for (const r of records) {
+    map.set(pinKeyOf(r.floor, r.building, r.unitNo), { x: r.x, y: r.y });
+  }
+  return map;
+}
+
+export function allDefaultUnitPins(): UnitPinRecord[] {
+  return (["B1", "1F", "2F"] as Floor[]).flatMap((floor) =>
+    listFloorPins(floor).map((p) => ({ floor, building: p.building, unitNo: p.unitNo, x: p.x, y: p.y })),
+  );
+}
+
+export function mergeUnitPins(saved: UnitPinRecord[]): UnitPinRecord[] {
+  const overlay = buildPinOverlay(saved);
+  const seen = new Set<string>();
+  const out = allDefaultUnitPins().map((p) => {
+    const k = pinKeyOf(p.floor, p.building, p.unitNo);
+    seen.add(k);
+    const hit = overlay.get(k);
+    return hit ? { ...p, x: hit.x, y: hit.y } : p;
+  });
+  for (const p of saved) {
+    const k = pinKeyOf(p.floor, p.building, p.unitNo);
+    if (seen.has(k)) continue;
+    if (!p.floor || !p.building || !p.unitNo) continue;
+    if (!Number.isFinite(p.x) || !Number.isFinite(p.y)) continue;
+    out.push(p);
+    seen.add(k);
+  }
+  return out;
+}
+
 /**
  * MD Plan 합본(A좌·B우) 핀 좌표(%).
  * 아웃라인 도면에서 호실 칸 bounding box 중심에 맞춤.
@@ -160,13 +206,17 @@ export function normalizeUnitNo(unitNo: string): string {
   return unitNo.replace(/^B-/i, "").replace(/^[ABab]-/, "");
 }
 
-export function listFloorPins(floor: Floor): { building: Building; unitNo: string; x: number; y: number }[] {
+export function listFloorPins(
+  floor: Floor,
+  overlay?: Map<string, Pin>,
+): { building: Building; unitNo: string; x: number; y: number }[] {
   const out: { building: Building; unitNo: string; x: number; y: number }[] = [];
   for (const building of ["A", "B"] as Building[]) {
     const map = MD_PINS[floor]?.[building] ?? {};
     for (const [unitNo, pin] of Object.entries(map)) {
       if (unitNo.startsWith("B-")) continue;
-      out.push({ building, unitNo, x: pin.x, y: pin.y });
+      const hit = overlay?.get(pinKeyOf(floor, building, unitNo));
+      out.push({ building, unitNo, x: hit?.x ?? pin.x, y: hit?.y ?? pin.y });
     }
   }
   return out.sort((a, b) => {
@@ -197,7 +247,11 @@ export function estimateUnitPin(
   unitNo: string,
   siblings: string[] = [],
   floor: Floor = "1F",
+  overlay?: Map<string, Pin>,
 ): Pin {
+  const fromOverlay = overlay?.get(pinKeyOf(floor, building, unitNo));
+  if (fromOverlay) return fromOverlay;
+
   const hit = lookupMdPin(building, floor, unitNo);
   if (hit) return hit;
 
@@ -215,6 +269,21 @@ export function estimateUnitPin(
   return {
     x: Math.round((panel.left + ((col + 0.5) / cols) * panel.width) * 10) / 10,
     y: Math.round((panel.top + ((row + 0.5) / rows) * panel.height) * 10) / 10,
+  };
+}
+
+/** 빨간 호실 마커 바로 아래(하단 가장자리는 위) 좌표 */
+export function belowUnitPin(
+  building: Building,
+  unitNo: string,
+  floor: Floor,
+  overlay?: Map<string, Pin>,
+): Pin {
+  const pos = estimateUnitPin(building, unitNo, [], floor, overlay);
+  const offset = pos.y >= 94 ? -3.4 : 3.4;
+  return {
+    x: pos.x,
+    y: Math.round(Math.min(100, Math.max(0, pos.y + offset)) * 10) / 10,
   };
 }
 

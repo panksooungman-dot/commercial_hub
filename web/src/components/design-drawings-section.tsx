@@ -33,6 +33,8 @@ export type DrawingUnitStatus = {
   frontLengthMm: number | null;
   frontFacade?: "north" | "south" | "east" | "west" | null;
   price: number | null;
+  deposit?: number | null;
+  monthlyRent?: number | null;
   recommendedBusiness: string;
   options: string;
 };
@@ -103,6 +105,8 @@ function popupInfoForMarker(
       frontLengthMm: hit.frontLengthMm ?? resolved?.mm ?? null,
       frontFacade: hit.frontFacade ?? resolved?.facade ?? frontFacadeForUnitId(hit.id),
       price: hit.price,
+      deposit: hit.deposit ?? null,
+      monthlyRent: hit.monthlyRent ?? null,
       recommendedBusiness: hit.recommendedBusiness,
       options: hit.options,
     };

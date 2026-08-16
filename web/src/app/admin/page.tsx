@@ -8,6 +8,8 @@ const LINKS = [
   { href: "/admin/units", title: "호실 관리", desc: "분양가, 상태, 계약면적, 권장업종" },
   { href: "/admin/faqs", title: "FAQ", desc: "질문·답변 작성" },
   { href: "/admin/area", title: "입지 콘텐츠", desc: "상권 카피 수정" },
+  { href: "/admin/operating", title: "영업 점포 마커", desc: "도면 노란 표시 — 영업 중인 점포 이름·위치" },
+  { href: "/admin/unit-pins", title: "호실 마커", desc: "빨간 호실 번호를 드래그해서 위치 보정" },
 ];
 
 export default async function AdminHomePage() {

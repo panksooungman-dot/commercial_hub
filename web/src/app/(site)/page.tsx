@@ -158,6 +158,8 @@ export default async function HomePage() {
               frontLengthMm: u.frontLengthMm ?? resolveFrontLength(u.building, u.floor, u.id)?.mm ?? null,
               frontFacade: frontFacadeForUnitId(u.id) ?? resolveFrontLength(u.building, u.floor, u.id)?.facade ?? null,
               price: u.price,
+              deposit: u.listing?.deposit ?? null,
+              monthlyRent: u.listing?.monthlyRent ?? null,
               recommendedBusiness: u.recommendedBusiness,
               options: u.options,
             }))}

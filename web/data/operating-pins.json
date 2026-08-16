@@ -1,0 +1,265 @@
+[
+  {
+    "id": "op-B1-A-soccer",
+    "floor": "B1",
+    "building": "A",
+    "label": "축구교실",
+    "x": 5.7,
+    "y": 84.2
+  },
+  {
+    "id": "op-B1-A-musical",
+    "floor": "B1",
+    "building": "A",
+    "label": "뮤지컬",
+    "x": 17.4,
+    "y": 66.6
+  },
+  {
+    "id": "op-B1-A-craft",
+    "floor": "B1",
+    "building": "A",
+    "label": "공방",
+    "x": 27.1,
+    "y": 74.3
+  },
+  {
+    "id": "op-B1-A-play",
+    "floor": "B1",
+    "building": "A",
+    "label": "실내놀이터",
+    "x": 28.5,
+    "y": 60.9
+  },
+  {
+    "id": "op-B1-B-drum",
+    "floor": "B1",
+    "building": "B",
+    "label": "드럼교실",
+    "x": 72.6,
+    "y": 67.8
+  },
+  {
+    "id": "op-B1-B-delivery",
+    "floor": "B1",
+    "building": "B",
+    "label": "배달음식",
+    "x": 69.6,
+    "y": 61.4
+  },
+  {
+    "id": "op-1F-A-inca",
+    "floor": "1F",
+    "building": "A",
+    "label": "인카부동산",
+    "x": 12.9,
+    "y": 15,
+    "roomLabel": "A104"
+  },
+  {
+    "id": "op-1F-A-kid",
+    "floor": "1F",
+    "building": "A",
+    "label": "어린이집",
+    "x": 20,
+    "y": 81.7,
+    "unitId": "A-1F-120",
+    "roomLabel": "A120"
+  },
+  {
+    "id": "op-1F-A-coffee",
+    "floor": "1F",
+    "building": "A",
+    "label": "백억커피",
+    "x": 21.8,
+    "y": 87.9,
+    "roomLabel": "A119"
+  },
+  {
+    "id": "op-1F-A-camping",
+    "floor": "1F",
+    "building": "A",
+    "label": "캠핑미트",
+    "x": 39.6,
+    "y": 78.3,
+    "roomLabel": "A124"
+  },
+  {
+    "id": "op-1F-A-rice",
+    "floor": "1F",
+    "building": "A",
+    "label": "무인떡집",
+    "x": 39.9,
+    "y": 67,
+    "roomLabel": "A126"
+  },
+  {
+    "id": "op-1F-A-music",
+    "floor": "1F",
+    "building": "A",
+    "label": "수음악학원",
+    "x": 37.9,
+    "y": 56.9,
+    "roomLabel": "A129"
+  },
+  {
+    "id": "op-1F-A-edge",
+    "floor": "1F",
+    "building": "A",
+    "label": "엣지영어",
+    "x": 39.8,
+    "y": 38.7,
+    "roomLabel": "A133"
+  },
+  {
+    "id": "op-1F-B-ud",
+    "floor": "1F",
+    "building": "B",
+    "label": "우대빵부동산",
+    "x": 67.4,
+    "y": 16.6
+  },
+  {
+    "id": "op-1F-B-galbi",
+    "floor": "1F",
+    "building": "B",
+    "label": "돼지생갈비찜",
+    "x": 63.7,
+    "y": 13
+  },
+  {
+    "id": "op-1F-B-style",
+    "floor": "1F",
+    "building": "B",
+    "label": "스타일뷰티",
+    "x": 88.5,
+    "y": 17.1,
+    "unitId": "B-1F-132",
+    "roomLabel": "B137"
+  },
+  {
+    "id": "op-1F-B-flower",
+    "floor": "1F",
+    "building": "B",
+    "label": "송도꽃집",
+    "x": 88.6,
+    "y": 19.7,
+    "roomLabel": "B136"
+  },
+  {
+    "id": "op-1F-B-hair",
+    "floor": "1F",
+    "building": "B",
+    "label": "머리염색",
+    "x": 88.6,
+    "y": 22.7,
+    "unitId": "B-1F-111",
+    "roomLabel": "B135"
+  },
+  {
+    "id": "op-1F-B-nail",
+    "floor": "1F",
+    "building": "B",
+    "label": "네일샵",
+    "x": 88.8,
+    "y": 25.3,
+    "roomLabel": "B134"
+  },
+  {
+    "id": "op-1F-B-leuen",
+    "floor": "1F",
+    "building": "B",
+    "label": "르엔뷰티",
+    "x": 54.6,
+    "y": 83.5
+  },
+  {
+    "id": "op-1F-B-bake",
+    "floor": "1F",
+    "building": "B",
+    "label": "베이크빵집",
+    "x": 59.2,
+    "y": 49.3
+  },
+  {
+    "id": "op-1F-B-pizza",
+    "floor": "1F",
+    "building": "B",
+    "label": "피자배달전문",
+    "x": 59.6,
+    "y": 45.2
+  },
+  {
+    "id": "op-2F-A-jnc",
+    "floor": "2F",
+    "building": "A",
+    "label": "제이엔씨영어학원",
+    "x": 41.1,
+    "y": 20.9
+  },
+  {
+    "id": "op-2F-A-studio",
+    "floor": "2F",
+    "building": "B",
+    "label": "스튜디오",
+    "x": 39.4,
+    "y": 31.5
+  },
+  {
+    "id": "op-2F-A-piano",
+    "floor": "2F",
+    "building": "A",
+    "label": "피아노학원",
+    "x": 42,
+    "y": 45.6
+  },
+  {
+    "id": "op-2F-B-science",
+    "floor": "2F",
+    "building": "B",
+    "label": "교습소 과학",
+    "x": 93.1,
+    "y": 81.2,
+    "unitId": "B-2F-218",
+    "roomLabel": "B218"
+  },
+  {
+    "id": "op-2F-B-posture",
+    "floor": "2F",
+    "building": "B",
+    "label": "체형교정",
+    "x": 87.6,
+    "y": 5.4,
+    "unitId": "B-2F-228",
+    "roomLabel": "B228"
+  },
+  {
+    "id": "op-1786854792077",
+    "floor": "B1",
+    "building": "A",
+    "label": "무인창고",
+    "x": 14.8,
+    "y": 57.4,
+    "roomLabel": "A106"
+  },
+  {
+    "id": "op-1786858662468",
+    "floor": "2F",
+    "building": "A",
+    "label": "실용음악",
+    "x": 18.5,
+    "y": 89.6,
+    "unitId": "A-2F-213",
+    "roomLabel": "A213"
+  },
+  {
+    "id": "op-1786859128746",
+    "floor": "2F",
+    "building": "A",
+    "label": "영어학원",
+    "x": 6.2,
+    "y": 95.7,
+    "unitId": "A-2F-212",
+    "roomLabel": "A212"
+  }
+]

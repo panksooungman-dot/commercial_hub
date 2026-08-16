@@ -4,9 +4,10 @@ import Link from "next/link";
 import { useMemo } from "react";
 import { FloorPlanFigure, HIGHLIGHT_STYLES } from "@/components/floor-plan-figure";
 import { useInterestUnits } from "@/hooks/use-interest-units";
-import { formatArea, formatFrontLength, formatPrice, STATUS_LABEL, unitLabel } from "@/lib/format";
+import { formatArea, formatFrontLength, formatLeaseLine, formatManwon, STATUS_LABEL, unitLabel } from "@/lib/format";
 import { FACADE_LABEL, frontFacadeForUnitId } from "@/lib/front-lengths";
 import { Building, Floor, Unit } from "@/lib/types";
+import type { UnitPinRecord } from "@/lib/unit-pins";
 
 type PublicUnit = Pick<
   Unit,
@@ -17,12 +18,19 @@ type PublicUnit = Pick<
   | "exclusiveArea"
   | "exclusiveAreaUnit"
   | "price"
+  | "listing"
   | "status"
   | "recommendedBusiness"
   | "frontLengthMm"
 >;
 
-export function InterestUnitsPanel({ units }: { units: PublicUnit[] }) {
+export function InterestUnitsPanel({
+  units,
+  pinRecords = [],
+}: {
+  units: PublicUnit[];
+  pinRecords?: UnitPinRecord[];
+}) {
   const interest = useInterestUnits();
   const byId = useMemo(() => new Map(units.map((u) => [u.id, u])), [units]);
 
@@ -141,7 +149,13 @@ export function InterestUnitsPanel({ units }: { units: PublicUnit[] }) {
               </div>
               <div className="flex justify-between gap-2">
                 <dt className="text-muted">분양가</dt>
-                <dd className="font-medium">{formatPrice(u.price)}</dd>
+                <dd className="font-medium">{formatManwon(u.price)}</dd>
+              </div>
+              <div className="flex justify-between gap-2">
+                <dt className="text-muted">임대조건</dt>
+                <dd className="font-medium text-right">
+                  {formatLeaseLine(u.listing?.deposit, u.listing?.monthlyRent)}
+                </dd>
               </div>
               <div className="flex justify-between gap-2">
                 <dt className="text-muted">권장업종</dt>
@@ -180,6 +194,7 @@ export function InterestUnitsPanel({ units }: { units: PublicUnit[] }) {
             showMood={false}
             hideDimPins
             showPins
+            pinRecords={pinRecords}
             highlights={items.map((i) => ({
               building: i.u.building as Building,
               unitNo: i.u.unitNo,

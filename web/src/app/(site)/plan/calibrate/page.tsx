@@ -97,8 +97,11 @@ export default function PinCalibratePage() {
     <div className="mx-auto max-w-6xl px-4 py-8">
       <h1 className="font-display text-3xl text-brand-deep">마커 수동 보정</h1>
       <p className="mt-2 text-sm text-muted">
-        호실 버튼을 고른 뒤 도면의 <strong>칸 한가운데</strong>를 클릭하세요. 마커를 눌러도 선택할 수
-        있습니다. 끝난 뒤 <strong>좌표 복사</strong>를 채팅에 붙여 주시면 반영합니다.
+        호실 버튼을 고른 뒤 도면의 <strong>칸 한가운데</strong>를 클릭하세요. 저장은{" "}
+        <a href="/admin/unit-pins" className="text-brand underline">
+          관리자 · 호실 마커
+        </a>
+        에서 하면 사이트에 바로 반영됩니다.
       </p>
 
       <div className="mt-4 flex flex-wrap gap-2">

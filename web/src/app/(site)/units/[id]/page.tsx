@@ -4,10 +4,13 @@ import { FloorPlanFigure } from "@/components/floor-plan-figure";
 import { InquiryForm } from "@/components/inquiry-form";
 import { InterestToggleButton } from "@/components/interest-toggle-button";
 import { ScrollToFloorPlan } from "@/components/scroll-to-floor-plan";
-import { formatArea, formatFrontLength, formatPrice, STATUS_LABEL, unitLabel } from "@/lib/format";
+import { formatArea, formatFrontLength, formatManwon, STATUS_LABEL, unitLabel } from "@/lib/format";
 import { FACADE_LABEL, frontFacadeForUnitId } from "@/lib/front-lengths";
+import { operatingOverlayPins } from "@/lib/operating-pins";
 import { store } from "@/lib/store";
 import { Floor, UnitStatus } from "@/lib/types";
+import { toUnitPopupInfo } from "@/lib/unit-popup";
+import { buildPinOverlay, estimateUnitPin } from "@/lib/unit-pins";
 
 type Ctx = { params: Promise<{ id: string }> };
 
@@ -17,20 +20,33 @@ export default async function UnitDetailPage({ params }: Ctx) {
   const unit = units.find((u) => u.id === id && u.status !== "hidden");
   if (!unit) notFound();
 
-  const project = await store.getProject();
+  const [project, operatingPins, pinRecords] = await Promise.all([
+    store.getProject(),
+    store.getOperatingPins(),
+    store.getUnitPins(),
+  ]);
   const floorMd = project.floorSummaries.find((f) => f.floor === unit.floor);
   const siblings = units
     .filter((u) => u.floor === unit.floor && u.building === unit.building && u.status !== "hidden")
     .map((u) => u.unitNo);
+  const pinOverlay = buildPinOverlay(pinRecords);
   const floorPins = units
     .filter((u) => u.floor === unit.floor && u.status !== "hidden")
-    .map((u) => ({
-      id: u.id,
-      building: u.building,
-      unitNo: u.unitNo,
-      status: u.status as Exclude<UnitStatus, "hidden">,
-      href: `/units/${u.id}#floor-plan`,
-    }));
+    .map((u) => {
+      const pos = estimateUnitPin(u.building, u.unitNo, [], u.floor, pinOverlay);
+      return {
+        id: u.id,
+        building: u.building,
+        unitNo: u.unitNo,
+        status: u.status as Exclude<UnitStatus, "hidden">,
+        href: `/units/${u.id}#floor-plan`,
+        x: pos.x,
+        y: pos.y,
+      };
+    });
+  const popupUnits = units
+    .filter((u) => u.floor === unit.floor && u.status !== "hidden")
+    .map((u) => toUnitPopupInfo(u));
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-12">
@@ -70,7 +86,9 @@ export default async function UnitDetailPage({ params }: Ctx) {
         <h2 className="mb-4 font-display text-2xl text-brand-deep">도면에서 위치 확인</h2>
         <FloorPlanFigure
           floor={unit.floor as Floor}
-          pins={floorPins}
+          pins={[...floorPins, ...operatingOverlayPins(operatingPins, unit.floor as Floor, "", popupUnits, pinOverlay)]}
+          popupUnits={popupUnits}
+          pinRecords={pinRecords}
           showPins
           highlight={{
             building: unit.building,
@@ -92,7 +110,9 @@ export default async function UnitDetailPage({ params }: Ctx) {
             })(),
           ],
           ["계약면적", unit.contractArea != null ? String(unit.contractArea) : "관리자 등록 필요"],
-          ["분양가", formatPrice(unit.price)],
+          ["분양가", formatManwon(unit.price)],
+          ["보증금", formatManwon(unit.listing?.deposit)],
+          ["월 임대료", formatManwon(unit.listing?.monthlyRent)],
           ["권장업종", unit.recommendedBusiness || "—"],
           ["옵션", unit.options || "—"],
           ["위치", project.address],

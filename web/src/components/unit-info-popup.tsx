@@ -1,25 +1,12 @@
 "use client";
 
 import Link from "next/link";
-import { formatArea, formatFrontLength, formatPrice, STATUS_FILL, STATUS_LABEL, unitLabel } from "@/lib/format";
+import { useEffect } from "react";
+import { formatArea, formatFrontLength, formatLeaseLine, formatManwon, STATUS_FILL, STATUS_LABEL, unitLabel } from "@/lib/format";
 import { FACADE_LABEL } from "@/lib/front-lengths";
-import type { Building, Floor, UnitStatus } from "@/lib/types";
+import type { UnitPopupInfo } from "@/lib/unit-popup";
 
-export type UnitPopupInfo = {
-  id?: string;
-  building: Building;
-  floor: Floor;
-  unitNo: string;
-  status: Exclude<UnitStatus, "hidden">;
-  exclusiveArea?: number;
-  exclusiveAreaUnit?: string;
-  contractArea?: number | null;
-  frontLengthMm?: number | null;
-  frontFacade?: "north" | "south" | "east" | "west" | null;
-  price?: number | null;
-  recommendedBusiness?: string;
-  options?: string;
-};
+export type { UnitPopupInfo };
 
 export function UnitInfoPopup({
   unit,
@@ -28,11 +15,24 @@ export function UnitInfoPopup({
   unit: UnitPopupInfo;
   onClose: () => void;
 }) {
-  const title = unitLabel(unit.building, unit.unitNo);
+  const title = unit.shopLabel || unitLabel(unit.building, unit.unitNo);
+  const unitLine = unit.unitNo
+    ? `${unitLabel(unit.building, unit.unitNo)} · ${unit.floor}`
+    : `${unit.building}동 · ${unit.floor}`;
   const detailHref = unit.id
     ? `/units/${unit.id}#floor-plan`
     : `/plan?building=${unit.building}&floor=${unit.floor}`;
-  const contactHref = `/contact?building=${unit.building}&floor=${unit.floor}&unit=${unit.unitNo}`;
+  const contactHref = `/contact?building=${unit.building}&floor=${unit.floor}${
+    unit.unitNo ? `&unit=${unit.unitNo}` : ""
+  }`;
+
+  useEffect(() => {
+    function onKey(e: KeyboardEvent) {
+      if (e.key === "Escape") onClose();
+    }
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [onClose]);
 
   return (
     <div
@@ -48,12 +48,14 @@ export function UnitInfoPopup({
       >
         <div className="flex items-start justify-between gap-3 border-b border-line px-5 py-4">
           <div>
-            <p className="text-xs tracking-wide text-muted uppercase">호실 정보</p>
+            <p className="text-xs tracking-wide text-muted uppercase">
+              {unit.shopLabel ? "영업 점포 · 호실 정보" : "호실 정보"}
+            </p>
             <h3 id="unit-popup-title" className="mt-1 font-display text-2xl text-brand-deep">
               {title}
             </h3>
             <p className="mt-1 text-sm text-muted">
-              {unit.building}동 · {unit.floor}
+              {unit.shopLabel ? unitLine : `${unit.building}동 · ${unit.floor}`}
             </p>
           </div>
           <button
@@ -76,6 +78,11 @@ export function UnitInfoPopup({
             <span className="rounded-full bg-brand-deep/90 px-2.5 py-0.5 text-xs font-medium text-white">
               {STATUS_LABEL[unit.status]}
             </span>
+            {unit.shopLabel ? (
+              <span className="rounded-full bg-[#ffc000] px-2.5 py-0.5 text-xs font-bold text-[#3a2a00]">
+                영업중
+              </span>
+            ) : null}
           </div>
 
           <dl className="grid grid-cols-2 gap-3 text-sm">
@@ -109,7 +116,13 @@ export function UnitInfoPopup({
             </div>
             <div className="rounded-xl bg-[#f7f9fb] px-3 py-2.5">
               <dt className="text-xs text-muted">분양가</dt>
-              <dd className="mt-0.5 font-medium text-brand-deep">{formatPrice(unit.price)}</dd>
+              <dd className="mt-0.5 font-medium text-brand-deep">{formatManwon(unit.price)}</dd>
+            </div>
+            <div className="col-span-2 rounded-xl bg-[#f7f9fb] px-3 py-2.5">
+              <dt className="text-xs text-muted">임대조건</dt>
+              <dd className="mt-0.5 font-medium text-brand-deep">
+                {formatLeaseLine(unit.deposit, unit.monthlyRent)}
+              </dd>
             </div>
             <div className="col-span-2 rounded-xl bg-[#f7f9fb] px-3 py-2.5">
               <dt className="text-xs text-muted">권장업종</dt>

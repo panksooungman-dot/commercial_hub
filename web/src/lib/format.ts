@@ -51,6 +51,28 @@ export function formatPrice(price: number | null | undefined) {
   return `${price.toLocaleString("ko-KR")}원`;
 }
 
+/** 26,055만원 / 2억 6,055만 형태 */
+export function formatManwon(price: number | null | undefined) {
+  if (price == null) return "상담 문의";
+  const man = Math.round(price / 10000);
+  if (man >= 10000) {
+    const eok = Math.floor(man / 10000);
+    const rest = man % 10000;
+    return rest ? `${eok}억 ${rest.toLocaleString("ko-KR")}만원` : `${eok}억원`;
+  }
+  return `${man.toLocaleString("ko-KR")}만원`;
+}
+
+export function formatLeaseLine(
+  deposit: number | null | undefined,
+  monthlyRent: number | null | undefined,
+) {
+  if (deposit == null && monthlyRent == null) return "상담 문의";
+  const d = deposit != null ? formatManwon(deposit) : "—";
+  const r = monthlyRent != null ? formatManwon(monthlyRent) : "—";
+  return `보증금 ${d} · 월 ${r}`;
+}
+
 export function formatArea(area: number, unit: string = "unknown") {
   const suffix = unit === "m2" ? "㎡" : unit === "py" ? "평" : "";
   return suffix ? `${area}${suffix}` : `${area}`;

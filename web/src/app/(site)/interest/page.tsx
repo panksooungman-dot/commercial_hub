@@ -1,9 +1,9 @@
 import { InterestUnitsPanel } from "@/components/interest-units-panel";
 import { resolveFrontLength } from "@/lib/front-lengths";
-import { getPublicUnits } from "@/lib/store";
+import { getPublicUnits, store } from "@/lib/store";
 
 export default async function InterestPage() {
-  const units = await getPublicUnits();
+  const [units, pinRecords] = await Promise.all([getPublicUnits(), store.getUnitPins()]);
   const slim = units.map((u) => ({
     id: u.id,
     building: u.building,
@@ -12,6 +12,7 @@ export default async function InterestPage() {
     exclusiveArea: u.exclusiveArea,
     exclusiveAreaUnit: u.exclusiveAreaUnit,
     price: u.price,
+    listing: u.listing,
     status: u.status,
     recommendedBusiness: u.recommendedBusiness,
     frontLengthMm:
@@ -27,7 +28,7 @@ export default async function InterestPage() {
       </p>
 
       <div className="mt-8">
-        <InterestUnitsPanel units={slim} />
+        <InterestUnitsPanel units={slim} pinRecords={pinRecords} />
       </div>
     </div>
   );

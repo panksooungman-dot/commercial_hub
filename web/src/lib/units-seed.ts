@@ -1,5 +1,6 @@
 import { Building, Floor, Unit } from "./types";
 import { frontLengthForUnitId } from "./front-lengths";
+import { applyPptPricing } from "./unit-pricing";
 
 type SeedRow = { building: Building; floor: Floor; unitNo: string; exclusiveArea: number };
 
@@ -87,13 +88,13 @@ export function buildSeedUnits(): Unit[] {
   const now = new Date().toISOString();
   return rows.map((row, index) => {
     const id = `${row.building}-${row.floor}-${row.unitNo}`;
-    return {
+    const unit: Unit = {
       id,
       building: row.building,
       floor: row.floor,
       unitNo: row.unitNo,
       exclusiveArea: row.exclusiveArea,
-      exclusiveAreaUnit: "unknown" as const,
+      exclusiveAreaUnit: "py" as const,
       contractArea: null,
       frontLengthMm: frontLengthForUnitId(id),
       price: null,
@@ -104,5 +105,6 @@ export function buildSeedUnits(): Unit[] {
       sortOrder: index + 1,
       updatedAt: now,
     };
+    return applyPptPricing(unit);
   });
 }
