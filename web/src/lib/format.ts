@@ -11,7 +11,7 @@ export const STATUS_LABEL: Record<UnitStatus, string> = {
 
 /** 도면 호실 면적 표시용 */
 export const STATUS_FILL: Record<Exclude<UnitStatus, "hidden">, string> = {
-  available: "rgba(220, 60, 60, 0.42)",
+  available: "rgba(30, 136, 229, 0.42)",
   for_lease: "rgba(47, 158, 92, 0.42)",
   reserved: "rgba(210, 140, 30, 0.45)",
   sold: "rgba(110, 110, 110, 0.40)",
@@ -19,7 +19,7 @@ export const STATUS_FILL: Record<Exclude<UnitStatus, "hidden">, string> = {
 };
 
 export const STATUS_BORDER: Record<Exclude<UnitStatus, "hidden">, string> = {
-  available: "border-[#d63c3c]/70",
+  available: "border-[#1e88e5]/70",
   for_lease: "border-[#2f9e5c]/75",
   reserved: "border-[#c48520]/80",
   sold: "border-[#6a6a6a]/70",
