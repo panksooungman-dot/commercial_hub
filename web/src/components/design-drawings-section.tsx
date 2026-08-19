@@ -343,7 +343,7 @@ function MarkerPin({
   onDoubleClick?: () => void;
   onDelete?: () => void;
 }) {
-  const wrapperClassName = `absolute select-none transition-opacity duration-200 ${compact ? "hidden sm:block" : ""} ${
+  const wrapperClassName = `absolute select-none transition-opacity duration-200 ${compact && !selected ? "hidden sm:block" : ""} ${
     editable ? "cursor-grab active:cursor-grabbing" : "pointer-events-none"
   } ${selected ? "z-[75]" : ""} ${dimmed ? "opacity-40" : ""}`;
   const wrapperStyle = {
