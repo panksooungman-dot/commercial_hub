@@ -317,6 +317,8 @@ function makeMarkerId() {
 function MarkerPin({
   marker,
   editable,
+  selected = false,
+  dimmed = false,
   pinScale = 1,
   compact = false,
   onPointerDown,
@@ -327,6 +329,10 @@ function MarkerPin({
 }: {
   marker: UnitMarker;
   editable: boolean;
+  /** 호실목록에서 선택된 마커인지 — 선택 시 빨간 핀으로 강조 표시 */
+  selected?: boolean;
+  /** 다른 마커가 선택되어 있을 때 나머지 마커를 흐리게 처리해 선택된 핀을 돋보이게 함 */
+  dimmed?: boolean;
   /** 부모(도면)에 확대/축소 transform이 걸려 있을 때 마커 자체 크기는 화면상 일정하게 유지하기 위한 역배율 */
   pinScale?: number;
   /** 좁은 화면 축소 미리보기(모바일)에서는 호실이 밀집해 라벨이 겹쳐 읽을 수 없으므로 숨김 */
@@ -339,7 +345,9 @@ function MarkerPin({
 }) {
   return (
     <div
-      className={`absolute select-none ${compact ? "hidden sm:block" : ""} ${editable ? "cursor-grab active:cursor-grabbing" : "pointer-events-none"}`}
+      className={`absolute select-none transition-opacity duration-200 ${compact ? "hidden sm:block" : ""} ${
+        editable ? "cursor-grab active:cursor-grabbing" : "pointer-events-none"
+      } ${selected ? "z-20" : ""} ${dimmed ? "opacity-40" : ""}`}
       style={{
         left: `${marker.x}%`,
         top: `${marker.y}%`,
@@ -350,7 +358,16 @@ function MarkerPin({
       onPointerUp={editable ? onPointerUp : undefined}
       onDoubleClick={editable ? onDoubleClick : undefined}
     >
-      <span className="relative flex h-[18px] min-w-[22px] items-center justify-center gap-0.5 whitespace-nowrap rounded-[3px] border border-[#2f5f9a]/80 bg-[#3d7ab8] px-1.5 text-[9px] font-bold leading-none text-white shadow-[0_1px_3px_rgba(0,0,0,0.45)]">
+      {selected && (
+        <span className="absolute inset-0 -z-10 animate-ping rounded-[3px] bg-[#e53935]/70" aria-hidden />
+      )}
+      <span
+        className={`relative flex h-[18px] min-w-[22px] items-center justify-center gap-0.5 whitespace-nowrap rounded-[3px] border px-1.5 text-[9px] font-bold leading-none text-white shadow-[0_1px_3px_rgba(0,0,0,0.45)] ${
+          selected
+            ? "scale-[1.15] border-[#b71c1c] bg-[#e53935] shadow-[0_0_0_2px_rgba(255,255,255,0.9),0_2px_5px_rgba(0,0,0,0.5)]"
+            : "border-[#2f5f9a]/80 bg-[#3d7ab8]"
+        }`}
+      >
         {marker.label}
         {editable && (
           <button
@@ -377,6 +394,7 @@ function UnitBox({
   status = "available",
   editable,
   selected,
+  dimmed = false,
   pinScale = 1,
   onSelect,
   onResizeHandlePointerDown,
@@ -387,6 +405,8 @@ function UnitBox({
   status?: Exclude<UnitStatus, "hidden">;
   editable?: boolean;
   selected?: boolean;
+  /** 다른 호실이 선택되어 있을 때 나머지 박스를 흐리게 처리해 선택된 호실을 돋보이게 함 */
+  dimmed?: boolean;
   pinScale?: number;
   onSelect?: () => void;
   onResizeHandlePointerDown?: (e: ReactPointerEvent<HTMLDivElement>) => void;
@@ -400,11 +420,11 @@ function UnitBox({
     <div
       role={clickable ? "button" : undefined}
       tabIndex={clickable ? 0 : undefined}
-      className={`absolute rounded-[1px] border ${
+      className={`absolute rounded-[1px] border transition-opacity duration-200 ${
         editable
           ? "border-black/40"
           : `${STATUS_BORDER[status]} ${clickable ? "cursor-pointer hover:brightness-95" : "pointer-events-none"}`
-      } ${selected ? "z-10 ring-2 ring-brand-deep ring-offset-1" : ""}`}
+      } ${selected ? "z-10 ring-2 ring-[#e53935] ring-offset-1" : ""} ${dimmed ? "opacity-40" : ""}`}
       style={{
         left: `${marker.x}%`,
         top: `${marker.y}%`,
@@ -514,6 +534,9 @@ export function DesignDrawingsSection({ units = [] }: { units?: DrawingUnitStatu
   };
 
   const closeUnitPopup = () => setSelectedUnit(null);
+
+  const isMarkerSelected = (label: string) =>
+    Boolean(selectedUnit) && selectedUnit?.unitNo === markerUnitNo(label, BUILDING_KEY_TO_BUILDING[building]);
 
   const zoomBy = (delta: number) => setScale((prev) => clampScale(prev + delta));
 
@@ -840,18 +863,32 @@ export function DesignDrawingsSection({ units = [] }: { units?: DrawingUnitStatu
               quality={95}
               className="object-contain"
             />
-            {thumbMarkers.map((m) => (
-              <UnitBox
-                key={`box-${m.id}`}
-                marker={m}
-                status={statusForMarker(units, building, floor, m.label)}
-                selected={selectedUnit?.unitNo === markerUnitNo(m.label, BUILDING_KEY_TO_BUILDING[building])}
-                onSelect={() => openUnitPopup(m.label)}
-              />
-            ))}
-            {thumbMarkers.map((m) => (
-              <MarkerPin key={m.id} marker={m} editable={false} compact />
-            ))}
+            {thumbMarkers.map((m) => {
+              const sel = isMarkerSelected(m.label);
+              return (
+                <UnitBox
+                  key={`box-${m.id}`}
+                  marker={m}
+                  status={statusForMarker(units, building, floor, m.label)}
+                  selected={sel}
+                  dimmed={Boolean(selectedUnit) && !sel}
+                  onSelect={() => openUnitPopup(m.label)}
+                />
+              );
+            })}
+            {thumbMarkers.map((m) => {
+              const sel = isMarkerSelected(m.label);
+              return (
+                <MarkerPin
+                  key={m.id}
+                  marker={m}
+                  editable={false}
+                  compact
+                  selected={sel}
+                  dimmed={Boolean(selectedUnit) && !sel}
+                />
+              );
+            })}
             <button
               type="button"
               onClick={openLightbox}
@@ -1000,38 +1037,43 @@ export function DesignDrawingsSection({ units = [] }: { units?: DrawingUnitStatu
                 priority
               />
               {(showMarkers || editMode) &&
-                (editMode ? currentMarkers : visibleMarkers).map((m) => (
-                  <UnitBox
-                    key={`box-${m.id}`}
-                    marker={m}
-                    status={statusForMarker(units, building, floor, m.label)}
-                    editable={editMode}
-                    selected={
-                      !editMode &&
-                      selectedUnit?.unitNo ===
-                        markerUnitNo(m.label, BUILDING_KEY_TO_BUILDING[building])
-                    }
-                    pinScale={1 / scale}
-                    onSelect={editMode ? undefined : () => openUnitPopup(m.label)}
-                    onResizeHandlePointerDown={(e) => handleBoxResizePointerDown(e, m.id)}
-                    onResizeHandlePointerMove={(e) => handleBoxResizePointerMove(e, m.id)}
-                    onResizeHandlePointerUp={handleBoxResizePointerUp}
-                  />
-                ))}
+                (editMode ? currentMarkers : visibleMarkers).map((m) => {
+                  const sel = !editMode && isMarkerSelected(m.label);
+                  return (
+                    <UnitBox
+                      key={`box-${m.id}`}
+                      marker={m}
+                      status={statusForMarker(units, building, floor, m.label)}
+                      editable={editMode}
+                      selected={sel}
+                      dimmed={!editMode && Boolean(selectedUnit) && !sel}
+                      pinScale={1 / scale}
+                      onSelect={editMode ? undefined : () => openUnitPopup(m.label)}
+                      onResizeHandlePointerDown={(e) => handleBoxResizePointerDown(e, m.id)}
+                      onResizeHandlePointerMove={(e) => handleBoxResizePointerMove(e, m.id)}
+                      onResizeHandlePointerUp={handleBoxResizePointerUp}
+                    />
+                  );
+                })}
               {(showMarkers || editMode) &&
-                (editMode ? currentMarkers : visibleMarkers).map((m) => (
-                  <MarkerPin
-                    key={m.id}
-                    marker={m}
-                    editable={editMode}
-                    pinScale={1 / scale}
-                    onPointerDown={(e) => handleMarkerPointerDown(e, m.id)}
-                    onPointerMove={(e) => handleMarkerPointerMove(e, m.id)}
-                    onPointerUp={handleMarkerPointerUp}
-                    onDoubleClick={() => renameMarker(m.id)}
-                    onDelete={() => deleteMarker(m.id)}
-                  />
-                ))}
+                (editMode ? currentMarkers : visibleMarkers).map((m) => {
+                  const sel = !editMode && isMarkerSelected(m.label);
+                  return (
+                    <MarkerPin
+                      key={m.id}
+                      marker={m}
+                      editable={editMode}
+                      selected={sel}
+                      dimmed={!editMode && Boolean(selectedUnit) && !sel}
+                      pinScale={1 / scale}
+                      onPointerDown={(e) => handleMarkerPointerDown(e, m.id)}
+                      onPointerMove={(e) => handleMarkerPointerMove(e, m.id)}
+                      onPointerUp={handleMarkerPointerUp}
+                      onDoubleClick={() => renameMarker(m.id)}
+                      onDelete={() => deleteMarker(m.id)}
+                    />
+                  );
+                })}
             </div>
           </div>
 
