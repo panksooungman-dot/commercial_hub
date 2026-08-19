@@ -479,6 +479,9 @@ export function DesignDrawingsSection({ units = [] }: { units?: DrawingUnitStatu
   const [floor, setFloor] = useState<FloorKey>("1f");
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [selectedUnit, setSelectedUnit] = useState<UnitPopupInfo | null>(null);
+  /** 호실목록에서 고른 호실 라벨 — 도면에 빨간 마커로만 표시하고, 팝업은 그 마커를 눌러야 뜬다 */
+  const [highlightedLabel, setHighlightedLabel] = useState<string | null>(null);
+  const figureRef = useRef<HTMLElement>(null);
   const [scale, setScale] = useState(ZOOM_OPEN_DEFAULT);
   const [pan, setPan] = useState({ x: 0, y: 0 });
   const dragState = useRef({ dragging: false, startX: 0, startY: 0, panX: 0, panY: 0 });
@@ -530,15 +533,22 @@ export function DesignDrawingsSection({ units = [] }: { units?: DrawingUnitStatu
   };
 
   const openUnitPopup = (markerLabel: string) => {
+    setHighlightedLabel(markerLabel);
     setSelectedUnit(popupInfoForMarker(units, building, floor, markerLabel));
   };
 
   const closeUnitPopup = () => setSelectedUnit(null);
 
-  const isMarkerSelected = (label: string) =>
-    Boolean(selectedUnit) && selectedUnit?.unitNo === markerUnitNo(label, BUILDING_KEY_TO_BUILDING[building]);
+  /** 호실목록에서 호실을 고르면 도면에 빨간 마커만 표시한다 — 팝업은 그 마커를 눌러야 뜬다 */
+  const highlightMarker = (markerLabel: string) => {
+    setSelectedUnit(null);
+    setHighlightedLabel(markerLabel);
+    figureRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
 
-  const selectedMarker = selectedUnit ? currentMarkers.find((m) => isMarkerSelected(m.label)) : undefined;
+  const isMarkerSelected = (label: string) => highlightedLabel === label;
+
+  const selectedMarker = highlightedLabel ? currentMarkers.find((m) => isMarkerSelected(m.label)) : undefined;
 
   /**
    * 라이트박스 안의 마커는 pan/zoom transform이 걸린 컨테이너 안에 있어 z-index만으로는
@@ -857,12 +867,17 @@ export function DesignDrawingsSection({ units = [] }: { units?: DrawingUnitStatu
             <div className="mt-2.5 flex flex-wrap gap-2">
               {visibleMarkers.map((m) => {
                 const st = statusForMarker(units, building, floor, m.label);
+                const active = isMarkerSelected(m.label);
                 return (
                   <button
                     key={m.id}
                     type="button"
-                    onClick={() => openUnitPopup(m.label)}
-                    className="inline-flex items-center gap-1.5 rounded-full border border-line bg-white px-3 py-1.5 text-sm font-medium text-brand-deep shadow-sm transition hover:border-brand hover:shadow"
+                    onClick={() => highlightMarker(m.label)}
+                    className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-sm font-medium shadow-sm transition hover:shadow ${
+                      active
+                        ? "border-[#e53935] bg-[#e53935]/10 text-[#b71c1c] hover:border-[#e53935]"
+                        : "border-line bg-white text-brand-deep hover:border-brand"
+                    }`}
                   >
                     <span
                       className="h-2.5 w-2.5 rounded-full"
@@ -879,7 +894,7 @@ export function DesignDrawingsSection({ units = [] }: { units?: DrawingUnitStatu
           )}
         </div>
 
-        <figure className="mt-6 overflow-hidden rounded-2xl border border-line bg-white">
+        <figure ref={figureRef} className="mt-6 overflow-hidden rounded-2xl border border-line bg-white">
           <div className="relative aspect-[888/661] w-full overflow-hidden bg-[#fbfbfb]">
             <Image
               key={drawing.src}
