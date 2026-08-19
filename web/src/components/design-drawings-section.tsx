@@ -359,22 +359,9 @@ function MarkerPin({
   };
 
   if (!editable) {
-    // 도면이 잘 보이도록 배지 없이 굵은 글씨 라벨만 표시하고, 흰색 텍스트 외곽선으로 도면선 위에서도 읽히게 한다
-    return (
-      <div className={wrapperClassName} style={wrapperStyle}>
-        <span
-          className={`relative whitespace-nowrap font-extrabold leading-none ${
-            selected ? "text-[13px] text-[#d32f2f]" : "text-[10px] text-[#173355]"
-          }`}
-          style={{
-            textShadow:
-              "-1.5px -1.5px 0 #fff, 1.5px -1.5px 0 #fff, -1.5px 1.5px 0 #fff, 1.5px 1.5px 0 #fff, 0 0 3px #fff",
-          }}
-        >
-          {marker.label}
-        </span>
-      </div>
-    );
+    // 공개 화면에서는 마커 라벨을 표시하지 않는다 — 도면 자체에 이미 인쇄된 호실 번호를 그대로 보여주고,
+    // 상태색 테두리 박스(UnitBox)만으로 상태·선택 여부를 표시한다
+    return null;
   }
 
   return (
@@ -412,6 +399,7 @@ function UnitBox({
   editable,
   selected,
   dimmed = false,
+  raiseAbovePopup = true,
   pinScale = 1,
   onSelect,
   onResizeHandlePointerDown,
@@ -424,6 +412,11 @@ function UnitBox({
   selected?: boolean;
   /** 다른 호실이 선택되어 있을 때 나머지 박스를 흐리게 처리해 선택된 호실을 돋보이게 함 */
   dimmed?: boolean;
+  /**
+   * 선택 시 정보 팝업(z-70) 위로 뜨도록 z-index를 올릴지 여부. 라이트박스가 열려 있을 때 썸네일
+   * 박스까지 이 값을 쓰면 라이트박스 배경(z-50)마저 뚫고 비쳐 보이므로, 그 경우엔 꺼야 한다.
+   */
+  raiseAbovePopup?: boolean;
   pinScale?: number;
   onSelect?: () => void;
   onResizeHandlePointerDown?: (e: ReactPointerEvent<HTMLDivElement>) => void;
@@ -441,7 +434,7 @@ function UnitBox({
         editable
           ? "border border-black/40"
           : `border-2 ${STATUS_BORDER[status]} ${clickable ? "cursor-pointer hover:brightness-95" : "pointer-events-none"}`
-      } ${selected ? "z-10 ring-2 ring-[#e53935] ring-offset-1" : ""} ${dimmed ? "opacity-40" : ""}`}
+      } ${selected ? `${raiseAbovePopup ? "z-[75]" : "z-10"} ring-2 ring-[#e53935] ring-offset-1` : ""} ${dimmed ? "opacity-40" : ""}`}
       style={{
         left: `${marker.x}%`,
         top: `${marker.y}%`,
@@ -573,10 +566,15 @@ export function DesignDrawingsSection({ units = [] }: { units?: DrawingUnitStatu
    * 팝업(z-70) 위로 뜰 수 없다(transform이 별도 stacking context를 만듦). 대신 선택된 마커의
    * 화면상 픽셀 좌표를 계산해 팝업과 같은 레벨(섹션 루트)에 배지를 하나 더 띄워 표시한다.
    */
-  const [lightboxMarkerScreenPos, setLightboxMarkerScreenPos] = useState<{ left: number; top: number } | null>(null);
+  const [lightboxMarkerScreenPos, setLightboxMarkerScreenPos] = useState<{
+    left: number;
+    top: number;
+    width: number;
+    height: number;
+  } | null>(null);
 
   useEffect(() => {
-    if (!lightboxOpen || !selectedMarker) return;
+    if (!lightboxOpen || !selectedMarker || !selectedUnit) return;
     const updatePos = () => {
       const rect = imageBoxRef.current?.getBoundingClientRect();
       setLightboxMarkerScreenPos(
@@ -584,6 +582,8 @@ export function DesignDrawingsSection({ units = [] }: { units?: DrawingUnitStatu
           ? {
               left: rect.left + (selectedMarker.x / 100) * rect.width,
               top: rect.top + (selectedMarker.y / 100) * rect.height,
+              width: ((selectedMarker.w ?? DEFAULT_BOX_W) / 100) * rect.width,
+              height: ((selectedMarker.h ?? DEFAULT_BOX_H) / 100) * rect.height,
             }
           : null,
       );
@@ -591,7 +591,7 @@ export function DesignDrawingsSection({ units = [] }: { units?: DrawingUnitStatu
     updatePos();
     window.addEventListener("resize", updatePos);
     return () => window.removeEventListener("resize", updatePos);
-  }, [lightboxOpen, selectedMarker, pan, scale]);
+  }, [lightboxOpen, selectedMarker, selectedUnit, pan, scale]);
 
   const zoomBy = (delta: number) => setScale((prev) => clampScale(prev + delta));
 
@@ -932,6 +932,7 @@ export function DesignDrawingsSection({ units = [] }: { units?: DrawingUnitStatu
                   status={statusForMarker(units, building, floor, m.label)}
                   selected={sel}
                   dimmed={Boolean(selectedUnit) && !sel}
+                  raiseAbovePopup={!lightboxOpen}
                   onSelect={() => openUnitPopup(m.label)}
                 />
               );
@@ -1145,22 +1146,20 @@ export function DesignDrawingsSection({ units = [] }: { units?: DrawingUnitStatu
         </div>
       )}
 
-      {lightboxOpen && selectedMarker && lightboxMarkerScreenPos && (
+      {lightboxOpen && selectedUnit && selectedMarker && lightboxMarkerScreenPos && (
+        // 라이트박스 안 마커는 pan/zoom transform 컨테이너에 갇혀 z-index만으로 팝업 위로 뜰 수
+        // 없으므로, 선택된 호실 박스를 화면 좌표로 다시 계산해 팝업과 같은 레벨에 그려 보이게 한다
         <div
-          className="pointer-events-none fixed z-[80] -translate-x-1/2 -translate-y-1/2"
-          style={{ left: lightboxMarkerScreenPos.left, top: lightboxMarkerScreenPos.top }}
+          className={`pointer-events-none fixed z-[80] -translate-x-1/2 -translate-y-1/2 rounded-[1px] border-2 ring-2 ring-[#e53935] ring-offset-1 ${STATUS_BORDER[statusForMarker(units, building, floor, selectedMarker.label)]}`}
+          style={{
+            left: lightboxMarkerScreenPos.left,
+            top: lightboxMarkerScreenPos.top,
+            width: lightboxMarkerScreenPos.width,
+            height: lightboxMarkerScreenPos.height,
+            backgroundColor: "rgba(229, 57, 53, 0.35)",
+          }}
           aria-hidden
-        >
-          <span
-            className="whitespace-nowrap text-[13px] font-extrabold leading-none text-[#d32f2f]"
-            style={{
-              textShadow:
-                "-1.5px -1.5px 0 #fff, 1.5px -1.5px 0 #fff, -1.5px 1.5px 0 #fff, 1.5px 1.5px 0 #fff, 0 0 3px #fff",
-            }}
-          >
-            {selectedMarker.label}
-          </span>
-        </div>
+        />
       )}
 
       {selectedUnit && <UnitInfoPopup unit={selectedUnit} onClose={closeUnitPopup} />}
