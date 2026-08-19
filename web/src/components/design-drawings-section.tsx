@@ -347,7 +347,7 @@ function MarkerPin({
     <div
       className={`absolute select-none transition-opacity duration-200 ${compact ? "hidden sm:block" : ""} ${
         editable ? "cursor-grab active:cursor-grabbing" : "pointer-events-none"
-      } ${selected ? "z-20" : ""} ${dimmed ? "opacity-40" : ""}`}
+      } ${selected ? "z-[75]" : ""} ${dimmed ? "opacity-40" : ""}`}
       style={{
         left: `${marker.x}%`,
         top: `${marker.y}%`,
