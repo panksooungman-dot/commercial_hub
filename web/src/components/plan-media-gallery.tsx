@@ -65,7 +65,7 @@ export function PlanMediaGallery({
       operatingPins,
       current.floor,
       building === "A" || building === "B" ? building : "",
-      popupUnits,
+      popupUnits.filter((u): u is UnitPopupInfo & { id: string } => Boolean(u.id)),
       pinOverlay,
     ),
   ];
