@@ -9,7 +9,7 @@ import { FACADE_LABEL, frontFacadeForUnitId } from "@/lib/front-lengths";
 import { operatingOverlayPins } from "@/lib/operating-pins";
 import { store } from "@/lib/store";
 import { Floor, UnitStatus } from "@/lib/types";
-import { toUnitPopupInfo } from "@/lib/unit-popup";
+import { toUnitPopupInfo, type UnitPopupInfo } from "@/lib/unit-popup";
 import { buildPinOverlay, estimateUnitPin } from "@/lib/unit-pins";
 
 type Ctx = { params: Promise<{ id: string }> };
@@ -86,7 +86,16 @@ export default async function UnitDetailPage({ params }: Ctx) {
         <h2 className="mb-4 font-display text-2xl text-brand-deep">도면에서 위치 확인</h2>
         <FloorPlanFigure
           floor={unit.floor as Floor}
-          pins={[...floorPins, ...operatingOverlayPins(operatingPins, unit.floor as Floor, "", popupUnits, pinOverlay)]}
+          pins={[
+            ...floorPins,
+            ...operatingOverlayPins(
+              operatingPins,
+              unit.floor as Floor,
+              "",
+              popupUnits.filter((u): u is UnitPopupInfo & { id: string } => Boolean(u.id)),
+              pinOverlay,
+            ),
+          ]}
           popupUnits={popupUnits}
           pinRecords={pinRecords}
           showPins
