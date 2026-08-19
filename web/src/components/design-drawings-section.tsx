@@ -343,46 +343,57 @@ function MarkerPin({
   onDoubleClick?: () => void;
   onDelete?: () => void;
 }) {
+  const wrapperClassName = `absolute select-none transition-opacity duration-200 ${compact ? "hidden sm:block" : ""} ${
+    editable ? "cursor-grab active:cursor-grabbing" : "pointer-events-none"
+  } ${selected ? "z-[75]" : ""} ${dimmed ? "opacity-40" : ""}`;
+  const wrapperStyle = {
+    left: `${marker.x}%`,
+    top: `${marker.y}%`,
+    transform: `translate(-50%, -50%) scale(${pinScale})`,
+  };
+
+  if (!editable) {
+    // 도면이 잘 보이도록 배지 없이 굵은 글씨 라벨만 표시하고, 흰색 텍스트 외곽선으로 도면선 위에서도 읽히게 한다
+    return (
+      <div className={wrapperClassName} style={wrapperStyle}>
+        <span
+          className={`relative whitespace-nowrap font-extrabold leading-none ${
+            selected ? "text-[13px] text-[#d32f2f]" : "text-[10px] text-[#173355]"
+          }`}
+          style={{
+            textShadow:
+              "-1.5px -1.5px 0 #fff, 1.5px -1.5px 0 #fff, -1.5px 1.5px 0 #fff, 1.5px 1.5px 0 #fff, 0 0 3px #fff",
+          }}
+        >
+          {marker.label}
+        </span>
+      </div>
+    );
+  }
+
   return (
     <div
-      className={`absolute select-none transition-opacity duration-200 ${compact ? "hidden sm:block" : ""} ${
-        editable ? "cursor-grab active:cursor-grabbing" : "pointer-events-none"
-      } ${selected ? "z-[75]" : ""} ${dimmed ? "opacity-40" : ""}`}
-      style={{
-        left: `${marker.x}%`,
-        top: `${marker.y}%`,
-        transform: `translate(-50%, -50%) scale(${pinScale})`,
-      }}
-      onPointerDown={editable ? onPointerDown : undefined}
-      onPointerMove={editable ? onPointerMove : undefined}
-      onPointerUp={editable ? onPointerUp : undefined}
-      onDoubleClick={editable ? onDoubleClick : undefined}
+      className={wrapperClassName}
+      style={wrapperStyle}
+      onPointerDown={onPointerDown}
+      onPointerMove={onPointerMove}
+      onPointerUp={onPointerUp}
+      onDoubleClick={onDoubleClick}
     >
-      {selected && (
-        <span className="absolute inset-0 -z-10 animate-ping rounded-[3px] bg-[#e53935]/70" aria-hidden />
-      )}
-      <span
-        className={`relative flex h-[18px] min-w-[22px] items-center justify-center gap-0.5 whitespace-nowrap rounded-[3px] border px-1.5 text-[9px] font-bold leading-none text-white shadow-[0_1px_3px_rgba(0,0,0,0.45)] ${
-          selected
-            ? "scale-[1.15] border-[#b71c1c] bg-[#e53935] shadow-[0_0_0_2px_rgba(255,255,255,0.9),0_2px_5px_rgba(0,0,0,0.5)]"
-            : "border-[#2f5f9a]/80 bg-[#3d7ab8]"
-        }`}
-      >
+      <span className="relative flex h-[18px] min-w-[22px] items-center justify-center gap-0.5 whitespace-nowrap rounded-[3px] border border-[#2f5f9a]/80 bg-[#3d7ab8] px-1.5 text-[9px] font-bold leading-none text-white shadow-[0_1px_3px_rgba(0,0,0,0.45)]">
         {marker.label}
-        {editable && (
-          <button
-            type="button"
-            onPointerDown={(e) => e.stopPropagation()}
-            onClick={(e) => {
-              e.stopPropagation();
-              onDelete?.();
-            }}
-            className="ml-0.5 rounded-full bg-black/25 px-1 text-[8px] leading-none text-white hover:bg-black/50"
-            aria-label="마커 삭제"
-          >
-            ✕
-          </button>
-        )}
+        <button
+          type="button"
+          onPointerDown={(e) => e.stopPropagation()}
+          onClick={(e) => {
+            e.stopPropagation();
+            onDelete?.();
+          }}
+          className="ml-0.5 rounded-full bg-black/25 px-1 text-[8px] leading-none text-white hover:bg-black/50"
+          aria-label="마커 삭제"
+        >
+          ✕
+        </button>
       </span>
     </div>
   );
@@ -1133,8 +1144,13 @@ export function DesignDrawingsSection({ units = [] }: { units?: DrawingUnitStatu
           style={{ left: lightboxMarkerScreenPos.left, top: lightboxMarkerScreenPos.top }}
           aria-hidden
         >
-          <span className="absolute inset-0 -z-10 animate-ping rounded-[3px] bg-[#e53935]/70" />
-          <span className="relative flex h-[18px] min-w-[22px] scale-[1.15] items-center justify-center whitespace-nowrap rounded-[3px] border border-[#b71c1c] bg-[#e53935] px-1.5 text-[9px] font-bold leading-none text-white shadow-[0_0_0_2px_rgba(255,255,255,0.9),0_2px_5px_rgba(0,0,0,0.5)]">
+          <span
+            className="whitespace-nowrap text-[13px] font-extrabold leading-none text-[#d32f2f]"
+            style={{
+              textShadow:
+                "-1.5px -1.5px 0 #fff, 1.5px -1.5px 0 #fff, -1.5px 1.5px 0 #fff, 1.5px 1.5px 0 #fff, 0 0 3px #fff",
+            }}
+          >
             {selectedMarker.label}
           </span>
         </div>
