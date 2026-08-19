@@ -538,6 +538,33 @@ export function DesignDrawingsSection({ units = [] }: { units?: DrawingUnitStatu
   const isMarkerSelected = (label: string) =>
     Boolean(selectedUnit) && selectedUnit?.unitNo === markerUnitNo(label, BUILDING_KEY_TO_BUILDING[building]);
 
+  const selectedMarker = selectedUnit ? currentMarkers.find((m) => isMarkerSelected(m.label)) : undefined;
+
+  /**
+   * 라이트박스 안의 마커는 pan/zoom transform이 걸린 컨테이너 안에 있어 z-index만으로는
+   * 팝업(z-70) 위로 뜰 수 없다(transform이 별도 stacking context를 만듦). 대신 선택된 마커의
+   * 화면상 픽셀 좌표를 계산해 팝업과 같은 레벨(섹션 루트)에 배지를 하나 더 띄워 표시한다.
+   */
+  const [lightboxMarkerScreenPos, setLightboxMarkerScreenPos] = useState<{ left: number; top: number } | null>(null);
+
+  useEffect(() => {
+    if (!lightboxOpen || !selectedMarker) return;
+    const updatePos = () => {
+      const rect = imageBoxRef.current?.getBoundingClientRect();
+      setLightboxMarkerScreenPos(
+        rect
+          ? {
+              left: rect.left + (selectedMarker.x / 100) * rect.width,
+              top: rect.top + (selectedMarker.y / 100) * rect.height,
+            }
+          : null,
+      );
+    };
+    updatePos();
+    window.addEventListener("resize", updatePos);
+    return () => window.removeEventListener("resize", updatePos);
+  }, [lightboxOpen, selectedMarker, pan, scale]);
+
   const zoomBy = (delta: number) => setScale((prev) => clampScale(prev + delta));
 
   const resetView = () => {
@@ -1082,6 +1109,19 @@ export function DesignDrawingsSection({ units = [] }: { units?: DrawingUnitStatu
               ? "빈 곳 클릭: 마커 추가 · 배지 드래그: 위치 이동 · 빨간 박스 모서리 드래그: 크기 조절 · 더블클릭: 이름 수정 · ✕: 삭제 · 완료 후 '좌표 내보내기'로 저장"
               : "호실 클릭: 정보 팝업 · 마우스 휠로 확대/축소 · 드래그로 이동 · ESC로 닫기"}
           </p>
+        </div>
+      )}
+
+      {lightboxOpen && selectedMarker && lightboxMarkerScreenPos && (
+        <div
+          className="pointer-events-none fixed z-[80] -translate-x-1/2 -translate-y-1/2"
+          style={{ left: lightboxMarkerScreenPos.left, top: lightboxMarkerScreenPos.top }}
+          aria-hidden
+        >
+          <span className="absolute inset-0 -z-10 animate-ping rounded-[3px] bg-[#e53935]/70" />
+          <span className="relative flex h-[18px] min-w-[22px] scale-[1.15] items-center justify-center whitespace-nowrap rounded-[3px] border border-[#b71c1c] bg-[#e53935] px-1.5 text-[9px] font-bold leading-none text-white shadow-[0_0_0_2px_rgba(255,255,255,0.9),0_2px_5px_rgba(0,0,0,0.5)]">
+            {selectedMarker.label}
+          </span>
         </div>
       )}
 
