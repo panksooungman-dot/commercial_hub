@@ -431,10 +431,10 @@ function UnitBox({
     <div
       role={clickable ? "button" : undefined}
       tabIndex={clickable ? 0 : undefined}
-      className={`absolute rounded-[1px] border transition-opacity duration-200 ${
+      className={`absolute rounded-[1px] transition-opacity duration-200 ${
         editable
-          ? "border-black/40"
-          : `${STATUS_BORDER[status]} ${clickable ? "cursor-pointer hover:brightness-95" : "pointer-events-none"}`
+          ? "border border-black/40"
+          : `border-2 ${STATUS_BORDER[status]} ${clickable ? "cursor-pointer hover:brightness-95" : "pointer-events-none"}`
       } ${selected ? "z-10 ring-2 ring-[#e53935] ring-offset-1" : ""} ${dimmed ? "opacity-40" : ""}`}
       style={{
         left: `${marker.x}%`,
@@ -442,7 +442,8 @@ function UnitBox({
         width: `${w}%`,
         height: `${h}%`,
         transform: "translate(-50%, -50%)",
-        backgroundColor: STATUS_FILL[status],
+        // 도면 원본이 잘 보이도록 평상시엔 테두리만 표시하고, 선택된 호실만 색을 채워 강조한다
+        backgroundColor: editable ? STATUS_FILL[status] : selected ? "rgba(229, 57, 53, 0.35)" : "transparent",
       }}
       title={`${marker.label} · ${STATUS_LABEL[status]} · 클릭하여 정보 보기`}
       onPointerDown={
