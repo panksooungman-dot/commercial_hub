@@ -346,7 +346,7 @@ function MarkerPin({
   raiseAbovePopup?: boolean;
   /** 부모(도면)에 확대/축소 transform이 걸려 있을 때 마커 자체 크기는 화면상 일정하게 유지하기 위한 역배율 */
   pinScale?: number;
-  /** 좁은 화면 축소 미리보기(모바일)에서는 호실이 밀집해 라벨이 겹쳐 읽을 수 없으므로 숨김 */
+  /** 좁은 화면 축소 미리보기(모바일)에서는 라벨을 더 작게 표시해 밀집한 호실도 겹침을 줄여 보이게 함 */
   compact?: boolean;
   onPointerDown?: (e: ReactPointerEvent<HTMLDivElement>) => void;
   onPointerMove?: (e: ReactPointerEvent<HTMLDivElement>) => void;
@@ -354,7 +354,7 @@ function MarkerPin({
   onDoubleClick?: () => void;
   onDelete?: () => void;
 }) {
-  const wrapperClassName = `absolute select-none transition-opacity duration-200 ${compact && !selected ? "hidden sm:block" : ""} ${
+  const wrapperClassName = `absolute select-none transition-opacity duration-200 ${
     editable ? "cursor-grab active:cursor-grabbing" : "pointer-events-none"
   } ${selected && raiseAbovePopup ? "z-[75]" : ""} ${dimmed ? "opacity-40" : ""}`;
   const wrapperStyle = {
@@ -369,7 +369,13 @@ function MarkerPin({
       <div className={wrapperClassName} style={wrapperStyle}>
         <span
           className={`relative whitespace-nowrap font-extrabold leading-none ${
-            selected ? "text-[16px] text-[#d32f2f]" : "text-[13px] text-[#173355]"
+            selected
+              ? compact
+                ? "text-[12px] sm:text-[16px] text-[#d32f2f]"
+                : "text-[16px] text-[#d32f2f]"
+              : compact
+                ? "text-[9px] sm:text-[13px] text-[#173355]"
+                : "text-[13px] text-[#173355]"
           }`}
           style={{
             textShadow:
