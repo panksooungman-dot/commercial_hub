@@ -15,8 +15,21 @@ const body = Manrope({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://ivian-hub.vercel.app"),
   title: "송도 하늘채 아이비원 상업시설",
   description: "송도 아이비원 주상복합 단지 내 근린생활시설 분양 안내",
+  openGraph: {
+    title: "송도 하늘채 아이비원 상업시설",
+    description: "송도 아이비원 주상복합 단지 내 근린생활시설 분양 안내",
+    siteName: "송도 하늘채 아이비원",
+    locale: "ko_KR",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "송도 하늘채 아이비원 상업시설",
+    description: "송도 아이비원 주상복합 단지 내 근린생활시설 분양 안내",
+  },
 };
 
 export default function RootLayout({
