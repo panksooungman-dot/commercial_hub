@@ -5,6 +5,7 @@ import type { PointerEvent as ReactPointerEvent, WheelEvent as ReactWheelEvent }
 import Image from "next/image";
 import {
   PUBLIC_STATUS_FILTERS,
+  STATUS_BORDER,
   STATUS_FILL,
   STATUS_LABEL,
   type PublicStatusFilter,
@@ -137,6 +138,15 @@ const BUILDINGS: { key: BuildingKey; label: string }[] = [
   { key: "a", label: "A동" },
   { key: "b", label: "B동" },
 ];
+
+/** 선택된 호실 목록 버튼을 그 호실의 분양 상태색으로 강조 표시 */
+const STATUS_TEXT: Record<Exclude<UnitStatus, "hidden">, string> = {
+  available: "text-[#0d5aa7]",
+  for_lease: "text-[#1b6b3f]",
+  reserved: "text-[#8a5c12]",
+  sold: "text-[#4a4a4a]",
+  move_in: "text-[#1c4a73]",
+};
 
 const DRAWINGS: Record<BuildingKey, Record<FloorKey, { src: string; alt: string }>> = {
   a: {
@@ -945,9 +955,10 @@ export function DesignDrawingsSection({ units = [] }: { units?: DrawingUnitStatu
                     onClick={() => highlightMarker(m.label)}
                     className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-[10px] font-extrabold shadow-sm transition hover:shadow sm:text-sm ${
                       active
-                        ? "border-[#e53935] bg-[#e53935]/10 text-[#b71c1c] hover:border-[#e53935]"
+                        ? `${STATUS_BORDER[st]} ${STATUS_TEXT[st]}`
                         : "border-line bg-white text-brand-deep hover:border-brand"
                     }`}
+                    style={active ? { backgroundColor: STATUS_FILL[st] } : undefined}
                   >
                     <span
                       className="h-2.5 w-2.5 rounded-full"
