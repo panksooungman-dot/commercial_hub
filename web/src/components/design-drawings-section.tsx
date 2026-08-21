@@ -1004,7 +1004,7 @@ export function DesignDrawingsSection({ units = [] }: { units?: DrawingUnitStatu
                   compact
                   selected={sel}
                   dimmed={Boolean(selectedUnit) && !sel}
-                  raiseAbovePopup={!lightboxOpen}
+                  raiseAbovePopup={false}
                 />
               );
             })}
