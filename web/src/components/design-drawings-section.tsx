@@ -369,11 +369,11 @@ function MarkerPin({
       <div className={wrapperClassName} style={wrapperStyle}>
         <span
           className={`relative whitespace-nowrap font-extrabold leading-none ${
-            selected ? "text-[13px] text-[#d32f2f]" : "text-[10px] text-[#173355]"
+            selected ? "text-[16px] text-[#d32f2f]" : "text-[13px] text-[#173355]"
           }`}
           style={{
             textShadow:
-              "-1.5px -1.5px 0 #fff, 1.5px -1.5px 0 #fff, -1.5px 1.5px 0 #fff, 1.5px 1.5px 0 #fff, 0 0 3px #fff",
+              "-2px -2px 0 #fff, 2px -2px 0 #fff, -2px 2px 0 #fff, 2px 2px 0 #fff, 0 0 4px #fff",
           }}
         >
           {marker.label}
