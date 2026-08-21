@@ -897,7 +897,7 @@ export function DesignDrawingsSection({ units = [] }: { units?: DrawingUnitStatu
                     key={m.id}
                     type="button"
                     onClick={() => highlightMarker(m.label)}
-                    className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-sm font-medium shadow-sm transition hover:shadow ${
+                    className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-sm font-bold shadow-sm transition hover:shadow ${
                       active
                         ? "border-[#e53935] bg-[#e53935]/10 text-[#b71c1c] hover:border-[#e53935]"
                         : "border-line bg-white text-brand-deep hover:border-brand"
