@@ -33,6 +33,7 @@ const NAV_SECTIONS = [
 export default async function HomePage() {
   const project = await store.getProject();
   const units = await getPublicUnits();
+  const designMarkerOverrides = await store.getDesignMarkerOverrides();
 
   return (
     <div>
@@ -144,6 +145,7 @@ export default async function HomePage() {
 
       <div id="drawings">
         <DesignDrawingsSection
+          markerOverrides={designMarkerOverrides}
           units={units
             .filter((u) => u.status !== "hidden")
             .map((u) => ({

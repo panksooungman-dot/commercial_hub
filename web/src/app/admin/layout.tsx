@@ -25,6 +25,9 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             <Link href="/admin/unit-pins" className="text-muted hover:text-brand">
               호실마커
             </Link>
+            <Link href="/admin/design-markers" className="text-muted hover:text-brand">
+              설계도면 호실
+            </Link>
             <Link href="/admin/faqs" className="text-muted hover:text-brand">
               FAQ
             </Link>

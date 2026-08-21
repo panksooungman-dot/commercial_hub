@@ -17,6 +17,13 @@ import {
   frontFacadeForUnitId,
   resolveFrontLength,
 } from "@/lib/front-lengths";
+import { DESIGN_MARKER_RAW_SEED } from "@/lib/design-marker-seed";
+import {
+  DESIGN_MARKER_DEFAULT_POSITION,
+  effectiveDesignMarkerLabels,
+  emptyDesignMarkerOverrides,
+  type DesignMarkerOverrides,
+} from "@/lib/design-markers";
 
 type FloorKey = "b1" | "1f" | "2f";
 type BuildingKey = "a" | "b";
@@ -168,198 +175,43 @@ type MarkerStore = Record<BuildingKey, Record<FloorKey, UnitMarker[]>>;
 const DEFAULT_BOX_W = 3.6;
 const DEFAULT_BOX_H = 5.2;
 
-/**
- * 도면 위 호실 라벨의 대략 위치·크기(이미지 기준 %). X1~X14 / Y1~Y11 그리드 실측치(mm)를
- * 시트 상 위치 비율로 환산해 배치한 1차 좌표이며, w/h(박스 폭·높이)는 분양 도면 전용면적표 및
- * 인접 호실 간격을 참고해 대략 추정한 값이다 — 실제 벽체 형상과 다를 수 있으며 편집 모드에서
- * 드래그/더블클릭으로 위치·이름을 보정할 수 있다(박스 크기 자체는 아직 편집 UI로 조절 불가).
- */
-const RAW_SEED: Record<BuildingKey, Record<FloorKey, [string, number, number, number, number][]>> = {
-  a: {
-    b1: [
-      // 분양 호실만 (A동 B1: B-101, B-102, B-105) — 라벨은 도면 표기 B-xxx
-      // 원본 설계도면 PDF의 인쇄 텍스트 좌표를 벡터 추출해 그 바로 위에 라벨이 오도록 보정
-      ["A101", 18.27, 17.98, 6.35, 13.32],
-      ["A102", 28.24, 17.98, 12.64, 13.32],
-      ["A105", 33.86, 36.42, 5.46, 18.72],
-    ],
-    "1f": [
-      // 원본 설계도면 PDF의 인쇄 텍스트(근생A-xxx) 좌표를 벡터 추출해 그 바로 위에 라벨이 오도록 보정
-      ["A116", 17.48, 16.68, 3.67, 13.32],
-      ["A115", 21.21, 16.68, 3.67, 13.32],
-      ["A114", 24.51, 16.68, 3.67, 13.32],
-      ["A113", 27.89, 16.68, 3.04, 13.32],
-      ["A112", 30.67, 16.68, 3.04, 13.32],
-      ["A111", 35.54, 16.68, 5.46, 13.32],
-      ["A110", 55.21, 16.33, 5.46, 13.32],
-      ["A109", 59.78, 16.33, 5.86, 13.32],
-      ["A108", 65.00, 16.33, 3.09, 13.32],
-      ["A107", 68.17, 16.33, 3.09, 13.32],
-      ["A106", 76.41, 16.33, 11.11, 7.83],
-      ["A105", 76.41, 21.71, 11.11, 5.49],
-      ["A102", 76.41, 35.24, 8.39, 4.31],
-      ["A117", 17.05, 31.70, 11.02, 4.5],
-      ["A118", 17.05, 37.30, 11.02, 4.5],
-      ["A119", 17.05, 54.60, 11.02, 4.3],
-      ["A120", 17.05, 59.22, 11.02, 4.34],
-      ["A121", 17.05, 65.90, 11.02, 4.3],
-      ["A122", 16.96, 73.38, 4.46, 7.13],
-      ["A123", 20.41, 74.43, 3.6, 7.13],
-      ["A124", 23.65, 75.57, 3.2, 7.13],
-      ["A125", 29.84, 74.43, 5.5, 7.13],
-      ["A126", 33.64, 75.57, 3.2, 7.13],
-      ["A127", 36.60, 74.43, 2.9, 7.13],
-      ["A128", 38.57, 76.2, 2.9, 7.13],
-      ["A129", 42.08, 74.43, 3.5, 7.13],
-      ["A130", 47.92, 73.38, 2.89, 7.13],
-      ["A131", 50.2, 75.5, 2.8, 7.13],
-      ["A132", 53.5, 73.38, 2.8, 7.13],
-      ["A133", 56.9, 75.5, 2.8, 7.13],
-      ["A134", 59.40, 73.38, 2.93, 7.13],
-      ["A135", 62.76, 73.38, 2.93, 7.13],
-      ["A136", 67.2, 73.38, 2.8, 7.13],
-      ["A137", 69.75, 75.5, 3.09, 7.13],
-      ["A138", 72.09, 73.38, 3.40, 7.13],
-      ["A139", 74.45, 75.5, 3.40, 7.13],
-      ["A140", 78.16, 73.38, 4.32, 5.89],
-      ["A141", 78.24, 65.62, 4.32, 7.12],
-      ["A142", 78.24, 56.92, 4.32, 8.51],
-      ["A143", 78.24, 51.54, 11.11, 11.05],
-    ],
-    "2f": [
-      // 원본 설계도면 PDF의 인쇄 텍스트(근생A-xxx) 좌표를 벡터 추출해 그 바로 위에 라벨이 오도록 보정
-      ["A212", 17.94, 17.07, 4.46, 13.32],
-      ["A211", 23.45, 17.07, 6.56, 13.32],
-      ["A210", 30.22, 17.07, 6.08, 13.32],
-      ["A209", 39.61, 17.07, 10.70, 13.32],
-      ["A208", 49.89, 17.07, 5.79, 13.32],
-      ["A207", 59.40, 17.07, 5.46, 13.32],
-      ["A206", 66.21, 17.07, 5.86, 13.32],
-      ["A205", 72.82, 17.07, 6.18, 13.32],
-      ["A204", 78.48, 17.07, 6.79, 13.32],
-      ["A213", 17.90, 36.60, 11.02, 18.72],
-      ["A214", 34.47, 31.40, 5.0, 6.0],
-      ["A215", 56.74, 30.11, 5.46, 9.00],
-      ["A216", 20.54, 57.55, 11.02, 16.87],
-      ["A217", 17.47, 73.98, 4.46, 7.13],
-      ["A218", 23.13, 73.98, 6.56, 7.13],
-      ["A219", 29.60, 73.98, 5.46, 7.13],
-      ["A220", 35.67, 73.98, 5.46, 7.13],
-      ["A221", 41.73, 73.98, 5.0, 7.13],
-      ["A222", 48.34, 73.98, 5.46, 7.13],
-      ["A223", 54.04, 73.98, 5.46, 7.13],
-      ["A224", 61.09, 73.98, 5.86, 7.13],
-      ["A225", 66.71, 73.98, 5.46, 7.13],
-      ["A226", 73.62, 73.98, 6.79, 7.13],
-      ["A227", 78.48, 73.98, 4.32, 7.13],
-      ["A203", 78.47, 29.94, 4.32, 7.88],
-      ["A202", 78.54, 34.58, 4.32, 4.74],
-      ["A201", 78.61, 39.03, 4.32, 4.19],
-      ["A229", 74.91, 55.12, 11.11, 11.05],
-      ["A230", 59.22, 66.13, 5.46, 7.13],
-      ["A228", 78.67, 65.31, 4.32, 8.51],
-    ],
-  },
-  b: {
-    b1: [
-      // 분양 호실만 (B동 B1: B-105, B-106, B-107)
-      // 원본 설계도면 PDF의 인쇄 텍스트 좌표를 벡터 추출해 그 바로 위에 라벨이 오도록 보정
-      ["B105", 33.50, 36.17, 5.46, 18.72],
-      ["B106", 42.67, 36.17, 5.24, 18.72],
-      ["B107", 18.88, 56.14, 12.91, 9.72],
-    ],
-    "1f": [
-      // 원본 설계도면 PDF의 인쇄 텍스트(근생B-xxx) 좌표를 벡터 추출해 그 바로 위에 라벨이 오도록 보정
-      ["B117", 17.31, 19.84, 4.46, 13.32],
-      ["B116", 21.74, 19.84, 2.8, 13.32],
-      ["B115", 24.63, 19.84, 2.8, 13.32],
-      ["B114", 27.53, 19.84, 2.8, 13.32],
-      ["B113", 30.59, 19.84, 5.24, 13.32],
-      ["B112", 39.14, 19.84, 1.85, 13.32],
-      ["B111", 42.13, 19.84, 1.85, 13.32],
-      ["B110", 47.77, 19.84, 2.2, 13.32],
-      ["B109", 50.03, 21.8, 2.2, 13.32],
-      ["B108", 59.77, 19.84, 5.86, 13.32],
-      ["B107", 64.97, 19.84, 3.09, 13.32],
-      ["B106", 68.06, 19.84, 3.09, 13.32],
-      ["B105", 76.64, 20.57, 11.11, 7.83],
-      ["B104", 76.64, 27.03, 11.11, 4.5],
-      ["B103", 76.64, 30.04, 8.39, 4.00],
-      ["B102", 76.64, 35.61, 11.11, 4.5],
-      ["B101", 76.64, 38.88, 8.39, 9.15],
-      ["B118", 16.7, 30.5, 11.02, 4.5],
-      ["B119", 16.74, 35.45, 11.02, 4.86],
-      ["B120", 16.74, 40.52, 11.02, 4.86],
-      ["B121", 16.74, 53.92, 11.02, 5.38],
-      ["B122", 16.74, 58.68, 11.02, 4.34],
-      ["B123", 16.74, 64.11, 11.02, 7.15],
-      ["B124", 16.74, 71.66, 11.02, 7.13],
-      ["B125", 21.3, 75.78, 2.7, 7.13],
-      ["B126", 25.0, 75.78, 2.7, 7.13],
-      ["B127", 30.09, 75.78, 2.73, 7.13],
-      ["B128", 33.66, 75.78, 2.73, 7.13],
-      ["B129", 36.24, 77.6, 2.62, 7.13],
-      ["B130", 39.20, 75.78, 2.62, 7.13],
-      ["B131", 55.51, 75.78, 1.82, 7.13],
-      ["B132", 59.65, 75.78, 1.82, 7.13],
-      ["B133", 62.11, 77.8, 2.5, 7.13],
-      ["B134", 66.70, 73.25, 2.5, 7.13],
-      ["B135", 69.66, 75.78, 2.5, 7.13],
-      ["B136", 71.68, 73.25, 2.5, 7.13],
-      ["B137", 74.78, 75.78, 2.5, 7.13],
-      ["B138", 78.15, 73.25, 4.32, 7.13],
-      ["B139", 77.71, 66.20, 4.32, 8.51],
-      ["B140", 77.4, 58.13, 4.32, 7.0],
-      ["B141", 77.08, 51.57, 11.11, 11.05],
-    ],
-    "2f": [
-      // 원본 설계도면 PDF의 인쇄 텍스트(근생B-xxx) 좌표를 벡터 추출해 그 바로 위에 라벨이 오도록 보정
-      ["B212", 17.24, 19.72, 4.46, 7.83],
-      ["B211", 22.49, 19.72, 6.56, 7.83],
-      ["B210", 28.78, 19.72, 6.08, 7.83],
-      ["B209", 40.52, 19.72, 5.24, 7.83],
-      ["B208", 48.85, 19.72, 5.79, 7.83],
-      ["B207", 60.76, 19.72, 5.46, 7.83],
-      ["B206", 66.40, 19.72, 5.86, 7.83],
-      ["B205", 73.15, 19.72, 6.18, 7.83],
-      ["B204", 78.69, 19.72, 6.79, 7.83],
-      ["B203", 78.29, 29.88, 11.11, 7.88],
-      ["B202", 78.37, 35.16, 11.11, 4.59],
-      ["B201", 78.43, 39.58, 11.11, 4.34],
-      ["B213", 17.49, 38.26, 17.10, 18.72],
-      ["B214", 34.86, 29.92, 5.24, 9.00],
-      ["B215", 56.17, 29.92, 5.46, 9.00],
-      ["B216", 17.38, 55.99, 11.02, 16.87],
-      ["B217", 16.47, 73.67, 4.46, 7.13],
-      ["B218", 23.06, 76.58, 4.46, 7.13],
-      ["B219", 28.98, 76.58, 12.64, 7.13],
-      ["B220", 34.55, 76.58, 5.46, 7.13],
-      ["B221", 39.78, 76.58, 5.24, 7.13],
-      ["B222", 49.99, 76.58, 5.79, 7.13],
-      ["B223", 55.80, 76.58, 5.46, 7.13],
-      ["B224", 61.25, 76.58, 5.86, 7.13],
-      ["B225", 67.51, 73.40, 6.18, 7.13],
-      ["B226", 73.34, 73.40, 6.79, 7.13],
-      ["B227", 78.22, 73.38, 4.32, 7.13],
-      ["B228", 77.56, 66.80, 4.32, 7.15],
-      ["B229", 74.98, 54.01, 11.11, 9.72],
-      ["B230", 59.71, 65.18, 5.86, 7.15],
-    ],
-  },
-};
+/** design-marker-seed.ts의 좌표 기준 데이터를 그대로 사용 (관리자 추가/삭제 오버레이는 buildEffectiveSeedMarkers에서 적용) */
+const RAW_SEED = DESIGN_MARKER_RAW_SEED;
 
-function buildSeedMarkers(raw: typeof RAW_SEED): MarkerStore {
-  const build = (building: BuildingKey, floor: FloorKey): UnitMarker[] =>
-    raw[building][floor].map(([label, x, y, w, h]) => ({ id: `${building}-${floor}-${label}`, label, x, y, w, h }));
+/**
+ * 관리자(/admin/design-markers)가 추가·삭제한 호실을 RAW_SEED 좌표 위에 겹쳐 적용한다.
+ * 관리자가 새로 추가한 호실은 도면 상 정확한 좌표가 없어 하단 여백에 순서대로 배치된다.
+ */
+function buildEffectiveSeedMarkers(overrides: DesignMarkerOverrides): MarkerStore {
+  const build = (building: BuildingKey, floor: FloorKey): UnitMarker[] => {
+    const baseByLabel = new Map(
+      RAW_SEED[building][floor].map(([label, x, y, w, h]) => [label, { x, y, w, h }]),
+    );
+    const labels = effectiveDesignMarkerLabels(building, floor, overrides);
+    let extraIndex = 0;
+    return labels.map((label) => {
+      const hit = baseByLabel.get(label);
+      if (hit) return { id: `${building}-${floor}-${label}`, label, ...hit };
+      const col = extraIndex % 15;
+      const row = Math.floor(extraIndex / 15);
+      extraIndex += 1;
+      return {
+        id: `${building}-${floor}-${label}`,
+        label,
+        x: 10 + col * 5,
+        y: DESIGN_MARKER_DEFAULT_POSITION.y - row * 4,
+        w: DESIGN_MARKER_DEFAULT_POSITION.w,
+        h: DESIGN_MARKER_DEFAULT_POSITION.h,
+      };
+    });
+  };
   return {
     a: { b1: build("a", "b1"), "1f": build("a", "1f"), "2f": build("a", "2f") },
     b: { b1: build("b", "b1"), "1f": build("b", "1f"), "2f": build("b", "2f") },
   };
 }
 
-const SEED_MARKERS: MarkerStore = buildSeedMarkers(RAW_SEED);
-
-const MARKERS_STORAGE_KEY = "ivysquare:design-drawing-markers:v6";
+const MARKERS_STORAGE_KEY = "ivysquare:design-drawing-markers:v7";
 const DRAG_CLICK_THRESHOLD = 6;
 
 const clamp = (n: number, min: number, max: number) => Math.min(max, Math.max(min, n));
@@ -554,7 +406,18 @@ function UnitBox({
   );
 }
 
-export function DesignDrawingsSection({ units = [] }: { units?: DrawingUnitStatus[] }) {
+export function DesignDrawingsSection({
+  units = [],
+  markerOverrides,
+}: {
+  units?: DrawingUnitStatus[];
+  /** 관리자(/admin/design-markers)가 추가·삭제한 호실 목록. 없으면 RAW_SEED 그대로 사용 */
+  markerOverrides?: DesignMarkerOverrides;
+}) {
+  const seedMarkers = useMemo(
+    () => buildEffectiveSeedMarkers(markerOverrides ?? emptyDesignMarkerOverrides()),
+    [markerOverrides],
+  );
   const [building, setBuilding] = useState<BuildingKey>("a");
   const [floor, setFloor] = useState<FloorKey>("1f");
   const [lightboxOpen, setLightboxOpen] = useState(false);
@@ -567,22 +430,22 @@ export function DesignDrawingsSection({ units = [] }: { units?: DrawingUnitStatu
   const dragState = useRef({ dragging: false, startX: 0, startY: 0, panX: 0, panY: 0 });
 
   const [markers, setMarkers] = useState<MarkerStore>(() => {
-    if (typeof window === "undefined") return SEED_MARKERS;
+    if (typeof window === "undefined") return seedMarkers;
     try {
       const raw = window.localStorage.getItem(MARKERS_STORAGE_KEY);
-      if (!raw) return SEED_MARKERS;
+      if (!raw) return seedMarkers;
       const parsed = JSON.parse(raw);
       const slot = (bk: BuildingKey, fk: FloorKey): UnitMarker[] => {
         const saved = parsed?.[bk]?.[fk];
         if (Array.isArray(saved) && saved.length > 0) return saved as UnitMarker[];
-        return SEED_MARKERS[bk][fk];
+        return seedMarkers[bk][fk];
       };
       return {
         a: { b1: slot("a", "b1"), "1f": slot("a", "1f"), "2f": slot("a", "2f") },
         b: { b1: slot("b", "b1"), "1f": slot("b", "1f"), "2f": slot("b", "2f") },
       };
     } catch {
-      return SEED_MARKERS;
+      return seedMarkers;
     }
   });
   const [showMarkers, setShowMarkers] = useState(true);

@@ -7,6 +7,11 @@ import { buildSeedUnits } from "./units-seed";
 import { mergePptPricing } from "./unit-pricing";
 import { DEFAULT_OPERATING_PINS, type OperatingPin } from "./operating-pins";
 import { mergeUnitPins, type UnitPinRecord } from "./unit-pins";
+import {
+  emptyDesignMarkerOverrides,
+  sanitizeDesignMarkerOverrides,
+  type DesignMarkerOverrides,
+} from "./design-markers";
 
 const DATA_DIR = path.join(process.cwd(), "data");
 
@@ -355,6 +360,13 @@ export const store = {
 
   getUnitPins: async () => mergeUnitPins(await readJson<UnitPinRecord[]>("unit-pins.json", () => [])),
   saveUnitPins: (data: UnitPinRecord[]) => writeJson("unit-pins.json", data),
+
+  getDesignMarkerOverrides: async () =>
+    sanitizeDesignMarkerOverrides(
+      await readJson<DesignMarkerOverrides>("design-marker-overrides.json", emptyDesignMarkerOverrides),
+    ),
+  saveDesignMarkerOverrides: (data: DesignMarkerOverrides) =>
+    writeJson("design-marker-overrides.json", sanitizeDesignMarkerOverrides(data)),
 };
 
 export async function getPublicUnits() {
