@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { InterestNavLink } from "@/components/interest-nav-link";
 
@@ -14,11 +15,21 @@ export function SiteHeader({ projectName, phone }: { projectName: string; phone?
   return (
     <header className="sticky top-0 z-40 border-b border-line/80 bg-surface/90 backdrop-blur">
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-2 px-4 py-3 sm:gap-4">
-        <Link href="/" className="min-w-0 shrink">
-          <p className="truncate font-display text-base font-semibold text-brand-deep sm:text-lg md:text-xl">
-            {projectName}
-          </p>
-          <p className="truncate text-xs text-muted">상업시설</p>
+        <Link href="/" className="flex min-w-0 shrink items-center gap-2">
+          <Image
+            src="/images/logo-ianulche.png"
+            alt="IANULCHE 로고"
+            width={40}
+            height={44}
+            className="h-9 w-auto shrink-0 sm:h-10"
+            priority
+          />
+          <span className="min-w-0">
+            <p className="truncate font-display text-base font-semibold text-brand-deep sm:text-lg md:text-xl">
+              {projectName}
+            </p>
+            <p className="truncate text-xs text-muted">상업시설</p>
+          </span>
         </Link>
         <nav className="hidden items-center gap-4 text-sm text-brand lg:flex">
           {NAV.map((item) =>
