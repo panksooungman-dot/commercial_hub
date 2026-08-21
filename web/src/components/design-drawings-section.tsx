@@ -5,6 +5,7 @@ import type { PointerEvent as ReactPointerEvent, WheelEvent as ReactWheelEvent }
 import Image from "next/image";
 import {
   PUBLIC_STATUS_FILTERS,
+  STATUS_BORDER,
   STATUS_FILL,
   STATUS_LABEL,
   type PublicStatusFilter,
@@ -138,6 +139,15 @@ const BUILDINGS: { key: BuildingKey; label: string }[] = [
   { key: "b", label: "B동" },
 ];
 
+/** 선택된 호실 목록 버튼을 그 호실의 분양 상태색으로 강조 표시 */
+const STATUS_TEXT: Record<Exclude<UnitStatus, "hidden">, string> = {
+  available: "text-[#0d5aa7]",
+  for_lease: "text-[#1b6b3f]",
+  reserved: "text-[#8a5c12]",
+  sold: "text-[#4a4a4a]",
+  move_in: "text-[#1c4a73]",
+};
+
 const DRAWINGS: Record<BuildingKey, Record<FloorKey, { src: string; alt: string }>> = {
   a: {
     b1: { src: "/images/plans/units/design-a-b1-units.jpg", alt: "A블럭 지하1층 평면도" },
@@ -188,14 +198,29 @@ const RAW_SEED: Record<BuildingKey, Record<FloorKey, [string, number, number, nu
       ["A106", 76.41, 16.33, 11.11, 7.83],
       ["A105", 76.41, 21.71, 11.11, 5.49],
       ["A102", 76.41, 35.24, 8.39, 4.31],
+      ["A117", 17.05, 31.70, 11.02, 4.5],
+      ["A118", 17.05, 37.30, 11.02, 4.5],
+      ["A119", 17.05, 54.60, 11.02, 4.3],
       ["A120", 17.05, 59.22, 11.02, 4.34],
+      ["A121", 17.05, 65.90, 11.02, 4.3],
       ["A122", 16.96, 73.38, 4.46, 7.13],
+      ["A123", 20.41, 74.43, 3.6, 7.13],
+      ["A124", 23.65, 75.57, 3.2, 7.13],
+      ["A125", 29.84, 74.43, 5.5, 7.13],
+      ["A126", 33.64, 75.57, 3.2, 7.13],
+      ["A127", 36.60, 74.43, 2.9, 7.13],
+      ["A128", 38.57, 76.2, 2.9, 7.13],
+      ["A129", 42.08, 74.43, 3.5, 7.13],
       ["A130", 47.92, 73.38, 2.89, 7.13],
+      ["A131", 50.2, 75.5, 2.8, 7.13],
+      ["A132", 53.5, 73.38, 2.8, 7.13],
+      ["A133", 56.9, 75.5, 2.8, 7.13],
       ["A134", 59.40, 73.38, 2.93, 7.13],
       ["A135", 62.76, 73.38, 2.93, 7.13],
-      ["A137", 69.75, 74.43, 3.09, 7.13],
+      ["A136", 67.2, 73.38, 2.8, 7.13],
+      ["A137", 69.75, 75.5, 3.09, 7.13],
       ["A138", 72.09, 73.38, 3.40, 7.13],
-      ["A139", 74.45, 74.43, 3.40, 7.13],
+      ["A139", 74.45, 75.5, 3.40, 7.13],
       ["A140", 78.16, 73.38, 4.32, 5.89],
       ["A141", 78.24, 65.62, 4.32, 7.12],
       ["A142", 78.24, 56.92, 4.32, 8.51],
@@ -213,17 +238,25 @@ const RAW_SEED: Record<BuildingKey, Record<FloorKey, [string, number, number, nu
       ["A205", 72.82, 17.07, 6.18, 13.32],
       ["A204", 78.48, 17.07, 6.79, 13.32],
       ["A213", 17.90, 36.60, 11.02, 18.72],
+      ["A214", 34.47, 31.40, 5.0, 6.0],
       ["A215", 56.74, 30.11, 5.46, 9.00],
       ["A216", 20.54, 57.55, 11.02, 16.87],
       ["A217", 17.47, 73.98, 4.46, 7.13],
       ["A218", 23.13, 73.98, 6.56, 7.13],
+      ["A219", 29.60, 73.98, 5.46, 7.13],
+      ["A220", 35.67, 73.98, 5.46, 7.13],
+      ["A221", 41.73, 73.98, 5.0, 7.13],
+      ["A222", 48.34, 73.98, 5.46, 7.13],
+      ["A223", 54.04, 73.98, 5.46, 7.13],
       ["A224", 61.09, 73.98, 5.86, 7.13],
+      ["A225", 66.71, 73.98, 5.46, 7.13],
       ["A226", 73.62, 73.98, 6.79, 7.13],
       ["A227", 78.48, 73.98, 4.32, 7.13],
       ["A203", 78.47, 29.94, 4.32, 7.88],
       ["A202", 78.54, 34.58, 4.32, 4.74],
       ["A201", 78.61, 39.03, 4.32, 4.19],
       ["A229", 74.91, 55.12, 11.11, 11.05],
+      ["A230", 59.22, 66.13, 5.46, 7.13],
       ["A228", 78.67, 65.31, 4.32, 8.51],
     ],
   },
@@ -238,29 +271,45 @@ const RAW_SEED: Record<BuildingKey, Record<FloorKey, [string, number, number, nu
     "1f": [
       // 원본 설계도면 PDF의 인쇄 텍스트(근생B-xxx) 좌표를 벡터 추출해 그 바로 위에 라벨이 오도록 보정
       ["B117", 17.31, 19.84, 4.46, 13.32],
+      ["B116", 21.74, 19.84, 2.8, 13.32],
+      ["B115", 24.63, 19.84, 2.8, 13.32],
+      ["B114", 27.53, 19.84, 2.8, 13.32],
       ["B113", 30.59, 19.84, 5.24, 13.32],
       ["B112", 39.14, 19.84, 1.85, 13.32],
       ["B111", 42.13, 19.84, 1.85, 13.32],
+      ["B110", 47.77, 19.84, 2.2, 13.32],
+      ["B109", 50.03, 21.8, 2.2, 13.32],
       ["B108", 59.77, 19.84, 5.86, 13.32],
       ["B107", 64.97, 19.84, 3.09, 13.32],
       ["B106", 68.06, 19.84, 3.09, 13.32],
       ["B105", 76.64, 20.57, 11.11, 7.83],
+      ["B104", 76.64, 27.03, 11.11, 4.5],
       ["B103", 76.64, 30.04, 8.39, 4.00],
+      ["B102", 76.64, 35.61, 11.11, 4.5],
       ["B101", 76.64, 38.88, 8.39, 9.15],
+      ["B118", 16.7, 30.5, 11.02, 4.5],
       ["B119", 16.74, 35.45, 11.02, 4.86],
       ["B120", 16.74, 40.52, 11.02, 4.86],
       ["B121", 16.74, 53.92, 11.02, 5.38],
       ["B122", 16.74, 58.68, 11.02, 4.34],
       ["B123", 16.74, 64.11, 11.02, 7.15],
       ["B124", 16.74, 71.66, 11.02, 7.13],
+      ["B125", 21.3, 75.78, 2.7, 7.13],
+      ["B126", 25.0, 75.78, 2.7, 7.13],
       ["B127", 30.09, 75.78, 2.73, 7.13],
       ["B128", 33.66, 75.78, 2.73, 7.13],
-      ["B129", 36.24, 76.87, 2.62, 7.13],
+      ["B129", 36.24, 77.6, 2.62, 7.13],
       ["B130", 39.20, 75.78, 2.62, 7.13],
       ["B131", 55.51, 75.78, 1.82, 7.13],
       ["B132", 59.65, 75.78, 1.82, 7.13],
+      ["B133", 62.11, 77.8, 2.5, 7.13],
+      ["B134", 66.70, 73.25, 2.5, 7.13],
+      ["B135", 69.66, 75.78, 2.5, 7.13],
+      ["B136", 71.68, 73.25, 2.5, 7.13],
+      ["B137", 74.78, 75.78, 2.5, 7.13],
       ["B138", 78.15, 73.25, 4.32, 7.13],
       ["B139", 77.71, 66.20, 4.32, 8.51],
+      ["B140", 77.4, 58.13, 4.32, 7.0],
       ["B141", 77.08, 51.57, 11.11, 11.05],
     ],
     "2f": [
@@ -281,6 +330,7 @@ const RAW_SEED: Record<BuildingKey, Record<FloorKey, [string, number, number, nu
       ["B214", 34.86, 29.92, 5.24, 9.00],
       ["B215", 56.17, 29.92, 5.46, 9.00],
       ["B216", 17.38, 55.99, 11.02, 16.87],
+      ["B217", 16.47, 73.67, 4.46, 7.13],
       ["B218", 23.06, 76.58, 4.46, 7.13],
       ["B219", 28.98, 76.58, 12.64, 7.13],
       ["B220", 34.55, 76.58, 5.46, 7.13],
@@ -309,7 +359,7 @@ function buildSeedMarkers(raw: typeof RAW_SEED): MarkerStore {
 
 const SEED_MARKERS: MarkerStore = buildSeedMarkers(RAW_SEED);
 
-const MARKERS_STORAGE_KEY = "ivysquare:design-drawing-markers:v4";
+const MARKERS_STORAGE_KEY = "ivysquare:design-drawing-markers:v6";
 const DRAG_CLICK_THRESHOLD = 6;
 
 const clamp = (n: number, min: number, max: number) => Math.min(max, Math.max(min, n));
@@ -346,7 +396,7 @@ function MarkerPin({
   raiseAbovePopup?: boolean;
   /** 부모(도면)에 확대/축소 transform이 걸려 있을 때 마커 자체 크기는 화면상 일정하게 유지하기 위한 역배율 */
   pinScale?: number;
-  /** 좁은 화면 축소 미리보기(모바일)에서는 호실이 밀집해 라벨이 겹쳐 읽을 수 없으므로 숨김 */
+  /** 좁은 화면 축소 미리보기(모바일)에서는 라벨을 더 작게 표시해 밀집한 호실도 겹침을 줄여 보이게 함 */
   compact?: boolean;
   onPointerDown?: (e: ReactPointerEvent<HTMLDivElement>) => void;
   onPointerMove?: (e: ReactPointerEvent<HTMLDivElement>) => void;
@@ -354,7 +404,7 @@ function MarkerPin({
   onDoubleClick?: () => void;
   onDelete?: () => void;
 }) {
-  const wrapperClassName = `absolute select-none transition-opacity duration-200 ${compact && !selected ? "hidden sm:block" : ""} ${
+  const wrapperClassName = `absolute select-none transition-opacity duration-200 ${
     editable ? "cursor-grab active:cursor-grabbing" : "pointer-events-none"
   } ${selected && raiseAbovePopup ? "z-[75]" : ""} ${dimmed ? "opacity-40" : ""}`;
   const wrapperStyle = {
@@ -369,7 +419,13 @@ function MarkerPin({
       <div className={wrapperClassName} style={wrapperStyle}>
         <span
           className={`relative whitespace-nowrap font-extrabold leading-none ${
-            selected ? "text-[16px] text-[#d32f2f]" : "text-[13px] text-[#173355]"
+            selected
+              ? compact
+                ? "text-[12px] sm:text-[16px] text-[#d32f2f]"
+                : "text-[16px] text-[#d32f2f]"
+              : compact
+                ? "text-[9px] sm:text-[13px] text-[#173355]"
+                : "text-[13px] text-[#173355]"
           }`}
           style={{
             textShadow:
@@ -897,11 +953,12 @@ export function DesignDrawingsSection({ units = [] }: { units?: DrawingUnitStatu
                     key={m.id}
                     type="button"
                     onClick={() => highlightMarker(m.label)}
-                    className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-sm font-medium shadow-sm transition hover:shadow ${
+                    className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-[10px] font-extrabold shadow-sm transition hover:shadow sm:text-sm ${
                       active
-                        ? "border-[#e53935] bg-[#e53935]/10 text-[#b71c1c] hover:border-[#e53935]"
+                        ? `${STATUS_BORDER[st]} ${STATUS_TEXT[st]}`
                         : "border-line bg-white text-brand-deep hover:border-brand"
                     }`}
+                    style={active ? { backgroundColor: STATUS_FILL[st] } : undefined}
                   >
                     <span
                       className="h-2.5 w-2.5 rounded-full"
@@ -947,7 +1004,7 @@ export function DesignDrawingsSection({ units = [] }: { units?: DrawingUnitStatu
                   compact
                   selected={sel}
                   dimmed={Boolean(selectedUnit) && !sel}
-                  raiseAbovePopup={!lightboxOpen}
+                  raiseAbovePopup={false}
                 />
               );
             })}
