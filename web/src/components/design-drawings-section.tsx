@@ -190,6 +190,13 @@ const RAW_SEED: Record<BuildingKey, Record<FloorKey, [string, number, number, nu
       ["A102", 76.41, 35.24, 8.39, 4.31],
       ["A120", 17.05, 59.22, 11.02, 4.34],
       ["A122", 16.96, 73.38, 4.46, 7.13],
+      ["A123", 20.41, 74.43, 3.6, 7.13],
+      ["A124", 23.65, 74.43, 3.2, 7.13],
+      ["A125", 29.84, 74.43, 5.5, 7.13],
+      ["A126", 33.64, 75.57, 3.2, 7.13],
+      ["A127", 36.60, 74.43, 2.9, 7.13],
+      ["A128", 38.57, 75.57, 2.9, 7.13],
+      ["A129", 42.08, 74.43, 3.5, 7.13],
       ["A130", 47.92, 73.38, 2.89, 7.13],
       ["A134", 59.40, 73.38, 2.93, 7.13],
       ["A135", 62.76, 73.38, 2.93, 7.13],
@@ -309,7 +316,7 @@ function buildSeedMarkers(raw: typeof RAW_SEED): MarkerStore {
 
 const SEED_MARKERS: MarkerStore = buildSeedMarkers(RAW_SEED);
 
-const MARKERS_STORAGE_KEY = "ivysquare:design-drawing-markers:v4";
+const MARKERS_STORAGE_KEY = "ivysquare:design-drawing-markers:v5";
 const DRAG_CLICK_THRESHOLD = 6;
 
 const clamp = (n: number, min: number, max: number) => Math.min(max, Math.max(min, n));
