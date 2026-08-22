@@ -194,21 +194,45 @@ export default function AdminProjectPage() {
                     updateSlide(s.id, { overlay: e.target.checked ? EMPTY_OVERLAY : undefined })
                   }
                 />
-                이 슬라이드만 사진 위 가운데에 큰 문구 얹기 (공통 배너 문구 대신 사용)
+                이 슬라이드만 사진 위에 문구 직접 얹기 (공통 배너 문구 대신 사용)
               </label>
               {s.overlay ? (
                 <div className="grid gap-2 border border-line bg-background p-2 md:col-span-2 md:grid-cols-2">
-                  <textarea
-                    className="border border-line px-2 py-1 text-sm md:col-span-2"
-                    placeholder={"작은 통계 문구, 줄바꿈으로 구분\n예: 16,000여 배후세대의 스케일도"}
-                    rows={3}
-                    value={s.overlay.statLines.join("\n")}
-                    onChange={(e) =>
-                      updateSlide(s.id, {
-                        overlay: { ...s.overlay!, statLines: e.target.value.split("\n") },
-                      })
-                    }
-                  />
+                  <div className="flex gap-4 text-sm md:col-span-2">
+                    <label className="flex items-center gap-1.5">
+                      <input
+                        type="radio"
+                        name={`overlay-style-${s.id}`}
+                        checked={(s.overlay.style ?? "centered") === "centered"}
+                        onChange={() =>
+                          updateSlide(s.id, { overlay: { ...s.overlay!, style: "centered" } })
+                        }
+                      />
+                      가운데 정렬 (큰 헤드라인 강조)
+                    </label>
+                    <label className="flex items-center gap-1.5">
+                      <input
+                        type="radio"
+                        name={`overlay-style-${s.id}`}
+                        checked={s.overlay.style === "left"}
+                        onChange={() => updateSlide(s.id, { overlay: { ...s.overlay!, style: "left" } })}
+                      />
+                      좌측 정렬 (프로젝트명 강조)
+                    </label>
+                  </div>
+                  {(s.overlay.style ?? "centered") === "centered" ? (
+                    <textarea
+                      className="border border-line px-2 py-1 text-sm md:col-span-2"
+                      placeholder={"작은 통계 문구, 줄바꿈으로 구분\n예: 16,000여 배후세대의 스케일도"}
+                      rows={3}
+                      value={s.overlay.statLines.join("\n")}
+                      onChange={(e) =>
+                        updateSlide(s.id, {
+                          overlay: { ...s.overlay!, statLines: e.target.value.split("\n") },
+                        })
+                      }
+                    />
+                  ) : null}
                   <input
                     className="border border-line px-2 py-1 text-sm"
                     placeholder="헤드라인 앞 작은 문구 (예: 송도가 기다려온)"
@@ -219,7 +243,11 @@ export default function AdminProjectPage() {
                   />
                   <input
                     className="border border-line px-2 py-1 text-sm"
-                    placeholder="큰 헤드라인 (예: 최상위권)"
+                    placeholder={
+                      (s.overlay.style ?? "centered") === "left"
+                        ? "중간 크기 헤드라인 (예: 최상위권 복합상업시설)"
+                        : "큰 헤드라인 (예: 최상위권)"
+                    }
                     value={s.overlay.headlineBig}
                     onChange={(e) =>
                       updateSlide(s.id, { overlay: { ...s.overlay!, headlineBig: e.target.value } })
@@ -227,7 +255,11 @@ export default function AdminProjectPage() {
                   />
                   <input
                     className="border border-line px-2 py-1 text-sm"
-                    placeholder="프로젝트명 (예: 송도 하늘채 아이비원)"
+                    placeholder={
+                      (s.overlay.style ?? "centered") === "left"
+                        ? "프로젝트명 — 크고 진하게 강조됨 (예: 송도 하늘채 아이비원)"
+                        : "프로젝트명 (예: 송도 하늘채 아이비원)"
+                    }
                     value={s.overlay.brandLine}
                     onChange={(e) =>
                       updateSlide(s.id, { overlay: { ...s.overlay!, brandLine: e.target.value } })

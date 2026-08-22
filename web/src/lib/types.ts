@@ -22,9 +22,14 @@ export type ScheduleItem = {
 
 /**
  * 슬라이드 전용 문구 오버레이 — 이 값이 있으면 해당 슬라이드는 공통 좌측 문구 대신
- * 사진 위 가운데에 큰 문구를 직접 얹는 디자인으로 표시된다 (밝은 톤 워시 처리).
+ * 사진 위에 문구를 직접 얹는 전용 디자인으로 표시된다.
+ * style "centered": 가운데 정렬, headlineBig을 큰 글자로 분리 표시 (밝은 워시 처리)
+ * style "left": 좌측 정렬, brandLine을 큰 포인트 컬러 글자로 표시
  */
+export type HeroSlideOverlayStyle = "centered" | "left";
+
 export type HeroSlideOverlay = {
+  style?: HeroSlideOverlayStyle;
   statLines: string[];
   headlinePrefix: string;
   headlineBig: string;
