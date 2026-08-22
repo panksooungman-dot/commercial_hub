@@ -29,15 +29,31 @@ export function HeroSlider({ slides, alt }: { slides: HeroSlide[]; alt: string }
           style={{ opacity: i === active ? 1 : 0 }}
           aria-hidden={i !== active}
         >
-          <Image
-            src={slide.image}
-            alt={alt}
-            fill
-            priority={i === 0}
-            quality={90}
-            sizes="(max-width: 1400px) 100vw, 1400px"
-            className="object-cover"
-          />
+          {slide.video ? (
+            <video
+              className="absolute inset-0 h-full w-full object-cover"
+              src={slide.video}
+              poster={slide.image}
+              autoPlay
+              muted
+              loop
+              playsInline
+              preload={i === 0 ? "auto" : "none"}
+              aria-hidden="true"
+            >
+              <source src={slide.video} type="video/mp4" />
+            </video>
+          ) : (
+            <Image
+              src={slide.image}
+              alt={alt}
+              fill
+              priority={i === 0}
+              quality={90}
+              sizes="(max-width: 1400px) 100vw, 1400px"
+              className="object-cover"
+            />
+          )}
         </div>
       ))}
 
