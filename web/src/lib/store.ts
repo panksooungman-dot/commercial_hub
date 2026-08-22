@@ -154,7 +154,12 @@ function defaultProject(): Project {
     heroCtaPrimary: "호실·도면 보기",
     heroCtaSecondary: "상담 신청하기",
     heroSlides: [
-      { id: "slide-1", image: "/images/hero-banner-poster.jpg", caption: "송도가 기다려온 최상위권 복합상업시설" },
+      {
+        id: "slide-1",
+        image: "/images/hero-banner-poster.jpg",
+        video: "/videos/hero-banner.mp4",
+        caption: "송도가 기다려온 최상위권 복합상업시설 (영상)",
+      },
       { id: "slide-2", image: "/images/marketing/street-plaza.jpg", caption: "일상이 완성되는 140m 스트리트 상권" },
       { id: "slide-3", image: "/images/aerial-plan.jpg", caption: "한눈에 보이는 단지 배치" },
       { id: "slide-4", image: "/images/marketing/ivysquare-twilight.jpg", caption: "송도의 새로운 랜드마크, 아이비스퀘어" },

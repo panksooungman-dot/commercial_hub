@@ -20,10 +20,11 @@ export type ScheduleItem = {
   sortOrder: number;
 };
 
-/** 메인 배너 슬라이더 한 장 — 이미지는 /images/... 경로 또는 전체 URL */
+/** 메인 배너 슬라이더 한 장 — 이미지/영상 경로는 /images(/videos)/... 또는 전체 URL. video가 있으면 해당 슬라이드는 영상으로 재생되고 image는 그 포스터(로딩 중 표시)로 쓰인다 */
 export type HeroSlide = {
   id: string;
   image: string;
+  video?: string;
   caption: string;
 };
 

@@ -148,7 +148,9 @@ export default function AdminProjectPage() {
             <h2 className="font-display text-xl text-brand">메인 배너 슬라이드</h2>
             <p className="mt-1 text-xs text-muted">
               홈 화면 맨 위 배너가 여러 장 자동으로 넘어갑니다. 이미지는 /images/... 경로 또는 전체
-              URL을 입력하세요. 문구·버튼은 위 &ldquo;메인 배너 문구&rdquo;가 모든 슬라이드에 공통으로 표시됩니다.
+              URL을 입력하세요. 영상 경로를 입력하면 그 슬라이드는 영상으로 재생되고, 이미지는 영상
+              로딩 중 포스터로 쓰입니다. 문구·버튼은 위 &ldquo;메인 배너 문구&rdquo;가 모든
+              슬라이드에 공통으로 표시됩니다.
             </p>
           </div>
           <button type="button" onClick={addSlide} className="shrink-0 text-sm text-brand underline">
@@ -160,12 +162,18 @@ export default function AdminProjectPage() {
             <div key={s.id} className="grid gap-2 border border-line p-3 md:grid-cols-2">
               <input
                 className="border border-line px-2 py-1 text-sm"
-                placeholder="이미지 경로 (예: /images/aerial-plan.jpg)"
+                placeholder="이미지(또는 영상 포스터) 경로 (예: /images/aerial-plan.jpg)"
                 value={s.image}
                 onChange={(e) => updateSlide(s.id, { image: e.target.value })}
               />
               <input
                 className="border border-line px-2 py-1 text-sm"
+                placeholder="영상 경로 (선택, 예: /videos/hero-banner.mp4)"
+                value={s.video ?? ""}
+                onChange={(e) => updateSlide(s.id, { video: e.target.value || undefined })}
+              />
+              <input
+                className="border border-line px-2 py-1 text-sm md:col-span-2"
                 placeholder="슬라이드 설명 (참고용, 화면에는 표시 안 됨)"
                 value={s.caption}
                 onChange={(e) => updateSlide(s.id, { caption: e.target.value })}
