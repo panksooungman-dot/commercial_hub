@@ -47,6 +47,8 @@ export default function AdminInquiriesPage() {
   const [noteMsg, setNoteMsg] = useState<{ id: string; text: string } | null>(null);
   const [smsDrafts, setSmsDrafts] = useState<Record<string, string>>({});
   const [smsMsg, setSmsMsg] = useState<{ id: string; text: string } | null>(null);
+  const [testingSms, setTestingSms] = useState(false);
+  const [testSmsResult, setTestSmsResult] = useState<{ ok: boolean; error?: string } | null>(null);
 
   async function load() {
     const res = await fetch("/api/admin/inquiries");
@@ -115,9 +117,49 @@ export default function AdminInquiriesPage() {
     }
   }
 
+  async function testAdminSms() {
+    setTestingSms(true);
+    setTestSmsResult(null);
+    try {
+      const res = await fetch("/api/admin/sms-test", { method: "POST" });
+      if (res.status === 401) {
+        location.href = "/admin/login";
+        return;
+      }
+      setTestSmsResult(await res.json());
+    } catch {
+      setTestSmsResult({ ok: false, error: "요청 실패 — 네트워크를 확인해 주세요" });
+    } finally {
+      setTestingSms(false);
+    }
+  }
+
   return (
     <div className="mx-auto max-w-5xl px-4 py-10">
       <h1 className="font-display text-3xl text-brand">상담 신청</h1>
+
+      <div className="mt-4 border border-line bg-surface p-4 text-sm">
+        <p className="font-medium text-brand">새 문의 접수 시 관리자 알림 문자 테스트</p>
+        <p className="mt-1 text-muted">
+          버튼을 누르면 설정된 관리자 번호로 테스트 문자를 즉시 발송합니다. 실패 시 원인이 아래에
+          표시됩니다.
+        </p>
+        <div className="mt-2 flex flex-wrap items-center gap-2">
+          <button
+            type="button"
+            onClick={testAdminSms}
+            disabled={testingSms}
+            className="rounded-sm bg-brand px-3 py-1.5 text-xs text-white hover:bg-brand-deep disabled:opacity-50"
+          >
+            {testingSms ? "발송 중…" : "테스트 문자 발송"}
+          </button>
+          {testSmsResult ? (
+            <span className={testSmsResult.ok ? "text-xs text-brand" : "text-xs text-red-600"}>
+              {testSmsResult.ok ? "발송 성공 — 관리자 번호로 문자를 확인해 주세요." : `발송 실패: ${testSmsResult.error}`}
+            </span>
+          ) : null}
+        </div>
+      </div>
 
       <div className="mt-6 flex flex-wrap items-center gap-2">
         <input
