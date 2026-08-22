@@ -20,12 +20,25 @@ export type ScheduleItem = {
   sortOrder: number;
 };
 
+/**
+ * 슬라이드 전용 문구 오버레이 — 이 값이 있으면 해당 슬라이드는 공통 좌측 문구 대신
+ * 사진 위 가운데에 큰 문구를 직접 얹는 디자인으로 표시된다 (밝은 톤 워시 처리).
+ */
+export type HeroSlideOverlay = {
+  statLines: string[];
+  headlinePrefix: string;
+  headlineBig: string;
+  brandLine: string;
+  badge: string;
+};
+
 /** 메인 배너 슬라이더 한 장 — 이미지/영상 경로는 /images(/videos)/... 또는 전체 URL. video가 있으면 해당 슬라이드는 영상으로 재생되고 image는 그 포스터(로딩 중 표시)로 쓰인다 */
 export type HeroSlide = {
   id: string;
   image: string;
   video?: string;
   caption: string;
+  overlay?: HeroSlideOverlay;
 };
 
 export type Project = {
