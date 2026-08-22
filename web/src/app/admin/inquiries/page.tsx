@@ -49,6 +49,7 @@ export default function AdminInquiriesPage() {
   const [smsMsg, setSmsMsg] = useState<{ id: string; text: string } | null>(null);
   const [testingSms, setTestingSms] = useState(false);
   const [testSmsResult, setTestSmsResult] = useState<{ ok: boolean; error?: string } | null>(null);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
 
   async function load() {
     const res = await fetch("/api/admin/inquiries");
@@ -114,6 +115,24 @@ export default function AdminInquiriesPage() {
       setSmsMsg({ id, text: "문자 내용 복사됨" });
     } catch {
       setSmsMsg({ id, text: "복사 실패 — 직접 선택해 복사해 주세요" });
+    }
+  }
+
+  async function deleteInquiry(id: string, name: string) {
+    if (!confirm(`${name}님 상담 신청을 삭제할까요? 삭제하면 되돌릴 수 없습니다.`)) return;
+    setDeletingId(id);
+    const res = await fetch("/api/admin/inquiries", {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id }),
+    });
+    setDeletingId(null);
+    if (res.status === 401) {
+      location.assign("/admin/login");
+      return;
+    }
+    if (res.ok) {
+      setItems((list) => list.filter((i) => i.id !== id));
     }
   }
 
@@ -233,6 +252,14 @@ export default function AdminInquiriesPage() {
                     {a.label}
                   </button>
                 ))}
+                <button
+                  type="button"
+                  disabled={deletingId === i.id}
+                  onClick={() => deleteInquiry(i.id, i.name)}
+                  className="ml-auto rounded-full border border-red-200 bg-white px-3 py-1 text-xs text-red-600 transition hover:border-red-400 hover:bg-red-50 disabled:opacity-50"
+                >
+                  {deletingId === i.id ? "삭제 중…" : "삭제"}
+                </button>
               </div>
               <div className="mt-3">
                 <label className="text-xs font-medium text-muted">담당자 메모</label>

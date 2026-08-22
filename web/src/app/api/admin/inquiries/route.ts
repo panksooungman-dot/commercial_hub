@@ -34,3 +34,25 @@ export async function PATCH(req: Request) {
     return NextResponse.json({ error: message }, { status: 500 });
   }
 }
+
+export async function DELETE(req: Request) {
+  try {
+    await requireAdmin();
+  } catch {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  try {
+    const { id } = (await req.json()) as { id: string };
+    const list = await store.getInquiries();
+    const next = list.filter((i) => i.id !== id);
+    if (next.length === list.length) {
+      return NextResponse.json({ error: "Not found" }, { status: 404 });
+    }
+    await store.saveInquiries(next);
+    return NextResponse.json({ ok: true });
+  } catch (err) {
+    const message = err instanceof Error ? err.message : "Delete failed";
+    return NextResponse.json({ error: message }, { status: 500 });
+  }
+}
