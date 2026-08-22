@@ -12,8 +12,11 @@ function chunkHeadline(text: string) {
   return lines;
 }
 
-/** 참고 화면처럼 사진 위 가운데에 큰 문구를 직접 얹는 밝은 톤 전용 오버레이 — 문구는 순서대로 페이드업, 강조 헤드라인은 포인트 컬러로 표시 */
-function SlideOverlayContent({ overlay }: { overlay: NonNullable<HeroSlide["overlay"]> }) {
+const OVERLAY_ACCENT = "#9c7a2e";
+const OVERLAY_TEAL = "#2f7182";
+
+/** 가운데 정렬 — 사진 위 가운데에 큰 문구를 직접 얹는 밝은 톤 오버레이. 문구는 순서대로 페이드업, 강조 헤드라인은 포인트 컬러로 표시 */
+function CenteredOverlayContent({ overlay }: { overlay: NonNullable<HeroSlide["overlay"]> }) {
   const headlineLines = chunkHeadline(overlay.headlineBig);
   return (
     <div className="absolute inset-0 flex flex-col items-center justify-center px-5 text-center">
@@ -30,7 +33,8 @@ function SlideOverlayContent({ overlay }: { overlay: NonNullable<HeroSlide["over
           {headlineLines.map((line, i) => (
             <span
               key={i}
-              className={`block ${i === headlineLines.length - 1 ? "text-[#9c7a2e]" : ""}`}
+              className="block"
+              style={i === headlineLines.length - 1 ? { color: OVERLAY_ACCENT } : undefined}
             >
               {line}
             </span>
@@ -44,6 +48,42 @@ function SlideOverlayContent({ overlay }: { overlay: NonNullable<HeroSlide["over
         </div>
       </div>
     </div>
+  );
+}
+
+/** 좌측 정렬 — headlinePrefix(작게) → headlineBig(중간) → brandLine(크고 포인트 컬러) → badge 순으로 왼쪽에 쌓는 오버레이 */
+function LeftOverlayContent({ overlay }: { overlay: NonNullable<HeroSlide["overlay"]> }) {
+  return (
+    <div className="absolute inset-0 flex flex-col justify-center px-5 sm:px-10 md:px-14">
+      <div className="max-w-xl">
+        <p className="animate-hero-fade-up text-base font-medium text-brand-deep/70 sm:text-lg">
+          {overlay.headlinePrefix}
+        </p>
+        <p className="animate-hero-fade-up mt-2 text-2xl font-bold text-brand-deep [animation-delay:120ms] sm:text-3xl md:text-4xl">
+          {overlay.headlineBig}
+        </p>
+        <h2
+          className="animate-hero-fade-up mt-3 font-display text-5xl leading-[1.05] font-extrabold tracking-tight [animation-delay:240ms] sm:text-6xl md:text-7xl"
+          style={{ color: OVERLAY_TEAL }}
+        >
+          {overlay.brandLine}
+        </h2>
+        <p
+          className="animate-hero-fade-up mt-2 text-xl font-bold [animation-delay:360ms] sm:text-2xl"
+          style={{ color: OVERLAY_TEAL }}
+        >
+          {overlay.badge}
+        </p>
+      </div>
+    </div>
+  );
+}
+
+function SlideOverlayContent({ overlay }: { overlay: NonNullable<HeroSlide["overlay"]> }) {
+  return overlay.style === "left" ? (
+    <LeftOverlayContent overlay={overlay} />
+  ) : (
+    <CenteredOverlayContent overlay={overlay} />
   );
 }
 
@@ -104,7 +144,12 @@ export function HeroSlider({
             />
           )}
 
-          {slide.overlay ? (
+          {slide.overlay?.style === "left" ? (
+            <>
+              <div className="absolute inset-0 bg-gradient-to-r from-white/60 via-white/20 to-transparent" />
+              <SlideOverlayContent overlay={slide.overlay} />
+            </>
+          ) : slide.overlay ? (
             <>
               <div className="absolute inset-0 bg-white/55" />
               <div className="absolute inset-0 bg-gradient-to-b from-white/10 via-white/45 to-white/70" />
