@@ -153,6 +153,12 @@ function defaultProject(): Project {
     heroAccentLine: "THE CENTER OF EDUCATION — 아이비스퀘어",
     heroCtaPrimary: "호실·도면 보기",
     heroCtaSecondary: "상담 신청하기",
+    heroSlides: [
+      { id: "slide-1", image: "/images/hero-banner-poster.jpg", caption: "송도가 기다려온 최상위권 복합상업시설" },
+      { id: "slide-2", image: "/images/marketing/street-plaza.jpg", caption: "일상이 완성되는 140m 스트리트 상권" },
+      { id: "slide-3", image: "/images/aerial-plan.jpg", caption: "한눈에 보이는 단지 배치" },
+      { id: "slide-4", image: "/images/marketing/ivysquare-twilight.jpg", caption: "송도의 새로운 랜드마크, 아이비스퀘어" },
+    ],
     updatedAt: now(),
   };
 }
@@ -310,6 +316,7 @@ export const store = {
       heroAccentLine: data.heroAccentLine ?? base.heroAccentLine,
       heroCtaPrimary: data.heroCtaPrimary ?? base.heroCtaPrimary,
       heroCtaSecondary: data.heroCtaSecondary ?? base.heroCtaSecondary,
+      heroSlides: data.heroSlides && data.heroSlides.length > 0 ? data.heroSlides : base.heroSlides,
       usageLabel: data.usageLabel ?? base.usageLabel,
       siteAreaM2: data.siteAreaM2 ?? base.siteAreaM2,
       totalFloorAreaM2: data.totalFloorAreaM2 ?? base.totalFloorAreaM2,

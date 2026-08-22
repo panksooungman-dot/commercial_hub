@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 import {
   BrandStorySection,
@@ -9,12 +8,9 @@ import {
 import { DesignDrawingsSection } from "@/components/design-drawings-section";
 import { AerialPlan, LocationMapSection, OverviewTable } from "@/components/overview-materials";
 import { SectionDotNav } from "@/components/section-dot-nav";
+import { HeroSlider } from "@/components/hero-slider";
 import { store, getPublicUnits } from "@/lib/store";
 import { frontFacadeForUnitId, resolveFrontLength } from "@/lib/front-lengths";
-
-/** 히어로 배경 영상(문구 없음) + HTML 문구 오버레이. poster는 영상 첫 프레임과 동일한 이미지. */
-const HERO_VIDEO_SRC = "/videos/hero-banner.mp4";
-const HERO_POSTER_SRC = "/images/hero-banner-poster.jpg";
 
 const NAV_SECTIONS = [
   { id: "hero", label: "인트로" },
@@ -41,28 +37,7 @@ export default async function HomePage() {
       <section id="hero" className="relative overflow-hidden bg-[#e8eef3] text-white">
         <div className="relative mx-auto w-full max-w-[1400px]">
           <div className="relative aspect-[1920/834] min-h-[440px] w-full overflow-hidden sm:min-h-[500px] md:min-h-[560px] lg:min-h-[620px]">
-            <Image
-              src={HERO_POSTER_SRC}
-              alt={`${project.projectName} 외관`}
-              fill
-              priority
-              quality={90}
-              sizes="(max-width: 1400px) 100vw, 1400px"
-              className="object-cover"
-            />
-            <video
-              className="absolute inset-0 h-full w-full object-cover"
-              src={HERO_VIDEO_SRC}
-              poster={HERO_POSTER_SRC}
-              autoPlay
-              muted
-              loop
-              playsInline
-              preload="metadata"
-              aria-hidden="true"
-            >
-              <source src={HERO_VIDEO_SRC} type="video/mp4" />
-            </video>
+            <HeroSlider slides={project.heroSlides} alt={`${project.projectName} 외관`} />
             <div className="absolute inset-0 bg-[#04141f]/45" />
             <div className="absolute inset-0 bg-gradient-to-t from-[#04141f]/60 via-[#04141f]/15 to-transparent" />
 

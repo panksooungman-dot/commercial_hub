@@ -20,6 +20,13 @@ export type ScheduleItem = {
   sortOrder: number;
 };
 
+/** 메인 배너 슬라이더 한 장 — 이미지는 /images/... 경로 또는 전체 URL */
+export type HeroSlide = {
+  id: string;
+  image: string;
+  caption: string;
+};
+
 export type Project = {
   id: string;
   projectName: string;
@@ -59,6 +66,7 @@ export type Project = {
   heroAccentLine: string;
   heroCtaPrimary: string;
   heroCtaSecondary: string;
+  heroSlides: HeroSlide[];
   updatedAt: string;
 };
 

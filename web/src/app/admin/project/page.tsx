@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Project, ScheduleItem } from "@/lib/types";
+import { HeroSlide, Project, ScheduleItem } from "@/lib/types";
 
 export default function AdminProjectPage() {
   const [project, setProject] = useState<Project | null>(null);
@@ -20,6 +20,34 @@ export default function AdminProjectPage() {
 
   function update<K extends keyof Project>(key: K, value: Project[K]) {
     setProject((p) => (p ? { ...p, [key]: value } : p));
+  }
+
+  function addSlide() {
+    const slide: HeroSlide = { id: `slide-${Date.now()}`, image: "", caption: "" };
+    update("heroSlides", [...project!.heroSlides, slide]);
+  }
+
+  function updateSlide(id: string, patch: Partial<HeroSlide>) {
+    update(
+      "heroSlides",
+      project!.heroSlides.map((s) => (s.id === id ? { ...s, ...patch } : s)),
+    );
+  }
+
+  function removeSlide(id: string) {
+    update(
+      "heroSlides",
+      project!.heroSlides.filter((s) => s.id !== id),
+    );
+  }
+
+  function moveSlide(id: string, dir: -1 | 1) {
+    const list = [...project!.heroSlides];
+    const idx = list.findIndex((s) => s.id === id);
+    const target = idx + dir;
+    if (idx < 0 || target < 0 || target >= list.length) return;
+    [list[idx], list[target]] = [list[target], list[idx]];
+    update("heroSlides", list);
   }
 
   function addSchedule() {
@@ -111,6 +139,67 @@ export default function AdminProjectPage() {
             value={project.heroCtaSecondary || ""}
             onChange={(v) => update("heroCtaSecondary", v)}
           />
+        </div>
+      </section>
+
+      <section className="mt-6 space-y-4 border border-line bg-surface p-5">
+        <div className="flex items-center justify-between">
+          <div>
+            <h2 className="font-display text-xl text-brand">메인 배너 슬라이드</h2>
+            <p className="mt-1 text-xs text-muted">
+              홈 화면 맨 위 배너가 여러 장 자동으로 넘어갑니다. 이미지는 /images/... 경로 또는 전체
+              URL을 입력하세요. 문구·버튼은 위 &ldquo;메인 배너 문구&rdquo;가 모든 슬라이드에 공통으로 표시됩니다.
+            </p>
+          </div>
+          <button type="button" onClick={addSlide} className="shrink-0 text-sm text-brand underline">
+            슬라이드 추가
+          </button>
+        </div>
+        <div className="space-y-3">
+          {project.heroSlides.map((s, idx) => (
+            <div key={s.id} className="grid gap-2 border border-line p-3 md:grid-cols-2">
+              <input
+                className="border border-line px-2 py-1 text-sm"
+                placeholder="이미지 경로 (예: /images/aerial-plan.jpg)"
+                value={s.image}
+                onChange={(e) => updateSlide(s.id, { image: e.target.value })}
+              />
+              <input
+                className="border border-line px-2 py-1 text-sm"
+                placeholder="슬라이드 설명 (참고용, 화면에는 표시 안 됨)"
+                value={s.caption}
+                onChange={(e) => updateSlide(s.id, { caption: e.target.value })}
+              />
+              <div className="flex items-center gap-3 md:col-span-2">
+                <button
+                  type="button"
+                  disabled={idx === 0}
+                  onClick={() => moveSlide(s.id, -1)}
+                  className="text-xs text-brand underline disabled:opacity-30"
+                >
+                  위로
+                </button>
+                <button
+                  type="button"
+                  disabled={idx === project.heroSlides.length - 1}
+                  onClick={() => moveSlide(s.id, 1)}
+                  className="text-xs text-brand underline disabled:opacity-30"
+                >
+                  아래로
+                </button>
+                <button
+                  type="button"
+                  onClick={() => removeSlide(s.id)}
+                  className="text-xs text-red-700 underline"
+                >
+                  삭제
+                </button>
+              </div>
+            </div>
+          ))}
+          {project.heroSlides.length === 0 ? (
+            <p className="text-sm text-muted">슬라이드가 없으면 배너가 비어 보입니다. 최소 1장은 등록해 주세요.</p>
+          ) : null}
         </div>
       </section>
 
