@@ -26,7 +26,7 @@ function SlideOverlayContent({ overlay }: { overlay: NonNullable<HeroSlide["over
         <p className="animate-hero-fade-up mt-5 text-base font-medium text-brand-deep/70 [animation-delay:120ms] sm:text-lg">
           {overlay.headlinePrefix}
         </p>
-        <h2 className="animate-hero-fade-up mt-1 font-display text-7xl leading-[0.95] font-extrabold tracking-tight text-brand-deep [animation-delay:240ms] sm:text-8xl md:text-9xl">
+        <h2 className="animate-hero-fade-up mt-5 font-display text-7xl leading-[0.95] font-extrabold tracking-tight text-brand-deep [animation-delay:240ms] sm:text-8xl md:text-9xl">
           {headlineLines.map((line, i) => (
             <span
               key={i}
