@@ -1,7 +1,15 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { HeroSlide, Project, ScheduleItem } from "@/lib/types";
+import { HeroSlide, HeroSlideOverlay, Project, ScheduleItem } from "@/lib/types";
+
+const EMPTY_OVERLAY: HeroSlideOverlay = {
+  statLines: [],
+  headlinePrefix: "",
+  headlineBig: "",
+  brandLine: "",
+  badge: "",
+};
 
 export default function AdminProjectPage() {
   const [project, setProject] = useState<Project | null>(null);
@@ -178,6 +186,63 @@ export default function AdminProjectPage() {
                 value={s.caption}
                 onChange={(e) => updateSlide(s.id, { caption: e.target.value })}
               />
+              <label className="flex items-center gap-2 text-sm md:col-span-2">
+                <input
+                  type="checkbox"
+                  checked={Boolean(s.overlay)}
+                  onChange={(e) =>
+                    updateSlide(s.id, { overlay: e.target.checked ? EMPTY_OVERLAY : undefined })
+                  }
+                />
+                이 슬라이드만 사진 위 가운데에 큰 문구 얹기 (공통 배너 문구 대신 사용)
+              </label>
+              {s.overlay ? (
+                <div className="grid gap-2 border border-line bg-background p-2 md:col-span-2 md:grid-cols-2">
+                  <textarea
+                    className="border border-line px-2 py-1 text-sm md:col-span-2"
+                    placeholder={"작은 통계 문구, 줄바꿈으로 구분\n예: 16,000여 배후세대의 스케일도"}
+                    rows={3}
+                    value={s.overlay.statLines.join("\n")}
+                    onChange={(e) =>
+                      updateSlide(s.id, {
+                        overlay: { ...s.overlay!, statLines: e.target.value.split("\n") },
+                      })
+                    }
+                  />
+                  <input
+                    className="border border-line px-2 py-1 text-sm"
+                    placeholder="헤드라인 앞 작은 문구 (예: 송도가 기다려온)"
+                    value={s.overlay.headlinePrefix}
+                    onChange={(e) =>
+                      updateSlide(s.id, { overlay: { ...s.overlay!, headlinePrefix: e.target.value } })
+                    }
+                  />
+                  <input
+                    className="border border-line px-2 py-1 text-sm"
+                    placeholder="큰 헤드라인 (예: 최상위권)"
+                    value={s.overlay.headlineBig}
+                    onChange={(e) =>
+                      updateSlide(s.id, { overlay: { ...s.overlay!, headlineBig: e.target.value } })
+                    }
+                  />
+                  <input
+                    className="border border-line px-2 py-1 text-sm"
+                    placeholder="프로젝트명 (예: 송도 하늘채 아이비원)"
+                    value={s.overlay.brandLine}
+                    onChange={(e) =>
+                      updateSlide(s.id, { overlay: { ...s.overlay!, brandLine: e.target.value } })
+                    }
+                  />
+                  <input
+                    className="border border-line px-2 py-1 text-sm"
+                    placeholder="배지 문구 (예: 단지 내 상가)"
+                    value={s.overlay.badge}
+                    onChange={(e) =>
+                      updateSlide(s.id, { overlay: { ...s.overlay!, badge: e.target.value } })
+                    }
+                  />
+                </div>
+              ) : null}
               <div className="flex items-center gap-3 md:col-span-2">
                 <button
                   type="button"

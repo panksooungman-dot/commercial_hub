@@ -1,12 +1,57 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import type { HeroSlide } from "@/lib/types";
 
 const SLIDE_DURATION_MS = 5500;
 
-export function HeroSlider({ slides, alt }: { slides: HeroSlide[]; alt: string }) {
+function chunkHeadline(text: string) {
+  const lines: string[] = [];
+  for (let i = 0; i < text.length; i += 2) lines.push(text.slice(i, i + 2));
+  return lines;
+}
+
+/** 참고 화면처럼 사진 위 가운데에 큰 문구를 직접 얹는 밝은 톤 전용 오버레이 */
+function SlideOverlayContent({ overlay }: { overlay: NonNullable<HeroSlide["overlay"]> }) {
+  return (
+    <div className="absolute inset-0 flex flex-col items-center justify-center px-5 text-center">
+      <div className="animate-hero-fade-up max-w-2xl">
+        <div className="space-y-0.5 text-sm font-medium text-brand-deep/80 sm:text-base">
+          {overlay.statLines.map((line) => (
+            <p key={line}>{line}</p>
+          ))}
+        </div>
+        <p className="mt-5 text-base font-medium text-brand-deep/70 sm:text-lg">
+          {overlay.headlinePrefix}
+        </p>
+        <h2 className="mt-1 font-display text-6xl leading-[0.95] font-extrabold tracking-tight text-brand-deep sm:text-7xl md:text-8xl">
+          {chunkHeadline(overlay.headlineBig).map((line, i) => (
+            <span key={i} className="block">
+              {line}
+            </span>
+          ))}
+        </h2>
+        <div className="mt-6 flex items-center justify-center gap-2 text-sm font-semibold text-brand-deep sm:text-base">
+          <span>{overlay.brandLine}</span>
+          <span className="rounded-sm bg-brand-deep px-2 py-0.5 text-xs font-semibold text-white">
+            {overlay.badge}
+          </span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export function HeroSlider({
+  slides,
+  alt,
+  sharedOverlay,
+}: {
+  slides: HeroSlide[];
+  alt: string;
+  sharedOverlay: ReactNode;
+}) {
   const [active, setActive] = useState(0);
   const [playing, setPlaying] = useState(true);
 
@@ -54,11 +99,25 @@ export function HeroSlider({ slides, alt }: { slides: HeroSlide[]; alt: string }
               className="object-cover"
             />
           )}
+
+          {slide.overlay ? (
+            <>
+              <div className="absolute inset-0 bg-white/55" />
+              <div className="absolute inset-0 bg-gradient-to-b from-white/10 via-white/45 to-white/70" />
+              <SlideOverlayContent overlay={slide.overlay} />
+            </>
+          ) : (
+            <>
+              <div className="absolute inset-0 bg-[#04141f]/45" />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#04141f]/60 via-[#04141f]/15 to-transparent" />
+              {sharedOverlay}
+            </>
+          )}
         </div>
       ))}
 
       {slides.length > 1 ? (
-        <div className="absolute bottom-5 left-5 z-10 flex items-center gap-3 sm:bottom-7 sm:left-10 md:left-14">
+        <div className="absolute bottom-5 left-5 z-10 flex items-center gap-3 rounded-full bg-black/25 px-3 py-1.5 backdrop-blur-sm sm:bottom-7 sm:left-10 md:left-14">
           <button
             type="button"
             onClick={() => setPlaying((p) => !p)}

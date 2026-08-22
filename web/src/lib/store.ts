@@ -160,7 +160,22 @@ function defaultProject(): Project {
         video: "/videos/hero-banner.mp4",
         caption: "송도가 기다려온 최상위권 복합상업시설 (영상)",
       },
-      { id: "slide-2", image: "/images/marketing/street-plaza.jpg", caption: "일상이 완성되는 140m 스트리트 상권" },
+      {
+        id: "slide-2",
+        image: "/images/hero-exterior.jpg",
+        caption: "밝은 외관 + 가운데 큰 문구 워시 디자인",
+        overlay: {
+          statLines: [
+            "16,000여 배후세대의 스케일도",
+            "140m 스트리트 상가의 퀄리티도",
+            "280여개 학원가 교육의 클래스도",
+          ],
+          headlinePrefix: "송도가 기다려온",
+          headlineBig: "최상위권",
+          brandLine: "송도 하늘채 아이비원",
+          badge: "단지 내 상가",
+        },
+      },
       { id: "slide-3", image: "/images/aerial-plan.jpg", caption: "한눈에 보이는 단지 배치" },
       { id: "slide-4", image: "/images/marketing/ivysquare-twilight.jpg", caption: "송도의 새로운 랜드마크, 아이비스퀘어" },
     ],

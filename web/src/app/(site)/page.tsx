@@ -37,59 +37,61 @@ export default async function HomePage() {
       <section id="hero" className="relative overflow-hidden bg-[#e8eef3] text-white">
         <div className="relative mx-auto w-full max-w-[1400px]">
           <div className="relative aspect-[1920/834] min-h-[440px] w-full overflow-hidden sm:min-h-[500px] md:min-h-[560px] lg:min-h-[620px]">
-            <HeroSlider slides={project.heroSlides} alt={`${project.projectName} 외관`} />
-            <div className="absolute inset-0 bg-[#04141f]/45" />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#04141f]/60 via-[#04141f]/15 to-transparent" />
-
-            <div className="absolute inset-0 flex flex-col justify-center px-5 pt-24 pb-10 sm:px-10 sm:pb-12 md:px-14 md:pb-14">
-              <div className="max-w-xl sm:max-w-2xl">
-                <p className="animate-hero-fade-up text-xs font-semibold tracking-[0.22em] text-accent uppercase sm:text-sm">
-                  {project.heroEyebrow || "SONGDO HANULCHE · IVYSQUARE"}
-                </p>
-                <h1 className="animate-hero-fade-up mt-3 font-display text-[2.1rem] leading-[1.22] font-bold text-white [animation-delay:80ms] [text-shadow:0_2px_20px_rgba(0,0,0,0.35)] sm:text-[2.75rem] sm:leading-[1.18] md:text-5xl lg:text-[3.4rem] lg:leading-[1.14]">
-                  {(project.heroHeadline || "송도가 기다려온\n최상위권 복합상업시설")
-                    .split("\n")
-                    .map((line, i, lines) => (
-                      <span
-                        key={i}
-                        className={`block ${i === lines.length - 1 ? "text-accent" : ""}`}
+            <HeroSlider
+              slides={project.heroSlides}
+              alt={`${project.projectName} 외관`}
+              sharedOverlay={
+                <div className="absolute inset-0 flex flex-col justify-center px-5 pt-24 pb-10 sm:px-10 sm:pb-12 md:px-14 md:pb-14">
+                  <div className="max-w-xl sm:max-w-2xl">
+                    <p className="animate-hero-fade-up text-xs font-semibold tracking-[0.22em] text-accent uppercase sm:text-sm">
+                      {project.heroEyebrow || "SONGDO HANULCHE · IVYSQUARE"}
+                    </p>
+                    <h1 className="animate-hero-fade-up mt-3 font-display text-[2.1rem] leading-[1.22] font-bold text-white [animation-delay:80ms] [text-shadow:0_2px_20px_rgba(0,0,0,0.35)] sm:text-[2.75rem] sm:leading-[1.18] md:text-5xl lg:text-[3.4rem] lg:leading-[1.14]">
+                      {(project.heroHeadline || "송도가 기다려온\n최상위권 복합상업시설")
+                        .split("\n")
+                        .map((line, i, lines) => (
+                          <span
+                            key={i}
+                            className={`block ${i === lines.length - 1 ? "text-accent" : ""}`}
+                          >
+                            {line}
+                          </span>
+                        ))}
+                    </h1>
+                    {project.heroBrandLine ? (
+                      <p className="animate-hero-fade-up mt-3 flex flex-wrap items-center gap-2 text-sm font-medium text-white/90 [animation-delay:140ms] sm:text-base">
+                        <span>{project.heroBrandLine}</span>
+                        <span className="rounded-sm bg-white/15 px-2 py-0.5 text-xs font-semibold text-white ring-1 ring-white/30">
+                          단지 내 상가
+                        </span>
+                      </p>
+                    ) : null}
+                    {project.heroAccentLine ? (
+                      <p className="animate-hero-fade-up mt-1.5 text-xs font-medium tracking-wide text-accent/90 [animation-delay:170ms] sm:text-sm">
+                        {project.heroAccentLine}
+                      </p>
+                    ) : null}
+                    <p className="animate-hero-fade-up mt-4 max-w-lg text-sm leading-relaxed whitespace-pre-line text-white/85 [animation-delay:200ms] sm:mt-5 sm:text-base md:text-lg">
+                      {project.heroSubcopy}
+                    </p>
+                    <div className="animate-hero-fade-up mt-7 flex flex-wrap gap-3 [animation-delay:400ms] sm:mt-9">
+                      <Link
+                        href="/plan"
+                        className="bg-accent px-6 py-3.5 text-sm font-semibold text-brand-deep transition-all duration-300 ease-out hover:-translate-y-0.5 hover:bg-[#d6b96e] hover:shadow-[0_12px_28px_-10px_rgba(196,163,90,0.65)] sm:px-7 sm:py-4 sm:text-base"
                       >
-                        {line}
-                      </span>
-                    ))}
-                </h1>
-                {project.heroBrandLine ? (
-                  <p className="animate-hero-fade-up mt-3 flex flex-wrap items-center gap-2 text-sm font-medium text-white/90 [animation-delay:140ms] sm:text-base">
-                    <span>{project.heroBrandLine}</span>
-                    <span className="rounded-sm bg-white/15 px-2 py-0.5 text-xs font-semibold text-white ring-1 ring-white/30">
-                      단지 내 상가
-                    </span>
-                  </p>
-                ) : null}
-                {project.heroAccentLine ? (
-                  <p className="animate-hero-fade-up mt-1.5 text-xs font-medium tracking-wide text-accent/90 [animation-delay:170ms] sm:text-sm">
-                    {project.heroAccentLine}
-                  </p>
-                ) : null}
-                <p className="animate-hero-fade-up mt-4 max-w-lg text-sm leading-relaxed whitespace-pre-line text-white/85 [animation-delay:200ms] sm:mt-5 sm:text-base md:text-lg">
-                  {project.heroSubcopy}
-                </p>
-                <div className="animate-hero-fade-up mt-7 flex flex-wrap gap-3 [animation-delay:400ms] sm:mt-9">
-                  <Link
-                    href="/plan"
-                    className="bg-accent px-6 py-3.5 text-sm font-semibold text-brand-deep transition-all duration-300 ease-out hover:-translate-y-0.5 hover:bg-[#d6b96e] hover:shadow-[0_12px_28px_-10px_rgba(196,163,90,0.65)] sm:px-7 sm:py-4 sm:text-base"
-                  >
-                    {project.heroCtaPrimary || "호실·도면 보기"}
-                  </Link>
-                  <Link
-                    href="/contact"
-                    className="border border-accent/60 bg-brand-deep/60 px-6 py-3.5 text-sm font-semibold text-white backdrop-blur-[2px] transition-all duration-300 ease-out hover:-translate-y-0.5 hover:border-accent hover:bg-brand-deep/85 sm:px-7 sm:py-4 sm:text-base"
-                  >
-                    {project.heroCtaSecondary || "상담 신청하기"}
-                  </Link>
+                        {project.heroCtaPrimary || "호실·도면 보기"}
+                      </Link>
+                      <Link
+                        href="/contact"
+                        className="border border-accent/60 bg-brand-deep/60 px-6 py-3.5 text-sm font-semibold text-white backdrop-blur-[2px] transition-all duration-300 ease-out hover:-translate-y-0.5 hover:border-accent hover:bg-brand-deep/85 sm:px-7 sm:py-4 sm:text-base"
+                      >
+                        {project.heroCtaSecondary || "상담 신청하기"}
+                      </Link>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
+              }
+            />
           </div>
         </div>
       </section>
