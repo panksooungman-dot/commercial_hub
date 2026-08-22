@@ -12,27 +12,31 @@ function chunkHeadline(text: string) {
   return lines;
 }
 
-/** 참고 화면처럼 사진 위 가운데에 큰 문구를 직접 얹는 밝은 톤 전용 오버레이 */
+/** 참고 화면처럼 사진 위 가운데에 큰 문구를 직접 얹는 밝은 톤 전용 오버레이 — 문구는 순서대로 페이드업, 강조 헤드라인은 포인트 컬러로 표시 */
 function SlideOverlayContent({ overlay }: { overlay: NonNullable<HeroSlide["overlay"]> }) {
+  const headlineLines = chunkHeadline(overlay.headlineBig);
   return (
     <div className="absolute inset-0 flex flex-col items-center justify-center px-5 text-center">
-      <div className="animate-hero-fade-up max-w-2xl">
-        <div className="space-y-0.5 text-sm font-medium text-brand-deep/80 sm:text-base">
-          {overlay.statLines.map((line) => (
-            <p key={line}>{line}</p>
+      <div className="max-w-2xl">
+        <div className="animate-hero-fade-up space-y-0.5 text-sm font-medium text-brand-deep/80 sm:text-base">
+          {overlay.statLines.map((line, i) => (
+            <p key={i}>{line}</p>
           ))}
         </div>
-        <p className="mt-5 text-base font-medium text-brand-deep/70 sm:text-lg">
+        <p className="animate-hero-fade-up mt-5 text-base font-medium text-brand-deep/70 [animation-delay:120ms] sm:text-lg">
           {overlay.headlinePrefix}
         </p>
-        <h2 className="mt-1 font-display text-6xl leading-[0.95] font-extrabold tracking-tight text-brand-deep sm:text-7xl md:text-8xl">
-          {chunkHeadline(overlay.headlineBig).map((line, i) => (
-            <span key={i} className="block">
+        <h2 className="animate-hero-fade-up mt-1 font-display text-7xl leading-[0.95] font-extrabold tracking-tight text-brand-deep [animation-delay:240ms] sm:text-8xl md:text-9xl">
+          {headlineLines.map((line, i) => (
+            <span
+              key={i}
+              className={`block ${i === headlineLines.length - 1 ? "text-[#9c7a2e]" : ""}`}
+            >
               {line}
             </span>
           ))}
         </h2>
-        <div className="mt-6 flex items-center justify-center gap-2 text-sm font-semibold text-brand-deep sm:text-base">
+        <div className="animate-hero-fade-up mt-6 flex items-center justify-center gap-2 text-sm font-semibold text-brand-deep [animation-delay:420ms] sm:text-base">
           <span>{overlay.brandLine}</span>
           <span className="rounded-sm bg-brand-deep px-2 py-0.5 text-xs font-semibold text-white">
             {overlay.badge}
@@ -95,7 +99,7 @@ export function HeroSlider({
               fill
               priority={i === 0}
               quality={90}
-              sizes="(max-width: 1400px) 100vw, 1400px"
+              sizes="(max-width: 1680px) 100vw, 1680px"
               className="object-cover"
             />
           )}
