@@ -36,7 +36,7 @@ export default async function HomePage() {
       <SectionDotNav sections={NAV_SECTIONS} />
       <section id="hero" className="relative overflow-hidden bg-[#e8eef3] text-white">
         <div className="relative mx-auto w-full max-w-[1680px]">
-          <div className="relative aspect-[1920/834] min-h-[520px] w-full overflow-hidden sm:min-h-[600px] md:min-h-[680px] lg:min-h-[760px]">
+          <div className="relative aspect-[1920/834] min-h-[470px] w-full overflow-hidden sm:min-h-[540px] md:min-h-[600px] lg:min-h-[650px]">
             <HeroSlider
               slides={project.heroSlides}
               alt={`${project.projectName} 외관`}
