@@ -4,10 +4,16 @@ import crypto from "crypto";
 const SOLAPI_SEND_URL = "https://api.solapi.com/messages/v4/send";
 
 function buildAuthHeader(apiKey: string, apiSecret: string) {
-  const date = new Date().toISOString();
+  /** Solapi 공식 예시 포맷(예: 2019-07-01T00:41:48Z)에 맞춰 밀리초를 제거한다 */
+  const date = new Date().toISOString().replace(/\.\d{3}Z$/, "Z");
   const salt = crypto.randomBytes(32).toString("hex");
   const signature = crypto.createHmac("sha256", apiSecret).update(date + salt).digest("hex");
   return `HMAC-SHA256 apiKey=${apiKey}, date=${date}, salt=${salt}, signature=${signature}`;
+}
+
+/** Vercel 환경변수에 하이픈 등을 섞어 입력해도 동작하도록 숫자만 남긴다 */
+function normalizePhone(raw: string) {
+  return raw.replace(/[^0-9]/g, "");
 }
 
 /** SOLAPI_API_KEY/SECRET/SENDER_NUMBER/ADMIN_PHONE이 모두 설정돼 있어야 발송한다 */
@@ -27,7 +33,7 @@ async function sendOne(apiKey: string, apiSecret: string, from: string, to: stri
       "Content-Type": "application/json",
       Authorization: buildAuthHeader(apiKey, apiSecret),
     },
-    body: JSON.stringify({ message: { to, from, text } }),
+    body: JSON.stringify({ message: { to: normalizePhone(to), from: normalizePhone(from), text } }),
   });
 
   if (!res.ok) {
