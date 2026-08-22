@@ -55,7 +55,7 @@ function CenteredOverlayContent({ overlay }: { overlay: NonNullable<HeroSlide["o
 function LeftOverlayContent({ overlay }: { overlay: NonNullable<HeroSlide["overlay"]> }) {
   return (
     <div className="absolute inset-0 flex flex-col justify-center px-5 sm:px-10 md:px-14">
-      <div className="max-w-xl">
+      <div className="max-w-3xl">
         <p className="animate-hero-fade-up text-base font-medium text-brand-deep/70 sm:text-lg">
           {overlay.headlinePrefix}
         </p>
@@ -63,7 +63,7 @@ function LeftOverlayContent({ overlay }: { overlay: NonNullable<HeroSlide["overl
           {overlay.headlineBig}
         </p>
         <h2
-          className="animate-hero-fade-up mt-3 font-display text-5xl leading-[1.05] font-extrabold tracking-tight [animation-delay:240ms] sm:text-6xl md:text-7xl"
+          className="animate-hero-fade-up mt-3 font-display text-4xl leading-[1.05] font-extrabold tracking-tight [animation-delay:240ms] sm:text-5xl md:text-6xl"
           style={{ color: OVERLAY_TEAL }}
         >
           {overlay.brandLine}
