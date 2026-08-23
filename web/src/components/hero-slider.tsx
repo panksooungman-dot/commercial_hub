@@ -21,15 +21,15 @@ function CenteredOverlayContent({ overlay }: { overlay: NonNullable<HeroSlide["o
   return (
     <div className="absolute inset-0 flex flex-col items-center justify-center px-5 text-center">
       <div className="max-w-2xl">
-        <div className="animate-hero-fade-up space-y-0.5 text-sm font-medium text-brand-deep/80 sm:text-base">
+        <div className="animate-hero-fade-up space-y-0.5 break-keep text-sm font-medium text-brand-deep/80 sm:text-base">
           {overlay.statLines.map((line, i) => (
             <p key={i}>{line}</p>
           ))}
         </div>
-        <p className="animate-hero-fade-up mt-5 text-base font-medium text-brand-deep/70 [animation-delay:120ms] sm:text-lg">
+        <p className="animate-hero-fade-up mt-5 break-keep text-base font-medium text-brand-deep/70 [animation-delay:120ms] sm:text-lg">
           {overlay.headlinePrefix}
         </p>
-        <h2 className="animate-hero-fade-up mt-5 font-display text-7xl leading-[0.95] font-extrabold tracking-tight text-brand-deep [animation-delay:240ms] sm:text-8xl md:text-9xl">
+        <h2 className="animate-hero-fade-up mt-5 font-display text-6xl leading-[0.95] font-extrabold tracking-tight text-brand-deep [animation-delay:240ms] sm:text-8xl md:text-9xl">
           {headlineLines.map((line, i) => (
             <span
               key={i}
@@ -40,7 +40,7 @@ function CenteredOverlayContent({ overlay }: { overlay: NonNullable<HeroSlide["o
             </span>
           ))}
         </h2>
-        <div className="animate-hero-fade-up mt-6 flex items-center justify-center gap-2 text-sm font-semibold text-brand-deep [animation-delay:420ms] sm:text-base">
+        <div className="animate-hero-fade-up mt-6 flex items-center justify-center gap-2 break-keep text-sm font-semibold text-brand-deep [animation-delay:420ms] sm:text-base">
           <span>{overlay.brandLine}</span>
           <span className="rounded-sm bg-brand-deep px-2 py-0.5 text-xs font-semibold text-white">
             {overlay.badge}
@@ -56,20 +56,20 @@ function LeftOverlayContent({ overlay }: { overlay: NonNullable<HeroSlide["overl
   return (
     <div className="absolute inset-0 flex flex-col justify-center px-5 sm:px-10 md:px-14">
       <div className="max-w-3xl">
-        <p className="animate-hero-fade-up text-base font-medium text-brand-deep/70 sm:text-lg">
+        <p className="animate-hero-fade-up break-keep text-sm font-medium text-brand-deep/70 sm:text-lg">
           {overlay.headlinePrefix}
         </p>
-        <p className="animate-hero-fade-up mt-2 text-2xl font-bold text-brand-deep [animation-delay:120ms] sm:text-3xl md:text-4xl">
+        <p className="animate-hero-fade-up mt-2 break-keep text-xl font-bold text-brand-deep [animation-delay:120ms] sm:text-3xl md:text-4xl">
           {overlay.headlineBig}
         </p>
         <h2
-          className="animate-hero-fade-up mt-3 font-display text-4xl leading-[1.05] font-extrabold tracking-tight [animation-delay:240ms] sm:text-5xl md:text-6xl"
+          className="animate-hero-fade-up mt-3 break-keep font-display text-3xl leading-[1.15] font-extrabold tracking-tight [animation-delay:240ms] sm:text-5xl sm:leading-[1.05] md:text-6xl"
           style={{ color: OVERLAY_TEAL }}
         >
           {overlay.brandLine}
         </h2>
         <p
-          className="animate-hero-fade-up mt-2 text-xl font-bold [animation-delay:360ms] sm:text-2xl"
+          className="animate-hero-fade-up mt-2 break-keep text-lg font-bold [animation-delay:360ms] sm:text-2xl"
           style={{ color: OVERLAY_TEAL }}
         >
           {overlay.badge}
