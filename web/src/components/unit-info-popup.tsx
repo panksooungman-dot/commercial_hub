@@ -103,7 +103,7 @@ export function UnitInfoPopup({
                     {unit.contractArea != null ? `${unit.contractArea.toLocaleString("ko-KR")}평` : "상담 문의"}
                   </dd>
                 </div>
-                <div className="rounded-xl bg-[#f7f9fb] px-3 py-2.5">
+                <div className="col-span-2 rounded-xl bg-[#f7f9fb] px-3 py-2.5">
                   <dt className="text-xs text-muted">분양가</dt>
                   <dd className="mt-0.5 font-medium text-brand-deep">{formatManwon(unit.price)}</dd>
                 </div>
