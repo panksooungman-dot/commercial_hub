@@ -624,7 +624,7 @@ export default function AdminUnitsPage() {
             type="button"
             disabled={selectedIds.size === 0}
             onClick={() => setPriceHiddenForSelected(true)}
-            className="border border-brand px-2 py-1.5 text-center leading-tight text-brand hover:bg-brand hover:text-white disabled:opacity-40"
+            className="flex min-h-[46px] items-center justify-center border border-brand px-2 py-1.5 text-center text-[13px] leading-snug text-brand hover:bg-brand hover:text-white disabled:opacity-40 sm:min-h-0 sm:text-sm"
           >
             선택 호실 분양가 미노출
           </button>
@@ -632,7 +632,7 @@ export default function AdminUnitsPage() {
             type="button"
             disabled={selectedIds.size === 0}
             onClick={() => setPriceHiddenForSelected(false)}
-            className="border border-line px-2 py-1.5 text-center leading-tight text-muted hover:border-brand hover:text-brand disabled:opacity-40"
+            className="flex min-h-[46px] items-center justify-center border border-line px-2 py-1.5 text-center text-[13px] leading-snug text-muted hover:border-brand hover:text-brand disabled:opacity-40 sm:min-h-0 sm:text-sm"
           >
             선택 호실 분양가 노출
           </button>
@@ -641,7 +641,7 @@ export default function AdminUnitsPage() {
             type="button"
             disabled={selectedIds.size === 0}
             onClick={() => setLeaseHiddenForSelected(true)}
-            className="border border-brand px-2 py-1.5 text-center leading-tight text-brand hover:bg-brand hover:text-white disabled:opacity-40"
+            className="flex min-h-[46px] items-center justify-center border border-brand px-2 py-1.5 text-center text-[13px] leading-snug text-brand hover:bg-brand hover:text-white disabled:opacity-40 sm:min-h-0 sm:text-sm"
           >
             선택 호실 임대조건 미노출
           </button>
@@ -649,7 +649,7 @@ export default function AdminUnitsPage() {
             type="button"
             disabled={selectedIds.size === 0}
             onClick={() => setLeaseHiddenForSelected(false)}
-            className="border border-line px-2 py-1.5 text-center leading-tight text-muted hover:border-brand hover:text-brand disabled:opacity-40"
+            className="flex min-h-[46px] items-center justify-center border border-line px-2 py-1.5 text-center text-[13px] leading-snug text-muted hover:border-brand hover:text-brand disabled:opacity-40 sm:min-h-0 sm:text-sm"
           >
             선택 호실 임대조건 노출
           </button>
