@@ -106,8 +106,9 @@ export default function AdminDesignMarkersPage() {
         <div>
           <h1 className="font-display text-3xl text-brand">설계도면 호실 관리</h1>
           <p className="mt-1 text-sm text-muted">
-            메인 페이지 &quot;공식 설계도면&quot;에 표시되는 호실 번호를 동·층별로 추가·삭제합니다. 도면 위
-            위치는 개발팀이 좌표로 관리하며, 여기서 추가한 호실은 도면 하단 여백에 임시로 표시됩니다.
+            메인 페이지 &quot;공식 설계도면&quot;에 표시되는 호실 번호를 동·층별로 관리합니다. 도면 위 위치는
+            개발팀이 좌표로 관리하며, 여기서 추가한 호실은 도면 하단 여백에 임시로 표시됩니다. 각 호실의
+            &quot;표시&quot;·&quot;비매물&quot; 체크박스는 아래 목록에서 바로 켜고 끌 수 있습니다.
           </p>
         </div>
         <button
@@ -170,40 +171,54 @@ export default function AdminDesignMarkersPage() {
 
       <div className="mt-6">
         <p className="text-sm font-medium text-brand-deep">
-          기본 호실 <span className="font-normal text-muted">{view.base.length}건 · 체크 해제하면 도면에서 숨겨집니다</span>
+          기본 호실 <span className="font-normal text-muted">{view.base.length}건</span>
         </p>
         <div className="mt-2 flex flex-wrap gap-2">
           {view.base.map(({ label, removed, nonSellable }) => (
             <span
               key={label}
-              className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-sm ${
+              className={`inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-sm ${
                 removed
-                  ? "border-line bg-surface text-muted line-through"
+                  ? "border-line bg-surface text-muted"
                   : nonSellable
                     ? "border-accent/70 bg-[#fff8e8] text-brand-deep"
                     : "border-brand/40 bg-white text-brand-deep"
               }`}
             >
-              <button type="button" onClick={() => toggleRemoved(label, !removed)}>
-                {label}
-              </button>
-              {!removed ? (
-                <label className="flex items-center gap-1 text-[11px] text-muted">
-                  <input
-                    type="checkbox"
-                    checked={nonSellable}
-                    onChange={(e) => toggleNonSellable(label, e.target.checked)}
-                  />
-                  비매물
-                </label>
-              ) : null}
+              <span className={`font-bold ${removed ? "line-through" : ""}`}>{label}</span>
+              <label className="flex items-center gap-1 text-[11px] text-muted">
+                <input
+                  type="checkbox"
+                  checked={!removed}
+                  onChange={(e) => toggleRemoved(label, !e.target.checked)}
+                />
+                표시
+              </label>
+              <label
+                className={`flex items-center gap-1 text-[11px] ${removed ? "text-muted/50" : "text-muted"}`}
+              >
+                <input
+                  type="checkbox"
+                  checked={nonSellable}
+                  disabled={removed}
+                  onChange={(e) => toggleNonSellable(label, e.target.checked)}
+                />
+                비매물
+              </label>
             </span>
           ))}
         </div>
-        <p className="mt-2 text-xs text-muted">
-          &quot;비매물&quot; 체크 시 실제 호실 데이터와 무관하게 계단·기계실 등 공용시설로 표시되며, 도면에서 클릭이
-          비활성화되고 호실 목록·카운트에서 제외됩니다.
-        </p>
+        <div className="mt-2 space-y-1 text-xs text-muted">
+          <p>
+            <strong className="font-medium text-brand-deep">표시</strong> 체크 해제 — 도면 편집 화면에서도
+            마커가 완전히 사라집니다(삭제와 동일). 실수로 껐다면 다시 체크하면 바로 복구됩니다.
+          </p>
+          <p>
+            <strong className="font-medium text-brand-deep">비매물</strong> 체크 — 계단·기계실 등 실제로 판매하지
+            않는 공용시설이라는 뜻입니다. 위치 정보는 남아있지만 공개 도면에는 표시되지 않고, 호실
+            목록·카운트에서도 제외됩니다. 나중에 판매용으로 바뀌면 체크만 해제하면 됩니다.
+          </p>
+        </div>
       </div>
 
       {view.added.length > 0 ? (
