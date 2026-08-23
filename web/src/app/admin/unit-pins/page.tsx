@@ -4,6 +4,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { PLAN_MEDIA_GALLERY } from "@/lib/plan-media-gallery";
 import {
   allDefaultUnitPins,
+  estimateUnitPin,
   pinKeyOf,
   pinLabel,
   type UnitPinRecord,
@@ -24,6 +25,8 @@ export default function AdminUnitPinsPage() {
   const [q, setQ] = useState("");
   const [msg, setMsg] = useState("");
   const [saving, setSaving] = useState(false);
+  const [newBuilding, setNewBuilding] = useState<Building>("A");
+  const [newUnitNo, setNewUnitNo] = useState("");
   const mapRef = useRef<HTMLDivElement>(null);
   const dragKey = useRef<string | null>(null);
   const dragged = useRef(false);
@@ -33,6 +36,7 @@ export default function AdminUnitPinsPage() {
   const visible = useMemo(() => {
     const query = q.trim().toUpperCase().replace(/[\s-]/g, "");
     return pins.filter((p) => {
+      if (p.removed) return false;
       if (p.floor !== floor) return false;
       if (side !== "all" && p.building !== side) return false;
       if (!query) return true;
@@ -59,6 +63,36 @@ export default function AdminUnitPinsPage() {
 
   function patch(key: string, partial: Partial<UnitPinRecord>) {
     setPins((list) => list.map((p) => (keyOf(p) === key ? { ...p, ...partial } : p)));
+  }
+
+  /** 목록에서 삭제 — 위치 값은 남겨두고 removed만 표시해, 같은 호실을 다시 추가하면 원래 위치로 복구된다 */
+  function removePin(key: string) {
+    const target = pins.find((p) => keyOf(p) === key);
+    if (!target) return;
+    if (!confirm(`${pinLabel(target.building, target.unitNo)} 마커를 목록에서 삭제할까요?`)) return;
+    patch(key, { removed: true });
+    if (activeKey === key) setActiveKey(null);
+    setMsg("삭제되었습니다. 저장하세요.");
+  }
+
+  function addPin() {
+    const unitNo = newUnitNo.trim();
+    if (!unitNo) return;
+    const key = pinKeyOf(floor, newBuilding, unitNo);
+    const existing = pins.find((p) => keyOf(p) === key);
+    if (existing && !existing.removed) {
+      setMsg(`${pinLabel(newBuilding, unitNo)}은(는) 이미 목록에 있습니다.`);
+      return;
+    }
+    if (existing?.removed) {
+      patch(key, { removed: false });
+    } else {
+      const pos = estimateUnitPin(newBuilding, unitNo, [], floor);
+      setPins((list) => [...list, { floor, building: newBuilding, unitNo, x: pos.x, y: pos.y }]);
+    }
+    setActiveKey(key);
+    setNewUnitNo("");
+    setMsg("추가되었습니다. 도면을 클릭해 위치를 맞추고 저장하세요.");
   }
 
   function coordsFromClient(clientX: number, clientY: number) {
@@ -163,22 +197,61 @@ export default function AdminUnitPinsPage() {
         />
       </div>
 
+      <div className="mt-3 flex flex-wrap items-center gap-2 rounded-xl border border-dashed border-line bg-white p-2 text-sm">
+        <span className="text-xs text-muted">호실 추가</span>
+        <select
+          value={newBuilding}
+          onChange={(e) => setNewBuilding(e.target.value as Building)}
+          className="border border-line px-2 py-1 text-sm"
+        >
+          <option value="A">A동</option>
+          <option value="B">B동</option>
+        </select>
+        <input
+          className="w-24 border border-line px-2 py-1.5 text-sm"
+          placeholder="예: 142"
+          value={newUnitNo}
+          onChange={(e) => setNewUnitNo(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") addPin();
+          }}
+        />
+        <button
+          type="button"
+          onClick={addPin}
+          className="rounded-md border border-brand px-3 py-1.5 text-sm text-brand hover:bg-brand hover:text-white"
+        >
+          추가
+        </button>
+        <span className="text-xs text-muted">
+          추가 후 도면을 클릭해 위치를 맞추고 저장하세요. 목록의 ✕는 삭제(도면에서 숨김)입니다.
+        </span>
+      </div>
+
       <div className="mt-3 flex max-h-28 flex-wrap gap-1 overflow-y-auto rounded-xl border border-line bg-white p-2">
         {visible.map((p) => {
           const on = active && keyOf(p) === keyOf(active);
           const orig = defaults.find((x) => keyOf(x) === keyOf(p));
           const dirty = orig && (orig.x !== p.x || orig.y !== p.y);
           return (
-            <button
+            <span
               key={keyOf(p)}
-              type="button"
-              onClick={() => setActiveKey(keyOf(p))}
-              className={`rounded px-2 py-1 text-[11px] font-bold ${
+              className={`inline-flex items-center gap-1 rounded px-1.5 py-1 text-[11px] font-bold ${
                 on ? "bg-brand text-white" : dirty ? "bg-[#fff4e5] text-brand-deep" : "bg-slate-100"
               }`}
             >
-              {pinLabel(p.building, p.unitNo)}
-            </button>
+              <button type="button" onClick={() => setActiveKey(keyOf(p))}>
+                {pinLabel(p.building, p.unitNo)}
+              </button>
+              <button
+                type="button"
+                onClick={() => removePin(keyOf(p))}
+                className="rounded-full px-1 leading-none opacity-70 hover:bg-black/15 hover:opacity-100"
+                aria-label={`${pinLabel(p.building, p.unitNo)} 삭제`}
+              >
+                ✕
+              </button>
+            </span>
           );
         })}
       </div>

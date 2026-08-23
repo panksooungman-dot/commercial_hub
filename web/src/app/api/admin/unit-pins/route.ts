@@ -28,6 +28,7 @@ function sanitize(list: unknown): UnitPinRecord[] {
       unitNo,
       x: Math.round(Math.min(100, Math.max(0, x)) * 10) / 10,
       y: Math.round(Math.min(100, Math.max(0, y)) * 10) / 10,
+      ...(item.removed === true ? { removed: true as const } : {}),
     });
   }
   return mergeUnitPins(out);
