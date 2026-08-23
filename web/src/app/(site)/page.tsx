@@ -8,6 +8,7 @@ import {
 import { DesignDrawingsSection } from "@/components/design-drawings-section";
 import { AerialPlan, LocationMapSection, OverviewTable } from "@/components/overview-materials";
 import { SectionDotNav } from "@/components/section-dot-nav";
+import { LocationQuickNav } from "@/components/location-quick-nav";
 import { HeroSlider } from "@/components/hero-slider";
 import { store, getPublicUnits } from "@/lib/store";
 import { frontFacadeForUnitId, resolveFrontLength } from "@/lib/front-lengths";
@@ -34,6 +35,7 @@ export default async function HomePage() {
   return (
     <div>
       <SectionDotNav sections={NAV_SECTIONS} />
+      <LocationQuickNav />
       <section id="hero" className="relative overflow-hidden bg-[#e8eef3] text-white">
         <div className="relative mx-auto w-full max-w-[1680px]">
           <div className="relative aspect-[1920/834] min-h-[470px] w-full overflow-hidden sm:min-h-[540px] md:min-h-[600px] lg:min-h-[650px]">

@@ -348,7 +348,10 @@ export const store = {
       heroAccentLine: data.heroAccentLine ?? base.heroAccentLine,
       heroCtaPrimary: data.heroCtaPrimary ?? base.heroCtaPrimary,
       heroCtaSecondary: data.heroCtaSecondary ?? base.heroCtaSecondary,
-      heroSlides: data.heroSlides && data.heroSlides.length > 0 ? data.heroSlides : base.heroSlides,
+      /** slide-4(아이비스퀘어 야경)는 관리자 요청으로 배너에서 제외 — 이후 관리자 페이지에서 새로 추가하는 슬라이드는 영향 없음 */
+      heroSlides: (data.heroSlides && data.heroSlides.length > 0 ? data.heroSlides : base.heroSlides).filter(
+        (s) => s.id !== "slide-4",
+      ),
       usageLabel: data.usageLabel ?? base.usageLabel,
       siteAreaM2: data.siteAreaM2 ?? base.siteAreaM2,
       totalFloorAreaM2: data.totalFloorAreaM2 ?? base.totalFloorAreaM2,
