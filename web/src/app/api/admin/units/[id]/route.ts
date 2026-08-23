@@ -1,3 +1,4 @@
+import { revalidatePath } from "next/cache";
 import { NextResponse } from "next/server";
 import { requireAdmin } from "@/lib/auth";
 import { store } from "@/lib/store";
@@ -25,6 +26,10 @@ export async function PUT(req: Request, ctx: Ctx) {
       updatedAt: new Date().toISOString(),
     };
     await store.saveUnits(units);
+    revalidatePath("/");
+    revalidatePath("/plan");
+    revalidatePath("/units", "layout");
+    revalidatePath("/interest");
     return NextResponse.json(units[idx]);
   } catch (err) {
     const message = err instanceof Error ? err.message : "Save failed";
