@@ -8,6 +8,8 @@ export type UnitPinRecord = {
   unitNo: string;
   x: number;
   y: number;
+  /** true면 관리자가 "호실 마커" 목록에서 삭제한 것 — 위치는 보존되지만 표시·활용되지 않는다 */
+  removed?: boolean;
 };
 
 export function pinKeyOf(floor: Floor, building: Building, unitNo: string) {
@@ -17,6 +19,7 @@ export function pinKeyOf(floor: Floor, building: Building, unitNo: string) {
 export function buildPinOverlay(records: UnitPinRecord[] = []) {
   const map = new Map<string, Pin>();
   for (const r of records) {
+    if (r.removed) continue;
     map.set(pinKeyOf(r.floor, r.building, r.unitNo), { x: r.x, y: r.y });
   }
   return map;
@@ -29,20 +32,22 @@ export function allDefaultUnitPins(): UnitPinRecord[] {
 }
 
 export function mergeUnitPins(saved: UnitPinRecord[]): UnitPinRecord[] {
-  const overlay = buildPinOverlay(saved);
+  const overlay = new Map<string, UnitPinRecord>();
+  for (const r of saved) overlay.set(pinKeyOf(r.floor, r.building, r.unitNo), r);
   const seen = new Set<string>();
   const out = allDefaultUnitPins().map((p) => {
     const k = pinKeyOf(p.floor, p.building, p.unitNo);
     seen.add(k);
     const hit = overlay.get(k);
-    return hit ? { ...p, x: hit.x, y: hit.y } : p;
+    if (!hit) return p;
+    return hit.removed ? { ...p, removed: true as const } : { ...p, x: hit.x, y: hit.y };
   });
   for (const p of saved) {
     const k = pinKeyOf(p.floor, p.building, p.unitNo);
     if (seen.has(k)) continue;
     if (!p.floor || !p.building || !p.unitNo) continue;
     if (!Number.isFinite(p.x) || !Number.isFinite(p.y)) continue;
-    out.push(p);
+    out.push(p.removed ? { ...p, removed: true as const } : p);
     seen.add(k);
   }
   return out;
