@@ -589,7 +589,7 @@ export default function AdminUnitsPage() {
               <th className="px-2 py-2">호실</th>
               <th className="px-2 py-2">전용</th>
               <th className="px-2 py-2">정면(mm)</th>
-              <th className="px-2 py-2">계약면적</th>
+              <th className="px-2 py-2">계약면적(평)</th>
               <th className="px-2 py-2">분양가(원)</th>
               <th className="px-2 py-2">상태</th>
               <th className="px-2 py-2">권장업종</th>
