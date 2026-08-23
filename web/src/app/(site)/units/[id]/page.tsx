@@ -6,7 +6,7 @@ import { InterestToggleButton } from "@/components/interest-toggle-button";
 import { ScrollToFloorPlan } from "@/components/scroll-to-floor-plan";
 import { formatAreaM2, formatManwon, STATUS_LABEL, unitLabel } from "@/lib/format";
 import { operatingOverlayPins } from "@/lib/operating-pins";
-import { store } from "@/lib/store";
+import { getPublicUnits, store } from "@/lib/store";
 import { Floor, UnitStatus } from "@/lib/types";
 import { toUnitPopupInfo, type UnitPopupInfo } from "@/lib/unit-popup";
 import { buildPinOverlay, estimateUnitPin } from "@/lib/unit-pins";
@@ -15,8 +15,8 @@ type Ctx = { params: Promise<{ id: string }> };
 
 export default async function UnitDetailPage({ params }: Ctx) {
   const { id } = await params;
-  const units = await store.getUnits();
-  const unit = units.find((u) => u.id === id && u.status !== "hidden");
+  const units = await getPublicUnits();
+  const unit = units.find((u) => u.id === id);
   if (!unit) notFound();
 
   const [project, operatingPins, pinRecords] = await Promise.all([

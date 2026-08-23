@@ -146,6 +146,8 @@ export type Unit = {
   /** 도면 정면(전면) 길이 — mm. 설계도면 X축 치수 기준 */
   frontLengthMm: number | null;
   price: number | null;
+  /** true면 실제 price 값은 유지한 채 공개 페이지에는 "상담 문의"로 표시(분양가 미노출) */
+  priceHidden?: boolean;
   status: UnitStatus;
   recommendedBusiness: string;
   options: string;
