@@ -119,7 +119,7 @@ export default async function UnitDetailPage({ params }: Ctx) {
             unit.contractArea != null ? `${unit.contractArea.toLocaleString("ko-KR")}평` : "관리자 등록 필요",
           ],
           [
-            "계약면적",
+            "계약면적(평)",
             unit.contractArea != null ? `${unit.contractArea.toLocaleString("ko-KR")}평` : "관리자 등록 필요",
           ],
           ["분양가", formatManwon(unit.price)],
