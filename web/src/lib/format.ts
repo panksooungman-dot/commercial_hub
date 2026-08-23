@@ -78,6 +78,12 @@ export function formatArea(area: number, unit: string = "unknown") {
   return suffix ? `${area}${suffix}` : `${area}`;
 }
 
+/** 저장 단위(㎡/평)와 무관하게 항상 ㎡로 환산해 표시 — 1평 = 400/121㎡ */
+export function formatAreaM2(area: number, unit: string = "unknown") {
+  const m2 = unit === "py" ? area * (400 / 121) : area;
+  return `${m2.toLocaleString("ko-KR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}㎡`;
+}
+
 /** 도면 정면길이(mm) → 예: 8.15m */
 export function formatFrontLength(mm: number | null | undefined) {
   if (mm == null || !Number.isFinite(mm) || mm <= 0) return "상담 문의";

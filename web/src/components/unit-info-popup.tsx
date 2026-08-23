@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useEffect } from "react";
-import { formatArea, formatFrontLength, formatLeaseLine, formatManwon, STATUS_FILL, STATUS_LABEL, unitLabel } from "@/lib/format";
+import { formatAreaM2, formatFrontLength, formatLeaseLine, formatManwon, STATUS_FILL, STATUS_LABEL, unitLabel } from "@/lib/format";
 import { FACADE_LABEL } from "@/lib/front-lengths";
 import type { UnitPopupInfo } from "@/lib/unit-popup";
 
@@ -87,10 +87,10 @@ export function UnitInfoPopup({
 
           <dl className="grid grid-cols-2 gap-3 text-sm">
             <div className="rounded-xl bg-[#f7f9fb] px-3 py-2.5">
-              <dt className="text-xs text-muted">전용면적</dt>
+              <dt className="text-xs text-muted">전용면적(㎡)</dt>
               <dd className="mt-0.5 font-medium text-brand-deep">
                 {unit.exclusiveArea != null
-                  ? formatArea(unit.exclusiveArea, unit.exclusiveAreaUnit || "unknown")
+                  ? formatAreaM2(unit.exclusiveArea, unit.exclusiveAreaUnit || "unknown")
                   : "확인 중"}
               </dd>
             </div>
