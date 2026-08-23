@@ -617,47 +617,53 @@ export default function AdminUnitsPage() {
         {msg ? <span className="text-sm text-brand">{msg}</span> : null}
       </div>
 
-      <div className="mt-3 flex flex-wrap items-center gap-2 border border-line bg-background px-3 py-2 text-sm">
+      <div className="mt-3 border border-line bg-background px-3 py-2 text-sm">
         <span className="text-muted">선택 {selectedIds.size}실</span>
-        <button
-          type="button"
-          disabled={selectedIds.size === 0}
-          onClick={() => setPriceHiddenForSelected(true)}
-          className="border border-brand px-2 py-1 text-brand hover:bg-brand hover:text-white disabled:opacity-40"
-        >
-          선택 호실 분양가 미노출
-        </button>
-        <button
-          type="button"
-          disabled={selectedIds.size === 0}
-          onClick={() => setPriceHiddenForSelected(false)}
-          className="border border-line px-2 py-1 text-muted hover:border-brand hover:text-brand disabled:opacity-40"
-        >
-          선택 호실 분양가 노출
-        </button>
-        <span className="mx-1 h-4 border-l border-line" />
-        <button
-          type="button"
-          disabled={selectedIds.size === 0}
-          onClick={() => setLeaseHiddenForSelected(true)}
-          className="border border-brand px-2 py-1 text-brand hover:bg-brand hover:text-white disabled:opacity-40"
-        >
-          선택 호실 임대조건 미노출
-        </button>
-        <button
-          type="button"
-          disabled={selectedIds.size === 0}
-          onClick={() => setLeaseHiddenForSelected(false)}
-          className="border border-line px-2 py-1 text-muted hover:border-brand hover:text-brand disabled:opacity-40"
-        >
-          선택 호실 임대조건 노출
-        </button>
-        <span className="text-xs text-muted">
+        <div className="mt-2 grid grid-cols-2 gap-2 sm:flex sm:flex-wrap sm:items-center sm:gap-2">
+          <button
+            type="button"
+            disabled={selectedIds.size === 0}
+            onClick={() => setPriceHiddenForSelected(true)}
+            className="border border-brand px-2 py-1.5 text-center leading-tight text-brand hover:bg-brand hover:text-white disabled:opacity-40"
+          >
+            선택 호실 분양가 미노출
+          </button>
+          <button
+            type="button"
+            disabled={selectedIds.size === 0}
+            onClick={() => setPriceHiddenForSelected(false)}
+            className="border border-line px-2 py-1.5 text-center leading-tight text-muted hover:border-brand hover:text-brand disabled:opacity-40"
+          >
+            선택 호실 분양가 노출
+          </button>
+          <span className="hidden self-stretch sm:mx-1 sm:block sm:h-4 sm:border-l sm:border-line" />
+          <button
+            type="button"
+            disabled={selectedIds.size === 0}
+            onClick={() => setLeaseHiddenForSelected(true)}
+            className="border border-brand px-2 py-1.5 text-center leading-tight text-brand hover:bg-brand hover:text-white disabled:opacity-40"
+          >
+            선택 호실 임대조건 미노출
+          </button>
+          <button
+            type="button"
+            disabled={selectedIds.size === 0}
+            onClick={() => setLeaseHiddenForSelected(false)}
+            className="border border-line px-2 py-1.5 text-center leading-tight text-muted hover:border-brand hover:text-brand disabled:opacity-40"
+          >
+            선택 호실 임대조건 노출
+          </button>
+        </div>
+        <p className="mt-2 text-xs text-muted">
           미노출로 바꾼 뒤 저장해야 공개 사이트에 반영됩니다. 값은 지워지지 않고 &quot;상담 문의&quot;로만 표시됩니다.
-        </span>
+        </p>
       </div>
 
-      <div className="mt-4 overflow-x-auto border border-line bg-surface">
+      <p className="mt-4 text-xs text-muted sm:hidden">
+        ← 표가 넓어요. 옆으로 스크롤하면 나머지 항목을 볼 수 있어요 →
+      </p>
+
+      <div className="mt-2 overflow-x-auto border border-line bg-surface sm:mt-4">
         <table className="w-full min-w-[1040px] text-left text-xs">
           <thead className="bg-background text-muted">
             <tr>
