@@ -68,85 +68,91 @@ export function UnitInfoPopup({
         </div>
 
         <div className="space-y-3 px-5 py-4">
-          <div className="flex items-center gap-2">
-            <span
-              className="inline-block h-3 w-5 rounded-sm border border-black/10"
-              style={{ backgroundColor: STATUS_FILL[unit.status] }}
-              aria-hidden
-            />
-            <span className="rounded-full bg-brand-deep/90 px-2.5 py-0.5 text-xs font-medium text-white">
-              {STATUS_LABEL[unit.status]}
-            </span>
-            {unit.shopLabel ? (
-              <span className="rounded-full bg-[#ffc000] px-2.5 py-0.5 text-xs font-bold text-[#3a2a00]">
-                영업중
+          {unit.id ? (
+            <div className="flex items-center gap-2">
+              <span
+                className="inline-block h-3 w-5 rounded-sm border border-black/10"
+                style={{ backgroundColor: STATUS_FILL[unit.status] }}
+                aria-hidden
+              />
+              <span className="rounded-full bg-brand-deep/90 px-2.5 py-0.5 text-xs font-medium text-white">
+                {STATUS_LABEL[unit.status]}
               </span>
-            ) : null}
+              {unit.shopLabel ? (
+                <span className="rounded-full bg-[#ffc000] px-2.5 py-0.5 text-xs font-bold text-[#3a2a00]">
+                  영업중
+                </span>
+              ) : null}
+            </div>
+          ) : null}
+
+          {unit.id ? (
+            <>
+              <dl className="grid grid-cols-2 gap-3 text-sm">
+                <div className="rounded-xl bg-[#f7f9fb] px-3 py-2.5">
+                  <dt className="text-xs text-muted">전용면적(㎡)</dt>
+                  <dd className="mt-0.5 font-medium text-brand-deep">
+                    {unit.exclusiveArea != null
+                      ? formatAreaM2(unit.exclusiveArea, unit.exclusiveAreaUnit || "unknown")
+                      : "확인 중"}
+                  </dd>
+                </div>
+                <div className="rounded-xl bg-[#f7f9fb] px-3 py-2.5">
+                  <dt className="text-xs text-muted">공급면적(평)</dt>
+                  <dd className="mt-0.5 font-medium text-brand-deep">
+                    {unit.contractArea != null ? `${unit.contractArea.toLocaleString("ko-KR")}평` : "상담 문의"}
+                  </dd>
+                </div>
+                <div className="rounded-xl bg-[#f7f9fb] px-3 py-2.5">
+                  <dt className="text-xs text-muted">분양가</dt>
+                  <dd className="mt-0.5 font-medium text-brand-deep">{formatManwon(unit.price)}</dd>
+                </div>
+                <div className="col-span-2 rounded-xl bg-[#f7f9fb] px-3 py-2.5">
+                  <dt className="text-xs text-muted">임대조건</dt>
+                  <dd className="mt-0.5 font-medium text-brand-deep">
+                    {formatLeaseLine(unit.deposit, unit.monthlyRent)}
+                  </dd>
+                </div>
+                <div className="col-span-2 rounded-xl bg-[#f7f9fb] px-3 py-2.5">
+                  <dt className="text-xs text-muted">권장업종</dt>
+                  <dd className="mt-0.5 font-medium text-brand-deep">
+                    {unit.recommendedBusiness || "—"}
+                  </dd>
+                </div>
+              </dl>
+
+              {unit.options ? (
+                <p className="text-sm text-muted">
+                  <span className="font-medium text-brand-deep">옵션 </span>
+                  {unit.options}
+                </p>
+              ) : null}
+            </>
+          ) : (
+            <p className="rounded-xl bg-[#f7f9fb] px-3 py-3 text-sm text-muted">
+              계단·기계실 등 공용시설로, 별도로 분양하지 않는 공간입니다.
+            </p>
+          )}
+        </div>
+
+        {unit.id ? (
+          <div className="flex flex-wrap gap-2 border-t border-line bg-[#f7f9fb] px-5 py-4">
+            <Link
+              href={detailHref}
+              className="flex-1 rounded-full border border-line bg-white px-4 py-2.5 text-center text-sm font-medium text-brand-deep hover:border-brand"
+              onClick={onClose}
+            >
+              상세 보기
+            </Link>
+            <Link
+              href={contactHref}
+              className="flex-1 rounded-full bg-brand px-4 py-2.5 text-center text-sm font-medium text-white hover:opacity-95"
+              onClick={onClose}
+            >
+              상담 신청
+            </Link>
           </div>
-
-          <dl className="grid grid-cols-2 gap-3 text-sm">
-            <div className="rounded-xl bg-[#f7f9fb] px-3 py-2.5">
-              <dt className="text-xs text-muted">전용면적(㎡)</dt>
-              <dd className="mt-0.5 font-medium text-brand-deep">
-                {unit.exclusiveArea != null
-                  ? formatAreaM2(unit.exclusiveArea, unit.exclusiveAreaUnit || "unknown")
-                  : "확인 중"}
-              </dd>
-            </div>
-            <div className="rounded-xl bg-[#f7f9fb] px-3 py-2.5">
-              <dt className="text-xs text-muted">공급면적(평)</dt>
-              <dd className="mt-0.5 font-medium text-brand-deep">
-                {unit.contractArea != null ? `${unit.contractArea.toLocaleString("ko-KR")}평` : "상담 문의"}
-              </dd>
-            </div>
-            <div className="rounded-xl bg-[#f7f9fb] px-3 py-2.5">
-              <dt className="text-xs text-muted">분양가</dt>
-              <dd className="mt-0.5 font-medium text-brand-deep">{formatManwon(unit.price)}</dd>
-            </div>
-            <div className="col-span-2 rounded-xl bg-[#f7f9fb] px-3 py-2.5">
-              <dt className="text-xs text-muted">임대조건</dt>
-              <dd className="mt-0.5 font-medium text-brand-deep">
-                {formatLeaseLine(unit.deposit, unit.monthlyRent)}
-              </dd>
-            </div>
-            <div className="col-span-2 rounded-xl bg-[#f7f9fb] px-3 py-2.5">
-              <dt className="text-xs text-muted">권장업종</dt>
-              <dd className="mt-0.5 font-medium text-brand-deep">
-                {unit.recommendedBusiness || "—"}
-              </dd>
-            </div>
-          </dl>
-
-          {unit.options ? (
-            <p className="text-sm text-muted">
-              <span className="font-medium text-brand-deep">옵션 </span>
-              {unit.options}
-            </p>
-          ) : null}
-
-          {!unit.id ? (
-            <p className="text-xs text-muted">
-              이 호실의 상세 데이터가 아직 연결되지 않았습니다. 상담으로 확인해 주세요.
-            </p>
-          ) : null}
-        </div>
-
-        <div className="flex flex-wrap gap-2 border-t border-line bg-[#f7f9fb] px-5 py-4">
-          <Link
-            href={detailHref}
-            className="flex-1 rounded-full border border-line bg-white px-4 py-2.5 text-center text-sm font-medium text-brand-deep hover:border-brand"
-            onClick={onClose}
-          >
-            상세 보기
-          </Link>
-          <Link
-            href={contactHref}
-            className="flex-1 rounded-full bg-brand px-4 py-2.5 text-center text-sm font-medium text-white hover:opacity-95"
-            onClick={onClose}
-          >
-            상담 신청
-          </Link>
-        </div>
+        ) : null}
       </div>
     </div>
   );
