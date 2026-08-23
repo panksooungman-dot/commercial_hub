@@ -67,14 +67,14 @@ export function LocationQuickNav() {
       ) : null}
 
       <div
-        className={`fixed inset-y-0 right-0 z-50 w-full max-w-lg transform bg-white shadow-2xl transition-transform duration-300 ease-out ${
+        className={`fixed inset-0 z-50 transform bg-white shadow-2xl transition-transform duration-300 ease-out ${
           panelOpen ? "translate-x-0" : "translate-x-full"
         }`}
         role="dialog"
         aria-modal="true"
         aria-label="지역도 자세히보기"
       >
-        <div className="flex items-center justify-between border-b border-line px-5 py-4">
+        <div className="flex items-center justify-between border-b border-line px-5 py-4 sm:px-8">
           <h3 className="font-display text-lg text-brand-deep">지역도</h3>
           <button
             type="button"
@@ -87,8 +87,10 @@ export function LocationQuickNav() {
             </svg>
           </button>
         </div>
-        <div className="h-[calc(100%-57px)] overflow-y-auto p-4 sm:p-6">
-          <SiteLocationInfographic />
+        <div className="h-[calc(100%-57px)] overflow-y-auto p-4 sm:p-8">
+          <div className="mx-auto max-w-5xl">
+            <SiteLocationInfographic />
+          </div>
         </div>
       </div>
     </>
