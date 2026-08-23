@@ -15,7 +15,7 @@ const body = Manrope({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://ivian-hub.vercel.app"),
+  metadataBase: new URL("https://ivianmall.com"),
   title: "송도 하늘채 아이비원 상업시설",
   description: "송도 아이비원 주상복합 단지 내 근린생활시설 분양 안내",
   openGraph: {
