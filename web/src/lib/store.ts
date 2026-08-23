@@ -358,6 +358,8 @@ export const store = {
       parkingTotal: data.parkingTotal ?? base.parkingTotal,
       /** 근생(상가) 판매 대상 층 기준으로 표기 — 관리자 요청으로 전체 동 층수 대신 고정 문구 사용 */
       scaleFloors: base.scaleFloors,
+      /** 관리자 요청 문구로 고정 — 기존 Blob 저장 데이터의 예전 문구를 덮어씀 */
+      zoningDistrict: base.zoningDistrict,
     } as Project;
   },
   saveProject: (data: Project) =>
