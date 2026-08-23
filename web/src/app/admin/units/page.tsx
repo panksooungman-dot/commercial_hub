@@ -450,6 +450,7 @@ export default function AdminUnitsPage() {
   const [msg, setMsg] = useState("");
   const [savingAll, setSavingAll] = useState(false);
   const [expandedId, setExpandedId] = useState<string | null>(null);
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   /** 삭제 직전 상태를 기억해 두었다가 복구 시 그대로 되돌린다(새로고침 시엔 분양가능으로 복구) */
   const statusBeforeDelete = useRef<Record<string, UnitStatus>>({});
 
@@ -513,6 +514,33 @@ export default function AdminUnitsPage() {
 
   function patch(id: string, partial: Partial<Unit>) {
     setUnits((list) => list.map((u) => (u.id === id ? { ...u, ...partial } : u)));
+  }
+
+  function toggleSelected(id: string, checked: boolean) {
+    setSelectedIds((prev) => {
+      const next = new Set(prev);
+      if (checked) next.add(id);
+      else next.delete(id);
+      return next;
+    });
+  }
+
+  function toggleSelectAllFiltered(checked: boolean) {
+    setSelectedIds((prev) => {
+      const next = new Set(prev);
+      for (const u of filtered) {
+        if (checked) next.add(u.id);
+        else next.delete(u.id);
+      }
+      return next;
+    });
+  }
+
+  /** 선택한 호실들의 분양가 공개 여부를 한 번에 바꾼다. 값은 유지한 채 노출만 전환된다 */
+  function setPriceHiddenForSelected(hidden: boolean) {
+    setUnits((list) =>
+      list.map((u) => (selectedIds.has(u.id) ? { ...u, priceHidden: hidden } : u)),
+    );
   }
 
   function updateListing(id: string, listingPatch: Partial<ListingDetail>) {
@@ -582,14 +610,44 @@ export default function AdminUnitsPage() {
         {msg ? <span className="text-sm text-brand">{msg}</span> : null}
       </div>
 
+      <div className="mt-3 flex flex-wrap items-center gap-2 border border-line bg-background px-3 py-2 text-sm">
+        <span className="text-muted">선택 {selectedIds.size}실</span>
+        <button
+          type="button"
+          disabled={selectedIds.size === 0}
+          onClick={() => setPriceHiddenForSelected(true)}
+          className="border border-brand px-2 py-1 text-brand hover:bg-brand hover:text-white disabled:opacity-40"
+        >
+          선택 호실 분양가 미노출
+        </button>
+        <button
+          type="button"
+          disabled={selectedIds.size === 0}
+          onClick={() => setPriceHiddenForSelected(false)}
+          className="border border-line px-2 py-1 text-muted hover:border-brand hover:text-brand disabled:opacity-40"
+        >
+          선택 호실 분양가 노출
+        </button>
+        <span className="text-xs text-muted">
+          미노출로 바꾼 뒤 저장해야 공개 사이트에 반영됩니다. 값은 지워지지 않고 &quot;상담 문의&quot;로만 표시됩니다.
+        </span>
+      </div>
+
       <div className="mt-4 overflow-x-auto border border-line bg-surface">
         <table className="w-full min-w-[1040px] text-left text-xs">
           <thead className="bg-background text-muted">
             <tr>
+              <th className="px-2 py-2">
+                <input
+                  type="checkbox"
+                  checked={filtered.length > 0 && filtered.every((u) => selectedIds.has(u.id))}
+                  onChange={(e) => toggleSelectAllFiltered(e.target.checked)}
+                />
+              </th>
               <th className="px-2 py-2">호실</th>
               <th className="px-2 py-2">전용</th>
               <th className="px-2 py-2">정면(mm)</th>
-              <th className="px-2 py-2">계약면적</th>
+              <th className="px-2 py-2">계약면적(평)</th>
               <th className="px-2 py-2">분양가(원)</th>
               <th className="px-2 py-2">상태</th>
               <th className="px-2 py-2">권장업종</th>
@@ -605,6 +663,13 @@ export default function AdminUnitsPage() {
                 <tr
                   className={`border-t border-line ${u.status === "hidden" ? "bg-background/70 opacity-60" : ""}`}
                 >
+                <td className="px-2 py-2">
+                  <input
+                    type="checkbox"
+                    checked={selectedIds.has(u.id)}
+                    onChange={(e) => toggleSelected(u.id, e.target.checked)}
+                  />
+                </td>
                 <td className="px-2 py-2 font-medium">
                   <Link href={`/units/${u.id}`} className="text-brand underline">
                     {u.building}-{u.floor}-{u.unitNo}
@@ -646,6 +711,14 @@ export default function AdminUnitsPage() {
                       })
                     }
                   />
+                  <label className="mt-1 flex items-center gap-1 text-[11px] text-muted">
+                    <input
+                      type="checkbox"
+                      checked={Boolean(u.priceHidden)}
+                      onChange={(e) => patch(u.id, { priceHidden: e.target.checked })}
+                    />
+                    미노출
+                  </label>
                 </td>
                 <td className="px-2 py-2">
                   <select

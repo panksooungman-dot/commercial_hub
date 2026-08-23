@@ -417,5 +417,7 @@ export const store = {
 
 export async function getPublicUnits() {
   const units = await store.getUnits();
-  return units.filter((u) => u.status !== "hidden");
+  return units
+    .filter((u) => u.status !== "hidden")
+    .map((u) => (u.priceHidden ? { ...u, price: null } : u));
 }

@@ -4,10 +4,9 @@ import { FloorPlanFigure } from "@/components/floor-plan-figure";
 import { InquiryForm } from "@/components/inquiry-form";
 import { InterestToggleButton } from "@/components/interest-toggle-button";
 import { ScrollToFloorPlan } from "@/components/scroll-to-floor-plan";
-import { formatArea, formatFrontLength, formatManwon, STATUS_LABEL, unitLabel } from "@/lib/format";
-import { FACADE_LABEL, frontFacadeForUnitId } from "@/lib/front-lengths";
+import { formatAreaM2, formatManwon, STATUS_LABEL, unitLabel } from "@/lib/format";
 import { operatingOverlayPins } from "@/lib/operating-pins";
-import { store } from "@/lib/store";
+import { getPublicUnits, store } from "@/lib/store";
 import { Floor, UnitStatus } from "@/lib/types";
 import { toUnitPopupInfo, type UnitPopupInfo } from "@/lib/unit-popup";
 import { buildPinOverlay, estimateUnitPin } from "@/lib/unit-pins";
@@ -16,8 +15,8 @@ type Ctx = { params: Promise<{ id: string }> };
 
 export default async function UnitDetailPage({ params }: Ctx) {
   const { id } = await params;
-  const units = await store.getUnits();
-  const unit = units.find((u) => u.id === id && u.status !== "hidden");
+  const units = await getPublicUnits();
+  const unit = units.find((u) => u.id === id);
   if (!unit) notFound();
 
   const [project, operatingPins, pinRecords] = await Promise.all([
@@ -109,16 +108,20 @@ export default async function UnitDetailPage({ params }: Ctx) {
 
       <div className="mt-10 grid gap-6 md:grid-cols-3">
         {[
-          ["전용면적", formatArea(unit.exclusiveArea, unit.exclusiveAreaUnit)],
           [
-            "정면길이",
-            (() => {
-              const face = frontFacadeForUnitId(unit.id);
-              const len = formatFrontLength(unit.frontLengthMm);
-              return face ? `${len} (${FACADE_LABEL[face]})` : len;
-            })(),
+            "전용면적(㎡)",
+            unit.exclusiveArea != null
+              ? formatAreaM2(unit.exclusiveArea, unit.exclusiveAreaUnit || "unknown")
+              : "확인 중",
           ],
-          ["계약면적", unit.contractArea != null ? String(unit.contractArea) : "관리자 등록 필요"],
+          [
+            "공급면적(평)",
+            unit.contractArea != null ? `${unit.contractArea.toLocaleString("ko-KR")}평` : "관리자 등록 필요",
+          ],
+          [
+            "계약면적",
+            unit.contractArea != null ? `${unit.contractArea.toLocaleString("ko-KR")}평` : "관리자 등록 필요",
+          ],
           ["분양가", formatManwon(unit.price)],
           ["보증금", formatManwon(unit.listing?.deposit)],
           ["월 임대료", formatManwon(unit.listing?.monthlyRent)],
