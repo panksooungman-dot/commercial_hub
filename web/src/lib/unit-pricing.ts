@@ -125,6 +125,120 @@ export const UNIT_CHEON_PRICES: Record<string, UnitCheonPrice> = {
   "B-2F-230": { sale: 132310, deposit: 8000, rent: 620 },
 };
 
+/**
+ * 송도 하늘채 아이비원 공급(계약)면적 PPT 기준. 단위: 평(py).
+ * 호실 정보 팝업의 "계약면적(평)" 표시에 사용.
+ */
+export const UNIT_SUPPLY_AREA_PY: Record<string, number> = {
+  "A-1F-102": 24.5,
+  "A-1F-105": 44.99,
+  "A-1F-106": 41.94,
+  "A-1F-107": 30.33,
+  "A-1F-108": 24.0,
+  "A-1F-109": 29.07,
+  "A-1F-110": 21.79,
+  "A-1F-111": 27.44,
+  "A-1F-112": 26.7,
+  "A-1F-113": 24.72,
+  "A-1F-114": 27.23,
+  "A-1F-115": 25.92,
+  "A-1F-116": 33.62,
+  "A-1F-120": 25.21,
+  "A-1F-122": 28.91,
+  "A-1F-130": 31.91,
+  "A-1F-134": 20.41,
+  "A-1F-135": 20.45,
+  "A-1F-137": 14.54,
+  "A-1F-138": 14.02,
+  "A-1F-139": 14.09,
+  "A-1F-140": 32.65,
+  "A-1F-141": 23.67,
+  "A-1F-142": 33.0,
+  "A-1F-143": 56.66,
+  "A-2F-201": 31.32,
+  "A-2F-202": 34.09,
+  "A-2F-203": 36.59,
+  "A-2F-204": 37.07,
+  "A-2F-205": 53.76,
+  "A-2F-206": 51.69,
+  "A-2F-207": 55.65,
+  "A-2F-208": 58.57,
+  "A-2F-209": 55.75,
+  "A-2F-210": 58.07,
+  "A-2F-211": 53.43,
+  "A-2F-212": 37.63,
+  "A-2F-213": 105.48,
+  "A-2F-215": 36.58,
+  "A-2F-216": 107.67,
+  "A-2F-217": 23.88,
+  "A-2F-218": 30.86,
+  "A-2F-224": 29.56,
+  "A-2F-226": 24.3,
+  "A-2F-227": 25.2,
+  "A-2F-228": 24.41,
+  "A-2F-229": 102.6,
+  "A-B1-B-101": 89.76,
+  "A-B1-B-102": 97.8,
+  "A-B1-B-105": 50.25,
+  "B-1F-101": 28.46,
+  "B-1F-103": 33.42,
+  "B-1F-105": 60.45,
+  "B-1F-106": 22.26,
+  "B-1F-107": 16.53,
+  "B-1F-108": 19.48,
+  "B-1F-111": 18.25,
+  "B-1F-112": 19.25,
+  "B-1F-113": 19.91,
+  "B-1F-117": 25.8,
+  "B-1F-119": 23.34,
+  "B-1F-120": 39.69,
+  "B-1F-121": 19.24,
+  "B-1F-122": 25.21,
+  "B-1F-123": 20.39,
+  "B-1F-124": 25.72,
+  "B-1F-127": 36.35,
+  "B-1F-128": 22.95,
+  "B-1F-129": 22.95,
+  "B-1F-130": 25.15,
+  "B-1F-131": 40.28,
+  "B-1F-132": 28.33,
+  "B-1F-138": 40.16,
+  "B-1F-139": 23.67,
+  "B-1F-141": 54.12,
+  "B-2F-201": 31.32,
+  "B-2F-202": 34.09,
+  "B-2F-203": 36.59,
+  "B-2F-204": 26.26,
+  "B-2F-205": 37.45,
+  "B-2F-206": 36.01,
+  "B-2F-207": 29.41,
+  "B-2F-208": 33.62,
+  "B-2F-209": 31.05,
+  "B-2F-210": 32.6,
+  "B-2F-211": 37.22,
+  "B-2F-212": 28.36,
+  "B-2F-213": 105.57,
+  "B-2F-214": 23.69,
+  "B-2F-215": 36.58,
+  "B-2F-216": 107.77,
+  "B-2F-218": 48.92,
+  "B-2F-219": 41.1,
+  "B-2F-220": 39.09,
+  "B-2F-221": 41.04,
+  "B-2F-222": 54.2,
+  "B-2F-223": 30.01,
+  "B-2F-224": 47.13,
+  "B-2F-225": 30.59,
+  "B-2F-226": 22.89,
+  "B-2F-227": 34.15,
+  "B-2F-228": 24.42,
+  "B-2F-229": 102.6,
+  "B-2F-230": 17.7,
+  "B-B1-B-105": 69.66,
+  "B-B1-B-106": 67.59,
+  "B-B1-B-107": 98.64,
+};
+
 function emptyListing(): ListingDetail {
   return {
     dealType: "",
@@ -192,22 +306,30 @@ export function applyPptPricing<T extends { id: string; price: number | null; li
   };
 }
 
-/** 저장된 값이 없으면 PPT 매매가·임대가를 채운다. 관리자 입력은 유지. */
-export function mergePptPricing<T extends { id: string; exclusiveAreaUnit?: string; price: number | null; listing?: ListingDetail }>(
-  unit: T,
-): T {
+/** 저장된 값이 없으면 PPT 매매가·임대가·계약(공급)면적을 채운다. 관리자 입력은 유지. */
+export function mergePptPricing<
+  T extends {
+    id: string;
+    exclusiveAreaUnit?: string;
+    contractArea?: number | null;
+    price: number | null;
+    listing?: ListingDetail;
+  },
+>(unit: T): T {
   const priced = pricingForUnitId(unit.id);
-  if (!priced) return unit;
+  const supplyAreaPy = UNIT_SUPPLY_AREA_PY[unit.id];
+  if (!priced && supplyAreaPy == null) return unit;
   const listing = unit.listing ?? emptyListing();
   return {
     ...unit,
     exclusiveAreaUnit: unit.exclusiveAreaUnit === "unknown" ? "py" : unit.exclusiveAreaUnit,
-    price: unit.price ?? priced.price,
+    contractArea: unit.contractArea ?? supplyAreaPy ?? null,
+    price: unit.price ?? priced?.price ?? null,
     listing: {
       ...listing,
       propertyType: listing.propertyType || "상가",
-      deposit: listing.deposit ?? priced.deposit,
-      monthlyRent: listing.monthlyRent ?? priced.monthlyRent,
+      deposit: listing.deposit ?? priced?.deposit ?? null,
+      monthlyRent: listing.monthlyRent ?? priced?.monthlyRent ?? null,
     },
   };
 }

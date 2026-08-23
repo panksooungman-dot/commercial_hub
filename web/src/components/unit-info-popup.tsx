@@ -2,8 +2,7 @@
 
 import Link from "next/link";
 import { useEffect } from "react";
-import { formatAreaM2, formatFrontLength, formatLeaseLine, formatManwon, STATUS_FILL, STATUS_LABEL, unitLabel } from "@/lib/format";
-import { FACADE_LABEL } from "@/lib/front-lengths";
+import { formatAreaM2, formatLeaseLine, formatManwon, STATUS_FILL, STATUS_LABEL, unitLabel } from "@/lib/format";
 import type { UnitPopupInfo } from "@/lib/unit-popup";
 
 export type { UnitPopupInfo };
@@ -95,23 +94,9 @@ export function UnitInfoPopup({
               </dd>
             </div>
             <div className="rounded-xl bg-[#f7f9fb] px-3 py-2.5">
-              <dt className="text-xs text-muted">
-                정면길이
-                {unit.frontFacade ? ` · ${FACADE_LABEL[unit.frontFacade]}` : ""}
-              </dt>
+              <dt className="text-xs text-muted">계약면적(평)</dt>
               <dd className="mt-0.5 font-medium text-brand-deep">
-                {formatFrontLength(unit.frontLengthMm)}
-                {unit.frontLengthMm != null ? (
-                  <span className="mt-0.5 block text-[11px] font-normal text-muted">
-                    {unit.frontLengthMm.toLocaleString("ko-KR")}mm
-                  </span>
-                ) : null}
-              </dd>
-            </div>
-            <div className="rounded-xl bg-[#f7f9fb] px-3 py-2.5">
-              <dt className="text-xs text-muted">계약면적</dt>
-              <dd className="mt-0.5 font-medium text-brand-deep">
-                {unit.contractArea != null ? String(unit.contractArea) : "상담 문의"}
+                {unit.contractArea != null ? `${unit.contractArea.toLocaleString("ko-KR")}평` : "상담 문의"}
               </dd>
             </div>
             <div className="rounded-xl bg-[#f7f9fb] px-3 py-2.5">
