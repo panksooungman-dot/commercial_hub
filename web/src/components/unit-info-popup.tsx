@@ -94,7 +94,7 @@ export function UnitInfoPopup({
               </dd>
             </div>
             <div className="rounded-xl bg-[#f7f9fb] px-3 py-2.5">
-              <dt className="text-xs text-muted">계약면적(평)</dt>
+              <dt className="text-xs text-muted">공급면적(평)</dt>
               <dd className="mt-0.5 font-medium text-brand-deep">
                 {unit.contractArea != null ? `${unit.contractArea.toLocaleString("ko-KR")}평` : "상담 문의"}
               </dd>
