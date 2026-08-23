@@ -419,5 +419,10 @@ export async function getPublicUnits() {
   const units = await store.getUnits();
   return units
     .filter((u) => u.status !== "hidden")
-    .map((u) => (u.priceHidden ? { ...u, price: null } : u));
+    .map((u) => (u.priceHidden ? { ...u, price: null } : u))
+    .map((u) =>
+      u.leaseHidden && u.listing
+        ? { ...u, listing: { ...u.listing, deposit: null, monthlyRent: null } }
+        : u,
+    );
 }
