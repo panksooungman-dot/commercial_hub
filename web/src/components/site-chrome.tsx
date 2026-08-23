@@ -31,12 +31,12 @@ export function SiteHeader({ projectName, phone }: { projectName: string; phone?
             <p className="truncate text-xs text-muted">상업시설</p>
           </span>
         </Link>
-        <nav className="hidden items-center gap-4 text-sm text-brand lg:flex">
+        <nav className="hidden items-center gap-5 text-base font-medium text-brand lg:flex xl:gap-7">
           {NAV.map((item) =>
             item.special ? (
               <InterestNavLink key={item.href} />
             ) : (
-              <Link key={item.href} href={item.href} className="hover:text-accent">
+              <Link key={item.href} href={item.href} className="whitespace-nowrap hover:text-accent">
                 {item.label}
               </Link>
             ),
