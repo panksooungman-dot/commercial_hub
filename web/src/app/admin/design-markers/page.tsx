@@ -55,6 +55,16 @@ export default function AdminDesignMarkersPage() {
     });
   }
 
+  function toggleNonSellable(label: string, nonSellable: boolean) {
+    setOverrides((prev) => {
+      const withoutThis = prev.nonSellable.filter(
+        (n) => !(n.building === building && n.floor === floor && n.label === label),
+      );
+      if (!nonSellable) return { ...prev, nonSellable: withoutThis };
+      return { ...prev, nonSellable: [...withoutThis, { building, floor, label }] };
+    });
+  }
+
   function removeAdded(label: string) {
     setOverrides((prev) => ({
       ...prev,
@@ -65,7 +75,7 @@ export default function AdminDesignMarkersPage() {
   function addLabel() {
     const label = newLabel.trim().toUpperCase();
     if (!label) return;
-    if (view.base.some((b) => b.label === label) || view.added.includes(label)) {
+    if (view.base.some((b) => b.label === label) || view.added.some((a) => a.label === label)) {
       setMsg(`「${label}」은(는) 이미 목록에 있습니다.`);
       return;
     }
@@ -96,7 +106,7 @@ export default function AdminDesignMarkersPage() {
         <div>
           <h1 className="font-display text-3xl text-brand">설계도면 호실 관리</h1>
           <p className="mt-1 text-sm text-muted">
-            메인 페이지 "공식 설계도면"에 표시되는 호실 번호를 동·층별로 추가·삭제합니다. 도면 위
+            메인 페이지 &quot;공식 설계도면&quot;에 표시되는 호실 번호를 동·층별로 추가·삭제합니다. 도면 위
             위치는 개발팀이 좌표로 관리하며, 여기서 추가한 호실은 도면 하단 여백에 임시로 표시됩니다.
           </p>
         </div>
@@ -163,19 +173,37 @@ export default function AdminDesignMarkersPage() {
           기본 호실 <span className="font-normal text-muted">{view.base.length}건 · 체크 해제하면 도면에서 숨겨집니다</span>
         </p>
         <div className="mt-2 flex flex-wrap gap-2">
-          {view.base.map(({ label, removed }) => (
-            <button
+          {view.base.map(({ label, removed, nonSellable }) => (
+            <span
               key={label}
-              type="button"
-              onClick={() => toggleRemoved(label, !removed)}
-              className={`rounded-full border px-3 py-1.5 text-sm ${
-                removed ? "border-line bg-surface text-muted line-through" : "border-brand/40 bg-white text-brand-deep"
+              className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-sm ${
+                removed
+                  ? "border-line bg-surface text-muted line-through"
+                  : nonSellable
+                    ? "border-accent/70 bg-[#fff8e8] text-brand-deep"
+                    : "border-brand/40 bg-white text-brand-deep"
               }`}
             >
-              {label}
-            </button>
+              <button type="button" onClick={() => toggleRemoved(label, !removed)}>
+                {label}
+              </button>
+              {!removed ? (
+                <label className="flex items-center gap-1 text-[11px] text-muted">
+                  <input
+                    type="checkbox"
+                    checked={nonSellable}
+                    onChange={(e) => toggleNonSellable(label, e.target.checked)}
+                  />
+                  비매물
+                </label>
+              ) : null}
+            </span>
           ))}
         </div>
+        <p className="mt-2 text-xs text-muted">
+          &quot;비매물&quot; 체크 시 실제 호실 데이터와 무관하게 계단·기계실 등 공용시설로 표시되며, 도면에서 클릭이
+          비활성화되고 호실 목록·카운트에서 제외됩니다.
+        </p>
       </div>
 
       {view.added.length > 0 ? (
@@ -184,12 +212,20 @@ export default function AdminDesignMarkersPage() {
             관리자 추가 호실 <span className="font-normal text-muted">{view.added.length}건</span>
           </p>
           <div className="mt-2 flex flex-wrap gap-2">
-            {view.added.map((label) => (
+            {view.added.map(({ label, nonSellable }) => (
               <span
                 key={label}
                 className="inline-flex items-center gap-1.5 rounded-full border border-accent/60 bg-[#fff8e8] px-3 py-1.5 text-sm text-brand-deep"
               >
                 {label}
+                <label className="flex items-center gap-1 text-[11px] text-muted">
+                  <input
+                    type="checkbox"
+                    checked={nonSellable}
+                    onChange={(e) => toggleNonSellable(label, e.target.checked)}
+                  />
+                  비매물
+                </label>
                 <button type="button" onClick={() => removeAdded(label)} className="text-muted hover:text-red-600">
                   ✕
                 </button>
