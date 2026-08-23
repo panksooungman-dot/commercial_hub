@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { Fragment, useEffect, useMemo, useRef, useState } from "react";
-import { STATUS_LABEL } from "@/lib/format";
+import { formatLeaseLine, STATUS_LABEL } from "@/lib/format";
 import {
   DealType,
   ListingDetail,
@@ -543,6 +543,13 @@ export default function AdminUnitsPage() {
     );
   }
 
+  /** 선택한 호실들의 보증금·월 임대료 공개 여부를 한 번에 바꾼다. 값은 유지한 채 노출만 전환된다 */
+  function setLeaseHiddenForSelected(hidden: boolean) {
+    setUnits((list) =>
+      list.map((u) => (selectedIds.has(u.id) ? { ...u, leaseHidden: hidden } : u)),
+    );
+  }
+
   function updateListing(id: string, listingPatch: Partial<ListingDetail>) {
     setUnits((list) =>
       list.map((u) =>
@@ -628,6 +635,23 @@ export default function AdminUnitsPage() {
         >
           선택 호실 분양가 노출
         </button>
+        <span className="mx-1 h-4 border-l border-line" />
+        <button
+          type="button"
+          disabled={selectedIds.size === 0}
+          onClick={() => setLeaseHiddenForSelected(true)}
+          className="border border-brand px-2 py-1 text-brand hover:bg-brand hover:text-white disabled:opacity-40"
+        >
+          선택 호실 임대조건 미노출
+        </button>
+        <button
+          type="button"
+          disabled={selectedIds.size === 0}
+          onClick={() => setLeaseHiddenForSelected(false)}
+          className="border border-line px-2 py-1 text-muted hover:border-brand hover:text-brand disabled:opacity-40"
+        >
+          선택 호실 임대조건 노출
+        </button>
         <span className="text-xs text-muted">
           미노출로 바꾼 뒤 저장해야 공개 사이트에 반영됩니다. 값은 지워지지 않고 &quot;상담 문의&quot;로만 표시됩니다.
         </span>
@@ -649,6 +673,7 @@ export default function AdminUnitsPage() {
               <th className="px-2 py-2">정면(mm)</th>
               <th className="px-2 py-2">계약면적(평)</th>
               <th className="px-2 py-2">분양가(원)</th>
+              <th className="px-2 py-2">임대조건</th>
               <th className="px-2 py-2">상태</th>
               <th className="px-2 py-2">권장업종</th>
               <th className="px-2 py-2">옵션</th>
@@ -716,6 +741,19 @@ export default function AdminUnitsPage() {
                       type="checkbox"
                       checked={Boolean(u.priceHidden)}
                       onChange={(e) => patch(u.id, { priceHidden: e.target.checked })}
+                    />
+                    미노출
+                  </label>
+                </td>
+                <td className="px-2 py-2">
+                  <p className="w-32 text-[11px] leading-tight">
+                    {formatLeaseLine(u.listing?.deposit, u.listing?.monthlyRent)}
+                  </p>
+                  <label className="mt-1 flex items-center gap-1 text-[11px] text-muted">
+                    <input
+                      type="checkbox"
+                      checked={Boolean(u.leaseHidden)}
+                      onChange={(e) => patch(u.id, { leaseHidden: e.target.checked })}
                     />
                     미노출
                   </label>

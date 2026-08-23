@@ -148,6 +148,8 @@ export type Unit = {
   price: number | null;
   /** true면 실제 price 값은 유지한 채 공개 페이지에는 "상담 문의"로 표시(분양가 미노출) */
   priceHidden?: boolean;
+  /** true면 실제 보증금·월 임대료 값은 유지한 채 공개 페이지에는 "상담 문의"로 표시(임대조건 미노출) */
+  leaseHidden?: boolean;
   status: UnitStatus;
   recommendedBusiness: string;
   options: string;
