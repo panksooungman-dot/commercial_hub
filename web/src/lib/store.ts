@@ -88,7 +88,7 @@ function defaultProject(): Project {
     projectName: "송도 하늘채 아이비원",
     subtitle: "송도 아이비원 주상복합 단지 내 상가 · IVYSQUARE",
     address: "인천광역시 연수구 송도동 20-4일원",
-    scaleFloors: "지하3층 / 지상10층",
+    scaleFloors: "지하1층 지상(1층~2층)",
     housingUnits: 336,
     commercialUnitsTotal: 160,
     commercialUnitsForSale: 107,
@@ -356,6 +356,8 @@ export const store = {
       siteAreaM2: data.siteAreaM2 ?? base.siteAreaM2,
       totalFloorAreaM2: data.totalFloorAreaM2 ?? base.totalFloorAreaM2,
       parkingTotal: data.parkingTotal ?? base.parkingTotal,
+      /** 근생(상가) 판매 대상 층 기준으로 표기 — 관리자 요청으로 전체 동 층수 대신 고정 문구 사용 */
+      scaleFloors: base.scaleFloors,
     } as Project;
   },
   saveProject: (data: Project) =>
