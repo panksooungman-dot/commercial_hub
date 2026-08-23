@@ -19,13 +19,21 @@ export type DesignMarkerRemoval = {
   label: string;
 };
 
+/** 관리자가 "공용시설(비매물)"로 직접 지정한 마커 — 실제 호실 데이터 유무와 무관하게 비매물로 취급된다 */
+export type DesignMarkerNonSellable = {
+  building: DesignBuildingKey;
+  floor: DesignFloorKey;
+  label: string;
+};
+
 export type DesignMarkerOverrides = {
   added: DesignMarkerAddition[];
   removed: DesignMarkerRemoval[];
+  nonSellable: DesignMarkerNonSellable[];
 };
 
 export function emptyDesignMarkerOverrides(): DesignMarkerOverrides {
-  return { added: [], removed: [] };
+  return { added: [], removed: [], nonSellable: [] };
 }
 
 /** 관리자가 추가한 호실은 도면 위 정확한 위치 데이터가 없어 기본값(여백)에 배치된다 */
@@ -51,6 +59,16 @@ export function effectiveDesignMarkerLabels(
     .map((a) => a.label)
     .filter((label) => !kept.includes(label));
   return [...kept, ...addedLabels];
+}
+
+/** 해당 마커가 관리자에 의해 "공용시설(비매물)"로 직접 지정되었는지 여부 — 실제 호실 데이터 유무와 별개로 적용된다 */
+export function isMarkerNonSellable(
+  building: DesignBuildingKey,
+  floor: DesignFloorKey,
+  label: string,
+  overrides: DesignMarkerOverrides,
+): boolean {
+  return overrides.nonSellable.some((n) => matches(n, building, floor) && n.label === label);
 }
 
 function sanitizeLabel(label: unknown): string {
@@ -85,6 +103,7 @@ export function sanitizeDesignMarkerOverrides(input: unknown): DesignMarkerOverr
   return {
     added: sanitizeList(raw.added),
     removed: sanitizeList(raw.removed),
+    nonSellable: sanitizeList(raw.nonSellable),
   };
 }
 
@@ -94,10 +113,17 @@ export function designMarkerAdminView(building: DesignBuildingKey, floor: Design
   const removedSet = new Set(
     overrides.removed.filter((r) => matches(r, building, floor)).map((r) => r.label),
   );
+  const nonSellableSet = new Set(
+    overrides.nonSellable.filter((n) => matches(n, building, floor)).map((n) => n.label),
+  );
   const added = overrides.added.filter((a) => matches(a, building, floor)).map((a) => a.label);
   return {
-    base: base.map((label) => ({ label, removed: removedSet.has(label) })),
-    added,
+    base: base.map((label) => ({
+      label,
+      removed: removedSet.has(label),
+      nonSellable: nonSellableSet.has(label),
+    })),
+    added: added.map((label) => ({ label, nonSellable: nonSellableSet.has(label) })),
   };
 }
 

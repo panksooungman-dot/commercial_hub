@@ -22,6 +22,7 @@ import {
   DESIGN_MARKER_DEFAULT_POSITION,
   effectiveDesignMarkerLabels,
   emptyDesignMarkerOverrides,
+  isMarkerNonSellable,
   type DesignMarkerOverrides,
 } from "@/lib/design-markers";
 
@@ -414,10 +415,8 @@ export function DesignDrawingsSection({
   /** 관리자(/admin/design-markers)가 추가·삭제한 호실 목록. 없으면 RAW_SEED 그대로 사용 */
   markerOverrides?: DesignMarkerOverrides;
 }) {
-  const seedMarkers = useMemo(
-    () => buildEffectiveSeedMarkers(markerOverrides ?? emptyDesignMarkerOverrides()),
-    [markerOverrides],
-  );
+  const overrides = useMemo(() => markerOverrides ?? emptyDesignMarkerOverrides(), [markerOverrides]);
+  const seedMarkers = useMemo(() => buildEffectiveSeedMarkers(overrides), [overrides]);
   const [building, setBuilding] = useState<BuildingKey>("a");
   const [floor, setFloor] = useState<FloorKey>("1f");
   const [lightboxOpen, setLightboxOpen] = useState(false);
@@ -667,12 +666,23 @@ export function DesignDrawingsSection({
     };
   }, [lightboxOpen, selectedUnit]);
 
+  /** 계단·기계실 등 판매 대상이 아닌 마커(호실 데이터 없음, 또는 관리자가 직접 비매물로 지정)는 목록·카운트·클릭에서 제외 */
+  const sellableMarkers = useMemo(
+    () =>
+      currentMarkers.filter(
+        (m) =>
+          findUnitForMarker(units, building, floor, m.label) &&
+          !isMarkerNonSellable(building, floor, m.label, overrides),
+      ),
+    [currentMarkers, units, building, floor, overrides],
+  );
+
   const visibleMarkers = useMemo(() => {
-    return currentMarkers.filter((m) => {
+    return sellableMarkers.filter((m) => {
       const st = statusForMarker(units, building, floor, m.label);
       return statusFilter === "all" || st === statusFilter;
     });
-  }, [currentMarkers, units, building, floor, statusFilter]);
+  }, [sellableMarkers, units, building, floor, statusFilter]);
 
   const thumbMarkers = useMemo(
     () => (showMarkers ? visibleMarkers : []),
@@ -681,12 +691,12 @@ export function DesignDrawingsSection({
 
   const statusCounts = useMemo(() => {
     const counts = { available: 0, for_lease: 0, reserved: 0, sold: 0, move_in: 0 };
-    for (const m of currentMarkers) {
+    for (const m of sellableMarkers) {
       const st = statusForMarker(units, building, floor, m.label);
       counts[st] += 1;
     }
     return counts;
-  }, [currentMarkers, units, building, floor]);
+  }, [sellableMarkers, units, building, floor]);
 
   return (
     <section className="bg-[#f7f9fb] py-16">
