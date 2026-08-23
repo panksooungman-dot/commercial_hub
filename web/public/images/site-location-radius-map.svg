@@ -1,0 +1,117 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 1080" width="1400" height="1080">
+  <defs>
+    <radialGradient id="radiusFill" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#e8447d" stop-opacity="0.55" />
+      <stop offset="55%" stop-color="#e8447d" stop-opacity="0.28" />
+      <stop offset="100%" stop-color="#e8447d" stop-opacity="0" />
+    </radialGradient>
+    <marker id="north" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M0 10 L5 0 L10 10 Z" fill="#334155" />
+    </marker>
+  </defs>
+
+  <rect width="1400" height="1080" fill="#eef1f0" />
+
+  <g opacity="0.55" fill="#dbe6d9">
+    <ellipse cx="230" cy="140" rx="220" ry="120" />
+    <ellipse cx="1180" cy="470" rx="180" ry="260" />
+    <ellipse cx="620" cy="960" rx="260" ry="110" />
+    <ellipse cx="120" cy="820" rx="150" ry="180" />
+  </g>
+  <g opacity="0.6" fill="none" stroke="#cfd8d6" stroke-width="10">
+    <path d="M0 260 L1400 210" />
+    <path d="M0 640 L1400 700" />
+    <path d="M300 0 L260 1080" />
+    <path d="M980 0 L1040 1080" />
+  </g>
+
+  <line x1="0" y1="60" x2="1400" y2="960" stroke="#e8447d" stroke-width="6" stroke-dasharray="2 16" stroke-linecap="round" />
+  <text x="1150" y="290" font-family="Pretendard, 'Apple SD Gothic Neo', sans-serif" font-size="30" font-weight="700" fill="#e8447d" transform="rotate(35 1150 290)">GTX-B(공사중)</text>
+
+  <path d="M60 900 C 260 760, 420 640, 480 610 C 620 480, 760 340, 900 240 C 1000 160, 1120 120, 1300 90"
+        fill="none" stroke="#22b8e0" stroke-width="10" stroke-linecap="round" />
+  <g font-family="Pretendard, 'Apple SD Gothic Neo', sans-serif" font-size="20" font-weight="700" fill="#0d3b52">
+    <circle cx="80" cy="884" r="9" fill="#22b8e0" />
+    <rect x="30" y="900" width="150" height="30" rx="15" fill="#22b8e0" />
+    <text x="105" y="920" text-anchor="middle" fill="#ffffff">송도달빛축제공원역</text>
+
+    <circle cx="330" cy="700" r="9" fill="#22b8e0" />
+    <rect x="270" y="716" width="120" height="30" rx="15" fill="#22b8e0" />
+    <text x="330" y="736" text-anchor="middle" fill="#ffffff">국제업무지구역</text>
+
+    <circle cx="440" cy="628" r="9" fill="#22b8e0" />
+    <rect x="270" y="644" width="140" height="30" rx="15" fill="#22b8e0" />
+    <text x="340" y="664" text-anchor="middle" fill="#ffffff">센트럴파크역</text>
+
+    <circle cx="455" cy="460" r="9" fill="#22b8e0" />
+    <rect x="360" y="412" width="150" height="30" rx="15" fill="#22b8e0" />
+    <text x="435" y="432" text-anchor="middle" fill="#ffffff">인천대입구역</text>
+
+    <circle cx="860" cy="300" r="9" fill="#22b8e0" />
+    <rect x="770" y="316" width="150" height="30" rx="15" fill="#22b8e0" />
+    <text x="845" y="336" text-anchor="middle" fill="#ffffff">지식정보단지역</text>
+
+    <circle cx="1010" cy="185" r="9" fill="#22b8e0" />
+    <rect x="940" y="150" width="120" height="30" rx="15" fill="#22b8e0" />
+    <text x="1000" y="170" text-anchor="middle" fill="#ffffff">테크노파크역</text>
+
+    <circle cx="1230" cy="110" r="9" fill="#22b8e0" />
+    <rect x="1170" y="76" width="120" height="30" rx="15" fill="#22b8e0" />
+    <text x="1230" y="96" text-anchor="middle" fill="#ffffff">캠퍼스타운역</text>
+  </g>
+
+  <circle cx="700" cy="500" r="330" fill="url(#radiusFill)" />
+  <circle cx="700" cy="500" r="330" fill="none" stroke="#d6236b" stroke-width="4" stroke-dasharray="10 10" />
+  <circle cx="700" cy="500" r="150" fill="none" stroke="#d6236b" stroke-width="3" stroke-dasharray="6 8" opacity="0.85" />
+
+  <rect x="640" y="150" width="70" height="34" rx="17" fill="#d6236b" />
+  <text x="675" y="173" text-anchor="middle" font-family="Pretendard, 'Apple SD Gothic Neo', sans-serif" font-size="20" font-weight="700" fill="#ffffff">1km</text>
+
+  <rect x="620" y="335" width="90" height="32" rx="16" fill="#d6236b" />
+  <text x="665" y="357" text-anchor="middle" font-family="Pretendard, 'Apple SD Gothic Neo', sans-serif" font-size="18" font-weight="700" fill="#ffffff">500m</text>
+
+  <text x="700" y="565" text-anchor="middle" font-family="Pretendard, 'Apple SD Gothic Neo', sans-serif" font-size="52" font-weight="800" fill="#7a1338">대상지 상권</text>
+
+  <g font-family="Pretendard, 'Apple SD Gothic Neo', sans-serif" font-size="17" fill="#334155">
+    <circle cx="560" cy="430" r="5" fill="#334155" />
+    <text x="572" y="425" font-weight="600">연송초</text>
+    <circle cx="700" cy="410" r="5" fill="#334155" />
+    <text x="600" y="400" font-weight="600">채드윅송도국제학교</text>
+    <circle cx="560" cy="470" r="5" fill="#334155" />
+    <text x="500" y="490" font-weight="600">송도푸르지오하버뷰</text>
+    <circle cx="470" cy="520" r="5" fill="#334155" />
+    <text x="395" y="540" font-weight="600">커낼워크</text>
+    <circle cx="830" cy="450" r="5" fill="#334155" />
+    <text x="845" y="445" font-weight="600">해양경찰청</text>
+    <circle cx="900" cy="500" r="5" fill="#334155" />
+    <text x="915" y="495" font-weight="600">새아침공원</text>
+    <circle cx="560" cy="600" r="5" fill="#334155" />
+    <text x="500" y="625" font-weight="600">포스코타워 송도</text>
+    <circle cx="700" cy="680" r="5" fill="#334155" />
+    <text x="660" y="705" font-weight="600">미추홀공원</text>
+    <circle cx="830" cy="620" r="5" fill="#334155" />
+    <text x="845" y="640" font-weight="600">해돋이공원</text>
+    <circle cx="940" cy="300" r="5" fill="#334155" />
+    <text x="955" y="295" font-weight="600">송도IC</text>
+  </g>
+
+  <g transform="translate(700,300)">
+    <path d="M-8 0 C-8 -20 8 -20 8 0 C8 14 0 26 0 26 C0 26 -8 14 -8 0 Z" fill="#0b3a5b" />
+    <circle cx="0" cy="-2" r="4" fill="#ffffff" />
+  </g>
+  <g>
+    <rect x="530" y="190" width="340" height="52" rx="6" fill="#ffffff" stroke="#0b3a5b" stroke-width="2" />
+    <text x="700" y="223" text-anchor="middle" font-family="Pretendard, 'Apple SD Gothic Neo', sans-serif" font-size="24" font-weight="800" fill="#0b3a5b">송도 하늘채 아이비원 단지 내 상가</text>
+    <path d="M690 242 L700 262 L710 242 Z" fill="#ffffff" stroke="#0b3a5b" stroke-width="2" />
+  </g>
+
+  <g transform="translate(1290,70)">
+    <line x1="0" y1="30" x2="0" y2="-20" stroke="#334155" stroke-width="4" marker-end="url(#north)" />
+    <text x="0" y="-28" text-anchor="middle" font-family="Pretendard, 'Apple SD Gothic Neo', sans-serif" font-size="22" font-weight="700" fill="#334155">N</text>
+  </g>
+
+  <g font-family="Pretendard, 'Apple SD Gothic Neo', sans-serif" font-size="14" fill="#8a94a3">
+    <text x="30" y="1030">※ 상기 CG, 이미지컷, 일러스트, 지역도는 소비자의 이해를 돕기 위한 것으로 실제와 다소 차이가 있을 수 있습니다.</text>
+    <text x="30" y="1052">※ 본 홈페이지에 기재된 개발계획은 관계기관의 사정에 따라 변경 또는 취소될 수 있습니다.</text>
+  </g>
+</svg>

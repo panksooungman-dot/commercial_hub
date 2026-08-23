@@ -6,11 +6,11 @@ import {
   naverMapUrl,
 } from "@/lib/site-location";
 
-/** 원본 인포그래픽 전체 — 지도·단지·세대수·하단 포인트 포함 */
+/** 대상지 상권 반경(500m/1km) 지도 — 지역도 자세히보기 패널에서 사용 */
 const INFOGRAPHIC = {
-  src: "/images/site-location-infographic.png",
-  width: 629,
-  height: 644,
+  src: "/images/site-location-radius-map.svg",
+  width: 1400,
+  height: 1080,
 } as const;
 
 /**
@@ -24,7 +24,7 @@ export function SiteLocationInfographic() {
       <figure className="bg-white">
         <Image
           src={INFOGRAPHIC.src}
-          alt="송도 아이비 학원가 랜드마크 상업시설 — 1공구 입지·단지·세대수"
+          alt="대상지 상권 500m·1km 반경 지도"
           width={INFOGRAPHIC.width}
           height={INFOGRAPHIC.height}
           quality={95}
