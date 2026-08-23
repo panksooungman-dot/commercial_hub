@@ -667,12 +667,18 @@ export function DesignDrawingsSection({
     };
   }, [lightboxOpen, selectedUnit]);
 
+  /** 계단·기계실 등 판매 대상이 아닌 마커(호실 데이터 없음)는 목록·카운트·클릭에서 제외 */
+  const sellableMarkers = useMemo(
+    () => currentMarkers.filter((m) => findUnitForMarker(units, building, floor, m.label)),
+    [currentMarkers, units, building, floor],
+  );
+
   const visibleMarkers = useMemo(() => {
-    return currentMarkers.filter((m) => {
+    return sellableMarkers.filter((m) => {
       const st = statusForMarker(units, building, floor, m.label);
       return statusFilter === "all" || st === statusFilter;
     });
-  }, [currentMarkers, units, building, floor, statusFilter]);
+  }, [sellableMarkers, units, building, floor, statusFilter]);
 
   const thumbMarkers = useMemo(
     () => (showMarkers ? visibleMarkers : []),
@@ -681,12 +687,12 @@ export function DesignDrawingsSection({
 
   const statusCounts = useMemo(() => {
     const counts = { available: 0, for_lease: 0, reserved: 0, sold: 0, move_in: 0 };
-    for (const m of currentMarkers) {
+    for (const m of sellableMarkers) {
       const st = statusForMarker(units, building, floor, m.label);
       counts[st] += 1;
     }
     return counts;
-  }, [currentMarkers, units, building, floor]);
+  }, [sellableMarkers, units, building, floor]);
 
   return (
     <section className="bg-[#f7f9fb] py-16">
