@@ -3,8 +3,15 @@ import { SiteLocationMap } from "@/components/site-location-map";
 import { LOCATION_HIGHLIGHTS } from "@/lib/site-location";
 import { Project } from "@/lib/types";
 
+const FLOOR_LABEL: Record<string, string> = {
+  "2F": "2층",
+  "1F": "1층",
+  B1: "지하1층",
+};
+
 function overviewRows(project: Project): [string, string][] {
   return [
+    ["단지명", project.projectName],
     ["위치", project.address],
     ["지역/지구", project.zoningDistrict],
     [
@@ -57,6 +64,54 @@ export function OverviewTable({ project }: { project: Project }) {
         <p className="mt-3 text-xs text-muted">
           ※ 수치·표기는 제공 자료 기준이며, 최종 계약·인허가 서류와 다를 수 있습니다.
         </p>
+
+        {project.floorSummaries.length > 0 ? (
+          <div className="mt-8 overflow-hidden border border-[#4a90c4] bg-white shadow-[0_1px_0_rgba(74,144,196,0.25)]">
+            <div className="bg-[#4a90c4] px-4 py-3 text-center">
+              <h2 className="font-display text-lg tracking-[0.35em] text-white md:text-xl">
+                잔여호실(근생)
+              </h2>
+            </div>
+            <div className="overflow-x-auto">
+              <table className="w-full min-w-[480px] border-collapse text-center text-sm text-[#4a5568] md:text-[15px]">
+                <thead>
+                  <tr className="border-t border-[#4a90c4]/60 bg-[#f8fbfe]">
+                    <th className="border-r border-[#4a90c4]/60 px-3 py-3 font-medium tracking-[0.1em] text-[#5a6a7a]">
+                      구분
+                    </th>
+                    <th className="border-r border-[#4a90c4]/60 px-3 py-3 font-medium tracking-[0.1em] text-[#5a6a7a]">
+                      점포 수
+                    </th>
+                    <th className="border-r border-[#4a90c4]/60 px-3 py-3 font-medium tracking-[0.1em] text-[#5a6a7a]">
+                      전용(PY)
+                    </th>
+                    <th className="border-r border-[#4a90c4]/60 px-3 py-3 font-medium tracking-[0.1em] text-[#5a6a7a]">
+                      계약(PY)
+                    </th>
+                    <th className="px-3 py-3 font-medium tracking-[0.1em] text-[#5a6a7a]">전용률(%)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {project.floorSummaries.map((f) => (
+                    <tr key={f.floor} className="border-t border-[#4a90c4]/60">
+                      <td className="border-r border-[#4a90c4]/60 px-3 py-3 font-semibold text-[#3d4a57]">
+                        {FLOOR_LABEL[f.floor] ?? f.floor}
+                      </td>
+                      <td className="border-r border-[#4a90c4]/60 px-3 py-3 text-[#3d4a57]">{f.shopCount}</td>
+                      <td className="border-r border-[#4a90c4]/60 px-3 py-3 text-[#3d4a57]">
+                        {f.exclusiveAreaPy.toLocaleString("ko-KR")}
+                      </td>
+                      <td className="border-r border-[#4a90c4]/60 px-3 py-3 text-[#3d4a57]">
+                        {f.contractAreaPy.toLocaleString("ko-KR")}
+                      </td>
+                      <td className="px-3 py-3 text-[#3d4a57]">{f.exclusiveRatioPct.toFixed(2)}%</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        ) : null}
       </div>
     </div>
   );
