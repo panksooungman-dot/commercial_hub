@@ -420,14 +420,15 @@ export const store = {
     writeJson("design-marker-overrides.json", sanitizeDesignMarkerOverrides(data)),
 };
 
+/**
+ * 분양가·임대조건은 관리자 체크박스(priceHidden/leaseHidden) 상태와 무관하게 항상 공개
+ * 사이트에서 가려진다 — 실수로 체크가 풀려도 노출되지 않도록 공개 데이터의 원천에서
+ * 고정 차단한다. 어드민 화면에는 실제 값이 그대로 보이고 수정도 계속 가능하다.
+ */
 export async function getPublicUnits() {
   const units = await store.getUnits();
   return units
     .filter((u) => u.status !== "hidden")
-    .map((u) => (u.priceHidden ? { ...u, price: null } : u))
-    .map((u) =>
-      u.leaseHidden && u.listing
-        ? { ...u, listing: { ...u.listing, deposit: null, monthlyRent: null } }
-        : u,
-    );
+    .map((u) => ({ ...u, price: null }))
+    .map((u) => (u.listing ? { ...u, listing: { ...u.listing, deposit: null, monthlyRent: null } } : u));
 }
