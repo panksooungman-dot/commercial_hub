@@ -655,7 +655,9 @@ export default function AdminUnitsPage() {
           </button>
         </div>
         <p className="mt-2 text-xs text-muted">
-          미노출로 바꾼 뒤 저장해야 공개 사이트에 반영됩니다. 값은 지워지지 않고 &quot;상담 문의&quot;로만 표시됩니다.
+          분양가·임대조건은 이 체크박스와 상관없이 공개 사이트에서 항상 &quot;상담 문의&quot;로
+          고정 표시됩니다(실수로 노출될 위험을 없애기 위함). 값 자체는 지워지지 않고 여기 어드민
+          화면에서만 계속 확인·수정할 수 있습니다.
         </p>
       </div>
 
