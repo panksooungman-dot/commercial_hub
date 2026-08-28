@@ -451,6 +451,8 @@ export default function AdminUnitsPage() {
   const [savingAll, setSavingAll] = useState(false);
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
+  /** 같이 화면을 보는 직원·협력사에게 실제 가격이 노출되지 않도록, 새로고침 시 항상 가려진 상태로 시작한다 */
+  const [priceVisible, setPriceVisible] = useState(false);
   /** 삭제 직전 상태를 기억해 두었다가 복구 시 그대로 되돌린다(새로고침 시엔 분양가능으로 복구) */
   const statusBeforeDelete = useRef<Record<string, UnitStatus>>({});
 
@@ -614,6 +616,17 @@ export default function AdminUnitsPage() {
         >
           {savingAll ? "전체 저장 중…" : `전체 저장 (${units.length}실)`}
         </button>
+        <button
+          type="button"
+          onClick={() => setPriceVisible((v) => !v)}
+          className={`border px-3 py-1 text-sm ${
+            priceVisible
+              ? "border-[#c0392b] text-[#c0392b] hover:bg-[#c0392b] hover:text-white"
+              : "border-brand text-brand hover:bg-brand hover:text-white"
+          }`}
+        >
+          {priceVisible ? "🔓 분양가·임대조건 숨기기" : "🔒 분양가·임대조건 보기"}
+        </button>
         {msg ? <span className="text-sm text-brand">{msg}</span> : null}
       </div>
 
@@ -734,16 +747,22 @@ export default function AdminUnitsPage() {
                   />
                 </td>
                 <td className="px-2 py-2">
-                  <input
-                    type="number"
-                    className="w-28 border px-1 py-1"
-                    value={u.price ?? ""}
-                    onChange={(e) =>
-                      patch(u.id, {
-                        price: e.target.value === "" ? null : Number(e.target.value),
-                      })
-                    }
-                  />
+                  {priceVisible ? (
+                    <input
+                      type="number"
+                      className="w-28 border px-1 py-1"
+                      value={u.price ?? ""}
+                      onChange={(e) =>
+                        patch(u.id, {
+                          price: e.target.value === "" ? null : Number(e.target.value),
+                        })
+                      }
+                    />
+                  ) : (
+                    <p className="w-28 border border-line bg-background px-1 py-1 tracking-widest text-muted select-none">
+                      ●●●●●●●●
+                    </p>
+                  )}
                   <label className="mt-1 flex items-center gap-1 text-[11px] text-muted">
                     <input
                       type="checkbox"
@@ -754,9 +773,15 @@ export default function AdminUnitsPage() {
                   </label>
                 </td>
                 <td className="px-2 py-2">
-                  <p className="w-32 text-[11px] leading-tight">
-                    {formatLeaseLine(u.listing?.deposit, u.listing?.monthlyRent)}
-                  </p>
+                  {priceVisible ? (
+                    <p className="w-32 text-[11px] leading-tight">
+                      {formatLeaseLine(u.listing?.deposit, u.listing?.monthlyRent)}
+                    </p>
+                  ) : (
+                    <p className="w-32 border border-line bg-background px-1 py-1 text-[11px] tracking-widest text-muted select-none">
+                      ●●●●●●●●
+                    </p>
+                  )}
                   <label className="mt-1 flex items-center gap-1 text-[11px] text-muted">
                     <input
                       type="checkbox"
