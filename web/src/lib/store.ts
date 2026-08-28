@@ -52,7 +52,12 @@ async function readJson<T>(file: string, fallback: () => T): Promise<T> {
     }
     // Blob에 아직 없음(최초 1회) — 저장소에 커밋된 실제 데이터로 시드하고 Blob에 기록
     const seed = (await readLocalFile<T>(file)) ?? fallback();
-    await writeJson(file, seed);
+    try {
+      await writeJson(file, seed);
+    } catch {
+      // Blob 저장소 자체가 막혀 있는 경우(정지·쿼터 초과 등) — 기록은 못 해도
+      // 최소한 이번 요청은 시드 데이터로 응답해 사이트 전체가 죽는 것을 막는다
+    }
     return seed;
   }
 
