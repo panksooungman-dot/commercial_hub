@@ -16,10 +16,17 @@ export function pinKeyOf(floor: Floor, building: Building, unitNo: string) {
   return `${floor}|${building}|${normalizeUnitNo(unitNo)}`;
 }
 
+function isWellFormedPinRecord(p: unknown): p is UnitPinRecord {
+  if (!p || typeof p !== "object") return false;
+  const r = p as Partial<UnitPinRecord>;
+  return Boolean(r.floor && r.building && typeof r.unitNo === "string" && r.unitNo);
+}
+
 export function buildPinOverlay(records: UnitPinRecord[] = []) {
   const map = new Map<string, Pin>();
+  if (!Array.isArray(records)) return map;
   for (const r of records) {
-    if (r.removed) continue;
+    if (!isWellFormedPinRecord(r) || r.removed) continue;
     map.set(pinKeyOf(r.floor, r.building, r.unitNo), { x: r.x, y: r.y });
   }
   return map;
@@ -32,8 +39,9 @@ export function allDefaultUnitPins(): UnitPinRecord[] {
 }
 
 export function mergeUnitPins(saved: UnitPinRecord[]): UnitPinRecord[] {
+  const wellFormed = (Array.isArray(saved) ? saved : []).filter(isWellFormedPinRecord);
   const overlay = new Map<string, UnitPinRecord>();
-  for (const r of saved) overlay.set(pinKeyOf(r.floor, r.building, r.unitNo), r);
+  for (const r of wellFormed) overlay.set(pinKeyOf(r.floor, r.building, r.unitNo), r);
   const seen = new Set<string>();
   const out = allDefaultUnitPins().map((p) => {
     const k = pinKeyOf(p.floor, p.building, p.unitNo);
@@ -42,10 +50,9 @@ export function mergeUnitPins(saved: UnitPinRecord[]): UnitPinRecord[] {
     if (!hit) return p;
     return hit.removed ? { ...p, removed: true as const } : { ...p, x: hit.x, y: hit.y };
   });
-  for (const p of saved) {
+  for (const p of wellFormed) {
     const k = pinKeyOf(p.floor, p.building, p.unitNo);
     if (seen.has(k)) continue;
-    if (!p.floor || !p.building || !p.unitNo) continue;
     if (!Number.isFinite(p.x) || !Number.isFinite(p.y)) continue;
     out.push(p.removed ? { ...p, removed: true as const } : p);
     seen.add(k);
@@ -208,6 +215,7 @@ const MD_PANELS: Record<Floor, Record<Building, { left: number; top: number; wid
 };
 
 export function normalizeUnitNo(unitNo: string): string {
+  if (typeof unitNo !== "string") return "";
   return unitNo.replace(/^B-/i, "").replace(/^[ABab]-/, "");
 }
 
