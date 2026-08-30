@@ -2,6 +2,7 @@ import "server-only";
 import { promises as fs } from "fs";
 import path from "path";
 import { get, put } from "@vercel/blob";
+import { unstable_cache, revalidateTag } from "next/cache";
 import { AreaContent, Faq, GalleryItem, Inquiry, Project, Unit } from "./types";
 import { buildSeedUnits } from "./units-seed";
 import { mergePptPricing } from "./unit-pricing";
@@ -39,14 +40,27 @@ async function readLocalFile<T>(file: string): Promise<T | null> {
   }
 }
 
+/**
+ * Blob의 Simple Operations는 방문 1회마다 소모된다(호실도면 1페이지 방문 = 여러 파일 읽기).
+ * 무료 플랜의 월 사용량 한도를 방문자 트래픽만으로도 금방 넘길 수 있어, 파일별로 60초간
+ * Next.js 캐시에 담아두고 그 안에서는 Blob을 다시 부르지 않는다. 관리자가 저장하면
+ * writeJson에서 해당 파일 태그를 즉시 무효화해 최신 값이 바로 반영되게 한다.
+ */
+const readBlobFile = unstable_cache(
+  async (file: string): Promise<string | null> => {
+    const result = await get(file, { access: "private", useCache: false });
+    if (!result) return null;
+    return new Response(result.stream).text();
+  },
+  ["store-blob-read"],
+  { revalidate: 60, tags: ["store-blob-read"] },
+);
+
 async function readJson<T>(file: string, fallback: () => T): Promise<T> {
   if (blobEnabled()) {
     try {
-      const result = await get(file, { access: "private", useCache: false });
-      if (result) {
-        const text = await new Response(result.stream).text();
-        return JSON.parse(text) as T;
-      }
+      const text = await readBlobFile(file);
+      if (text) return JSON.parse(text) as T;
     } catch {
       // Blob 조회 실패 — 아래에서 시드 데이터로 폴백
     }
@@ -77,6 +91,8 @@ async function writeJson<T>(file: string, data: T): Promise<void> {
       allowOverwrite: true,
       contentType: "application/json",
     });
+    // 저장 직후에는 캐시된 값이 아니라 방금 쓴 값이 바로 보여야 하므로 즉시 무효화한다
+    revalidateTag("store-blob-read", { expire: 0 });
     return;
   }
   await ensureDir();
