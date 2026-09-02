@@ -93,17 +93,20 @@ export function SiteFooter({
   phone,
   bizName,
   bizRepresentative,
+  bizRegistrationNumber,
   bizAddress,
 }: {
   developers: string[];
   phone: string;
   bizName?: string;
   bizRepresentative?: string;
+  bizRegistrationNumber?: string;
   bizAddress?: string;
 }) {
   const bizLine = [
     bizName ? `상호: ${bizName}` : "",
     bizRepresentative ? `대표: ${bizRepresentative}` : "",
+    bizRegistrationNumber ? `사업자등록번호: ${bizRegistrationNumber}` : "",
     bizAddress ? `사업장 소재지: ${bizAddress}` : "",
   ]
     .filter(Boolean)

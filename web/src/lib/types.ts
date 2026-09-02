@@ -80,6 +80,7 @@ export type Project = {
   /** 사이트 하단 사업자정보 — 분양대행사 사업자등록증 발급 시 관리자에서 갱신 */
   bizName: string;
   bizRepresentative: string;
+  bizRegistrationNumber: string;
   bizAddress: string;
   /** 메인 배너 문구 — 관리자에서 수정 */
   heroEyebrow: string;

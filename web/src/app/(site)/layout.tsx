@@ -16,6 +16,7 @@ export default async function SiteLayout({
         phone={project.prCenterPhone}
         bizName={project.bizName}
         bizRepresentative={project.bizRepresentative}
+        bizRegistrationNumber={project.bizRegistrationNumber}
         bizAddress={project.bizAddress}
       />
     </div>
