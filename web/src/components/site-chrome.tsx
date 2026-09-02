@@ -109,6 +109,11 @@ export function SiteFooter({
           </Link>
         </div>
       </div>
+      <div className="border-t border-white/10">
+        <div className="mx-auto max-w-6xl px-4 py-4 text-xs text-white/50">
+          <p>상호: 영미 · 대표: 정빛나 · 사업장 소재지: 인천광역시 서구 가정로 387</p>
+        </div>
+      </div>
     </footer>
   );
 }
