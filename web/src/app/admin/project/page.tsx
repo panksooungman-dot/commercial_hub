@@ -76,7 +76,12 @@ export default function AdminProjectPage() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(project),
     });
-    setMsg(res.ok ? "저장되었습니다. 홈 메인 배너에 바로 반영됩니다." : "저장 실패");
+    if (res.ok) {
+      setMsg("저장되었습니다. 홈 메인 배너에 바로 반영됩니다.");
+      return;
+    }
+    const body = await res.json().catch(() => null);
+    setMsg(`저장 실패${body?.error ? `: ${body.error}` : ""}`);
   }
 
   return (

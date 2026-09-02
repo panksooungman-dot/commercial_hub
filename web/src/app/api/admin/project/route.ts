@@ -16,11 +16,18 @@ export async function GET() {
 export async function PUT(req: Request) {
   try {
     await requireAdmin();
+  } catch {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  try {
     const body = (await req.json()) as Project;
     await store.saveProject(body);
     revalidatePath("/", "layout");
     return NextResponse.json(body);
-  } catch {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  } catch (err) {
+    console.error("[admin/project] save failed", err);
+    const message = err instanceof Error ? err.message : "Unknown error";
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }
