@@ -328,6 +328,11 @@ export default function AdminProjectPage() {
         <p className="text-xs text-muted">사이트 하단(푸터)에 표시됩니다. 분양대행사 사업자등록증이 발급되면 여기서 갱신하세요.</p>
         <Field label="상호" value={project.bizName} onChange={(v) => update("bizName", v)} />
         <Field label="대표" value={project.bizRepresentative} onChange={(v) => update("bizRepresentative", v)} />
+        <Field
+          label="사업자등록번호"
+          value={project.bizRegistrationNumber}
+          onChange={(v) => update("bizRegistrationNumber", v)}
+        />
         <Field label="사업장 소재지" value={project.bizAddress} onChange={(v) => update("bizAddress", v)} />
       </section>
 

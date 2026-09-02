@@ -168,6 +168,7 @@ function defaultProject(): Project {
     prCenterMapUrl: "",
     bizName: "영미",
     bizRepresentative: "정빛나",
+    bizRegistrationNumber: "829-91-01408",
     bizAddress: "인천광역시 서구 가정로 387",
     heroEyebrow: "SONGDO HANULCHE · IVYSQUARE",
     heroBrandLine: "아이비스퀘어 · 송도 하늘채 아이비원",
