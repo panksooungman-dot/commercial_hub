@@ -324,6 +324,14 @@ export default function AdminProjectPage() {
       </section>
 
       <section className="mt-6 space-y-4 border border-line bg-surface p-5">
+        <h2 className="font-display text-xl text-brand">사업자정보</h2>
+        <p className="text-xs text-muted">사이트 하단(푸터)에 표시됩니다. 분양대행사 사업자등록증이 발급되면 여기서 갱신하세요.</p>
+        <Field label="상호" value={project.bizName} onChange={(v) => update("bizName", v)} />
+        <Field label="대표" value={project.bizRepresentative} onChange={(v) => update("bizRepresentative", v)} />
+        <Field label="사업장 소재지" value={project.bizAddress} onChange={(v) => update("bizAddress", v)} />
+      </section>
+
+      <section className="mt-6 space-y-4 border border-line bg-surface p-5">
         <h2 className="font-display text-xl text-brand">분양안내 본문</h2>
         <label className="block text-sm">
           분양 조건

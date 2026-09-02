@@ -11,7 +11,13 @@ export default async function SiteLayout({
     <div className="flex min-h-full flex-col">
       <SiteHeader projectName={project.projectName} phone={project.prCenterPhone} />
       <main className="flex-1">{children}</main>
-      <SiteFooter developers={project.developers} phone={project.prCenterPhone} />
+      <SiteFooter
+        developers={project.developers}
+        phone={project.prCenterPhone}
+        bizName={project.bizName}
+        bizRepresentative={project.bizRepresentative}
+        bizAddress={project.bizAddress}
+      />
     </div>
   );
 }
