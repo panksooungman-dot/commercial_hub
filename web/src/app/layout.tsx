@@ -30,6 +30,11 @@ export const metadata: Metadata = {
     title: "송도 하늘채 아이비원 상업시설",
     description: "송도 아이비원 주상복합 단지 내 근린생활시설 분양 안내",
   },
+  verification: {
+    other: {
+      "naver-site-verification": "997fc9942d9e27f34f756754eebcfbe9ee701060",
+    },
+  },
 };
 
 export default function RootLayout({
