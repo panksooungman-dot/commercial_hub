@@ -91,10 +91,24 @@ export function SiteHeader({ projectName, phone }: { projectName: string; phone?
 export function SiteFooter({
   developers,
   phone,
+  bizName,
+  bizRepresentative,
+  bizAddress,
 }: {
   developers: string[];
   phone: string;
+  bizName?: string;
+  bizRepresentative?: string;
+  bizAddress?: string;
 }) {
+  const bizLine = [
+    bizName ? `상호: ${bizName}` : "",
+    bizRepresentative ? `대표: ${bizRepresentative}` : "",
+    bizAddress ? `사업장 소재지: ${bizAddress}` : "",
+  ]
+    .filter(Boolean)
+    .join(" · ");
+
   return (
     <footer className="mt-auto border-t border-line bg-brand-deep text-white/85">
       <div className="mx-auto flex max-w-6xl flex-col gap-3 px-4 py-8 text-sm md:flex-row md:items-end md:justify-between">
@@ -109,11 +123,13 @@ export function SiteFooter({
           </Link>
         </div>
       </div>
-      <div className="border-t border-white/10">
-        <div className="mx-auto max-w-6xl px-4 py-4 text-xs text-white/50">
-          <p>상호: 영미 · 대표: 정빛나 · 사업장 소재지: 인천광역시 서구 가정로 387</p>
+      {bizLine ? (
+        <div className="border-t border-white/10">
+          <div className="mx-auto max-w-6xl px-4 py-4 text-xs text-white/50">
+            <p>{bizLine}</p>
+          </div>
         </div>
-      </div>
+      ) : null}
     </footer>
   );
 }
