@@ -320,6 +320,9 @@ export default function AdminOperatingPinsPage() {
                 p.id === active?.id ? "bg-[#fff8d6]" : "hover:bg-slate-50"
               }`}
             >
+              <span className="rounded bg-slate-100 px-1.5 py-0.5 text-[11px] font-bold text-muted">
+                {p.building}동
+              </span>
               <button
                 type="button"
                 className="text-left text-sm font-bold text-brand-deep"
