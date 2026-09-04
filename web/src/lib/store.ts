@@ -58,14 +58,22 @@ const readBlobFile = unstable_cache(
 
 async function readJson<T>(file: string, fallback: () => T): Promise<T> {
   if (blobEnabled()) {
+    let text: string | null = null;
+    let blobUnavailable = false;
     try {
-      const text = await readBlobFile(file);
-      if (text) return JSON.parse(text) as T;
+      text = await readBlobFile(file);
     } catch {
-      // Blob 조회 실패 — 아래에서 시드 데이터로 폴백
+      blobUnavailable = true;
     }
-    // Blob에 아직 없음(최초 1회) — 저장소에 커밋된 실제 데이터로 시드하고 Blob에 기록
+    if (text) return JSON.parse(text) as T;
+
     const seed = (await readLocalFile<T>(file)) ?? fallback();
+    // Blob 저장소 자체에 접근 불가(정지·한도 초과 등)한 경우 — 여기서 시드를
+    // 다시 써넣으면 실제 저장돼 있는 최신 데이터를 시드로 덮어쓸 위험이 있어
+    // 절대 쓰지 않고, 이번 요청만 시드 데이터로 응답한다.
+    if (blobUnavailable) return seed;
+
+    // Blob에 정말 처음부터 없음(최초 1회) — 저장소에 커밋된 실제 데이터로 시드하고 Blob에 기록
     try {
       await writeJson(file, seed);
     } catch {
