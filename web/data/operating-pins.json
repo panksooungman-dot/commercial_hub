@@ -48,15 +48,6 @@
     "y": 61.4
   },
   {
-    "id": "op-1F-A-inca",
-    "floor": "1F",
-    "building": "A",
-    "label": "인카부동산",
-    "x": 12.9,
-    "y": 15,
-    "roomLabel": "A104"
-  },
-  {
     "id": "op-1F-A-kid",
     "floor": "1F",
     "building": "A",
@@ -241,25 +232,5 @@
     "x": 14.8,
     "y": 57.4,
     "roomLabel": "A106"
-  },
-  {
-    "id": "op-1786858662468",
-    "floor": "2F",
-    "building": "A",
-    "label": "실용음악",
-    "x": 18.5,
-    "y": 89.6,
-    "unitId": "A-2F-213",
-    "roomLabel": "A213"
-  },
-  {
-    "id": "op-1786859128746",
-    "floor": "2F",
-    "building": "A",
-    "label": "영어학원",
-    "x": 6.2,
-    "y": 95.7,
-    "unitId": "A-2F-212",
-    "roomLabel": "A212"
   }
 ]

@@ -63,7 +63,6 @@ export const DEFAULT_OPERATING_PINS: OperatingPin[] = [
   { id: "op-B1-B-drum", floor: "B1", building: "B", label: "드럼교실", x: 70.7, y: 69.3 },
   { id: "op-B1-B-delivery", floor: "B1", building: "B", label: "배달음식", x: 73.1, y: 61.9 },
 
-  { id: "op-1F-A-inca", floor: "1F", building: "A", label: "인카부동산", x: 12.6, y: 16.6 },
   { id: "op-1F-A-kid", floor: "1F", building: "A", label: "어린이집", x: 19.9, y: 91.7 },
   { id: "op-1F-A-coffee", floor: "1F", building: "A", label: "백억커피", x: 27.4, y: 96.0 },
   { id: "op-1F-A-camping", floor: "1F", building: "A", label: "캠핑미트", x: 37.7, y: 94.5 },
