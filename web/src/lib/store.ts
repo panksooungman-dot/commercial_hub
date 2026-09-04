@@ -163,7 +163,7 @@ function defaultProject(): Project {
       "※ 임대 가능 호실은 2026년 7월 기준이며, 임대 진행 상황에 따라 변경될 수 있습니다.\n※ 본 홍보물의 MD 구성·이미지·도면은 소비자의 이해를 돕기 위한 것으로 실제와 다를 수 있으므로, 계약 전 반드시 확인하시기 바랍니다.\n※ 홍보물 CG·일러스트·지역도 및 개발계획은 관계기관 사정에 따라 변경·취소될 수 있습니다.",
     prCenterName: "송도 하늘채 아이비원 홍보관",
     prCenterAddress: "인천광역시 연수구 컨벤시아대로42번길 21, B동 1층 105호",
-    prCenterPhone: "",
+    prCenterPhone: "01034255119(고바우 이사)",
     prCenterHours: "",
     prCenterMapUrl: "",
     bizName: "영미",
