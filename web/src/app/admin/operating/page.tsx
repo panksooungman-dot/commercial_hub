@@ -7,6 +7,7 @@ import { belowUnitPin, buildPinOverlay, listFloorPins, pinLabel, type UnitPinRec
 import { Building, Floor } from "@/lib/types";
 
 const FLOORS: Floor[] = ["B1", "1F", "2F"];
+const FLOOR_LABEL: Record<Floor, string> = { B1: "지하1층", "1F": "지상1층", "2F": "지상2층" };
 
 function findGhost(
   raw: string,
@@ -298,10 +299,11 @@ export default function AdminOperatingPinsPage() {
               floor === f ? "bg-brand text-white" : "border border-line bg-white"
             }`}
           >
-            {f}
+            {FLOOR_LABEL[f]}
           </button>
         ))}
       </div>
+      <p className="mt-1 text-xs text-muted">각 층 도면에는 A동·B동 점포가 함께 표시됩니다.</p>
 
       <datalist id={`operating-unit-nos-${floor}`}>
         {unitGhosts.map((g) => (
