@@ -29,7 +29,7 @@ function CenteredOverlayContent({ overlay }: { overlay: NonNullable<HeroSlide["o
         <p className="animate-hero-fade-up mt-5 break-keep text-base font-medium text-brand-deep/70 [animation-delay:120ms] sm:text-lg">
           {overlay.headlinePrefix}
         </p>
-        <h2 className="animate-hero-fade-up mt-5 font-display text-6xl leading-[0.95] font-extrabold tracking-tight text-brand-deep [animation-delay:240ms] sm:text-8xl md:text-9xl">
+        <h2 className="animate-hero-fade-up mt-3 font-display text-5xl leading-[0.95] font-extrabold tracking-tight text-brand-deep [animation-delay:240ms] sm:mt-5 sm:text-8xl md:text-9xl">
           {headlineLines.map((line, i) => (
             <span
               key={i}
