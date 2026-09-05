@@ -4,6 +4,7 @@ import { useState } from "react";
 
 export default function AdminLoginPage() {
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const [submitting, setSubmitting] = useState(false);
 
@@ -38,12 +39,21 @@ export default function AdminLoginPage() {
       <form onSubmit={onSubmit} className="mt-6 space-y-3 border border-line bg-surface p-5">
         <label className="block text-sm">
           비밀번호
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="mt-1 w-full border border-line px-3 py-2"
-          />
+          <div className="relative mt-1">
+            <input
+              type={showPassword ? "text" : "password"}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="w-full border border-line px-3 py-2 pr-16"
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword((v) => !v)}
+              className="absolute inset-y-0 right-0 px-3 text-xs text-muted hover:text-brand"
+            >
+              {showPassword ? "숨기기" : "보기"}
+            </button>
+          </div>
         </label>
         {error ? <p className="text-sm text-red-700">{error}</p> : null}
         <button
