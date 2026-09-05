@@ -2,6 +2,7 @@ import "server-only";
 import { promises as fs } from "fs";
 import path from "path";
 import { get, put } from "@vercel/blob";
+import { getStore } from "@netlify/blobs";
 import { unstable_cache, revalidateTag } from "next/cache";
 import { AreaContent, Faq, GalleryItem, Inquiry, Project, Unit } from "./types";
 import { buildSeedUnits } from "./units-seed";
@@ -17,14 +18,19 @@ import {
 const DATA_DIR = path.join(process.cwd(), "data");
 
 /**
- * Vercel의 서버리스 프로덕션 환경은 배포된 코드 폴더가 읽기 전용이라
- * 로컬 fs.writeFile은 프로덕션에서 항상 실패한다. BLOB_READ_WRITE_TOKEN이
- * 설정돼 있으면(Vercel Blob 연결됨) 쓰기는 Blob으로, 없으면(로컬 개발)
- * 기존처럼 로컬 fs로 처리한다.
+ * 서버리스 프로덕션 환경(Vercel·Netlify 등)은 배포된 코드 폴더가 읽기 전용이라
+ * 로컬 fs.writeFile은 프로덕션에서 항상 실패한다. 어느 플랫폼에 배포됐는지에
+ * 따라 그 플랫폼의 Blob 저장소를 쓰고, 로컬 개발 환경에서는 기존처럼 로컬 fs를 쓴다.
  */
-function blobEnabled() {
-  return Boolean(process.env.BLOB_READ_WRITE_TOKEN);
+type RemoteBackend = "vercel" | "netlify" | null;
+
+function remoteBackend(): RemoteBackend {
+  if (process.env.BLOB_READ_WRITE_TOKEN) return "vercel";
+  if (process.env.NETLIFY) return "netlify";
+  return null;
 }
+
+const NETLIFY_STORE_NAME = "commercial-hub-data";
 
 async function ensureDir() {
   await fs.mkdir(DATA_DIR, { recursive: true });
@@ -43,11 +49,14 @@ async function readLocalFile<T>(file: string): Promise<T | null> {
 /**
  * Blob의 Simple Operations는 방문 1회마다 소모된다(호실도면 1페이지 방문 = 여러 파일 읽기).
  * 무료 플랜의 월 사용량 한도를 방문자 트래픽만으로도 금방 넘길 수 있어, 파일별로 60초간
- * Next.js 캐시에 담아두고 그 안에서는 Blob을 다시 부르지 않는다. 관리자가 저장하면
+ * Next.js 캐시에 담아두고 그 안에서는 원격 저장소를 다시 부르지 않는다. 관리자가 저장하면
  * writeJson에서 해당 파일 태그를 즉시 무효화해 최신 값이 바로 반영되게 한다.
  */
-const readBlobFile = unstable_cache(
-  async (file: string): Promise<string | null> => {
+const readRemoteFile = unstable_cache(
+  async (file: string, backend: RemoteBackend): Promise<string | null> => {
+    if (backend === "netlify") {
+      return getStore(NETLIFY_STORE_NAME).get(file, { type: "text" });
+    }
     const result = await get(file, { access: "private", useCache: false });
     if (!result) return null;
     return new Response(result.stream).text();
@@ -57,27 +66,28 @@ const readBlobFile = unstable_cache(
 );
 
 async function readJson<T>(file: string, fallback: () => T): Promise<T> {
-  if (blobEnabled()) {
+  const backend = remoteBackend();
+  if (backend) {
     let text: string | null = null;
-    let blobUnavailable = false;
+    let remoteUnavailable = false;
     try {
-      text = await readBlobFile(file);
+      text = await readRemoteFile(file, backend);
     } catch {
-      blobUnavailable = true;
+      remoteUnavailable = true;
     }
     if (text) return JSON.parse(text) as T;
 
     const seed = (await readLocalFile<T>(file)) ?? fallback();
-    // Blob 저장소 자체에 접근 불가(정지·한도 초과 등)한 경우 — 여기서 시드를
+    // 원격 저장소 자체에 접근 불가(정지·한도 초과 등)한 경우 — 여기서 시드를
     // 다시 써넣으면 실제 저장돼 있는 최신 데이터를 시드로 덮어쓸 위험이 있어
     // 절대 쓰지 않고, 이번 요청만 시드 데이터로 응답한다.
-    if (blobUnavailable) return seed;
+    if (remoteUnavailable) return seed;
 
-    // Blob에 정말 처음부터 없음(최초 1회) — 저장소에 커밋된 실제 데이터로 시드하고 Blob에 기록
+    // 원격 저장소에 정말 처음부터 없음(최초 1회) — 저장소에 커밋된 실제 데이터로 시드하고 기록
     try {
       await writeJson(file, seed);
     } catch {
-      // Blob 저장소 자체가 막혀 있는 경우(정지·쿼터 초과 등) — 기록은 못 해도
+      // 원격 저장소 자체가 막혀 있는 경우(정지·쿼터 초과 등) — 기록은 못 해도
       // 최소한 이번 요청은 시드 데이터로 응답해 사이트 전체가 죽는 것을 막는다
     }
     return seed;
@@ -92,13 +102,19 @@ async function readJson<T>(file: string, fallback: () => T): Promise<T> {
 }
 
 async function writeJson<T>(file: string, data: T): Promise<void> {
-  if (blobEnabled()) {
-    await put(file, JSON.stringify(data, null, 2), {
-      access: "private",
-      addRandomSuffix: false,
-      allowOverwrite: true,
-      contentType: "application/json",
-    });
+  const backend = remoteBackend();
+  if (backend) {
+    const text = JSON.stringify(data, null, 2);
+    if (backend === "netlify") {
+      await getStore(NETLIFY_STORE_NAME).set(file, text);
+    } else {
+      await put(file, text, {
+        access: "private",
+        addRandomSuffix: false,
+        allowOverwrite: true,
+        contentType: "application/json",
+      });
+    }
     // 저장 직후에는 캐시된 값이 아니라 방금 쓴 값이 바로 보여야 하므로 즉시 무효화한다
     revalidateTag("store-blob-read", { expire: 0 });
     return;
