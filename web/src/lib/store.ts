@@ -26,7 +26,9 @@ type RemoteBackend = "vercel" | "netlify" | null;
 
 function remoteBackend(): RemoteBackend {
   if (process.env.BLOB_READ_WRITE_TOKEN) return "vercel";
-  if (process.env.NETLIFY) return "netlify";
+  // NETLIFY는 빌드 환경에만 있고 함수 실행 환경에는 없을 수 있어, Netlify Blobs가
+  // 실제로 컨텍스트를 주입할 때 쓰는 NETLIFY_BLOBS_CONTEXT를 함께 확인한다.
+  if (process.env.NETLIFY || process.env.NETLIFY_BLOBS_CONTEXT) return "netlify";
   return null;
 }
 
